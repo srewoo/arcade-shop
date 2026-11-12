@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Split Shot: fire your line, split the bouncing bubbles, and pop them all before time runs out." />
+    <title>Split Shot</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23221a4a'/><circle cx='22' cy='36' r='13' fill='%23ff4f94' stroke='%23fff' stroke-width='2'/><circle cx='44' cy='24' r='9' fill='%23ffb32e' stroke='%23fff' stroke-width='2'/><path d='M32 58V8' stroke='%23ffeab0' stroke-width='3'/></svg>"
+    />
+  </head>
+  <body>
+    <main class="app" id="app">
+      <div class="stage" id="stage">
+        <canvas id="cv" role="img" aria-label="Split Shot playfield"></canvas>
+
+        <section class="hud" id="hud" aria-label="Stage status">
+          <div class="score"><span class="label">Score</span><b id="hud-score">0</b></div>
+          <div class="chips">
+            <div class="chip"><span class="label">Lives</span><b><svg class="life-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle class="shine" cx="8.5" cy="8.5" r="2.4"/></svg><span id="hud-lives">3</span></b></div>
+            <div class="chip stage-chip"><span class="label">Stage</span><b id="hud-stage">1</b></div>
+            <div class="chip time-chip" id="hud-time-chip"><span class="label">Time</span><b id="hud-time">60</b><span class="bar" aria-hidden="true"><i id="hud-bar"></i></span></div>
+            <div class="chip best-chip"><span class="label">Best</span><b id="hud-best">0</b></div>
+          </div>
+        </section>
+
+        <div class="top-actions" id="top-actions">
+          <button id="sound" class="icon-btn" type="button" aria-pressed="true" aria-label="Sound on" title="Sound (M)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9v6h4l5 4V5L8 9z"/><path class="waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="slash" d="M17 9l5 6M22 9l-5 6"/></svg>
+          </button>
+          <button id="open-settings" class="icon-btn" type="button" aria-label="Settings" aria-haspopup="dialog" title="Settings">
+            <svg class="cog" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.18 10.22L21.9 10.59L21.9 13.41L19.18 13.78L18.34 15.82L20 18L18 20L15.82 18.34L13.78 19.18L13.41 21.9L10.59 21.9L10.22 19.18L8.18 18.34L6 20L4 18L5.66 15.82L4.82 13.78L2.1 13.41L2.1 10.59L4.82 10.22L5.66 8.18L4 6L6 4L8.18 5.66L10.22 4.82L10.59 2.1L13.41 2.1L13.78 4.82L15.82 5.66L18 4L20 6L18.34 8.18ZM15 12a3 3 0 1 0-6 0a3 3 0 1 0 6 0Z"/></svg>
+          </button>
+          <button id="pause" class="icon-btn" type="button" aria-label="Pause" aria-haspopup="dialog" title="Pause (P)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+          </button>
+        </div>
+
+        <div id="banner" class="banner" hidden><b id="banner-title"></b><span id="banner-sub"></span></div>
+        <div id="hint" class="hintbox" hidden>
+          <span id="hint-text"></span>
+          <button id="hint-ok" class="btn small" type="button">Got it</button>
+        </div>
+
+        <div id="touch" class="touch" hidden>
+          <div class="pad">
+            <button id="t-left" class="tbtn" type="button" aria-label="Move left"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button id="t-right" class="tbtn" type="button" aria-label="Move right"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+          <button id="t-fire" class="tbtn fire" type="button" aria-label="Fire line"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5M6 11l6-6 6 6"/></svg></button>
+        </div>
+      </div>
+    </main>
+
+    <div id="title-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="title-h" hidden>
+      <div class="sheet title-sheet">
+        <h2 id="title-h" class="wordmark">
+          <svg class="logo" viewBox="0 0 96 64" aria-hidden="true">
+            <defs>
+              <radialGradient id="lg1" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#ffd3e6"/><stop offset="0.5" stop-color="#ff4f94"/><stop offset="1" stop-color="#9a1a52"/></radialGradient>
+              <radialGradient id="lg2" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff0c4"/><stop offset="0.5" stop-color="#ffb32e"/><stop offset="1" stop-color="#a8620a"/></radialGradient>
+            </defs>
+            <path class="cord" d="M48 62V4"/>
+            <circle cx="26" cy="38" r="20" fill="url(#lg1)" stroke="#0b1030" stroke-width="3"/>
+            <ellipse cx="18" cy="28" rx="6.5" ry="3.6" transform="rotate(-40 18 28)" fill="#fff" opacity="0.85"/>
+            <circle cx="72" cy="22" r="14" fill="url(#lg2)" stroke="#0b1030" stroke-width="3"/>
+            <ellipse cx="67" cy="16" rx="4.4" ry="2.4" transform="rotate(-40 67 16)" fill="#fff" opacity="0.85"/>
+          </svg>
+          <span>Split Shot</span>
+        </h2>
+        <p class="desc">Fire your line and split the bouncing bubbles. Pop every last one before the tide turns.</p>
+        <p class="desc keyhint"><kbd>←</kbd> <kbd>→</kbd> / <kbd>A</kbd> <kbd>D</kbd> walk · <kbd>Space</kbd> fire · <kbd>P</kbd> pause · <kbd>M</kbd> mute</p>
+        <p id="title-best" class="desc"></p>
+        <div class="stack">
+          <button id="title-play" class="btn primary" type="button">Play</button>
+          <button id="title-settings" class="btn" type="button">Settings</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pause-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pause-h" hidden>
+      <div class="sheet">
+        <h2 id="pause-h">Paused</h2>
+        <div class="stack">
+          <button id="pause-resume" class="btn primary" type="button">Resume</button>
+          <button id="pause-restart" class="btn" type="button">Restart</button>
+          <button id="pause-settings" class="btn" type="button">Settings</button>
+          <button id="pause-quit" class="btn" type="button">Quit to title</button>
+        </div>
+        <div id="pause-confirm" class="confirm-bar" role="group" aria-label="Confirm" hidden>
+          <span id="pause-confirm-text"></span>
+          <button id="pause-confirm-yes" class="btn small primary" type="button">Yes</button>
+          <button id="pause-confirm-no" class="btn small" type="button">Keep playing</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="over-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="over-h" hidden>
+      <div class="sheet">
+        <h2 id="over-h">Game over</h2>
+        <p id="over-new" class="badge" hidden></p>
+        <p class="label big-label">Score</p>
+        <p id="over-score" class="big" aria-live="off"></p>
+        <ul class="tiles" aria-label="Run summary">
+          <li><span class="label">Stage</span><b id="over-stage"></b></li>
+          <li><span class="label">Best score</span><b id="over-best"></b></li>
+          <li><span class="label">Furthest</span><b id="over-furthest"></b></li>
+        </ul>
+        <p id="over-detail" class="sr-only"></p>
+        <div class="stack">
+          <button id="over-retry" class="btn primary" type="button">Play again</button>
+          <button id="over-title" class="btn" type="button">Title screen</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="settings-h" hidden>
+      <div class="sheet">
+        <h2 id="settings-h">Settings</h2>
+        <div class="options">
+          <div class="row">
+            <label for="volume" class="lbl">Volume</label>
+            <input id="volume" type="range" min="0" max="100" step="5" value="70" />
+            <output id="volume-out" for="volume">70</output>
+          </div>
+          <fieldset data-setting="sound"><legend>Sound</legend>
+            <button type="button" data-value="true">On</button><button type="button" data-value="false">Muted</button>
+          </fieldset>
+          <fieldset data-setting="reduceMotion"><legend>Reduce motion</legend>
+            <button type="button" data-value="system">System</button><button type="button" data-value="on">On</button><button type="button" data-value="off">Off</button>
+          </fieldset>
+          <fieldset data-setting="colorAssist"><legend>Colour-blind assist (bubble numbers)</legend>
+            <button type="button" data-value="false">Off</button><button type="button" data-value="true">On</button>
+          </fieldset>
+          <fieldset data-setting="textSize"><legend>Text size</legend>
+            <button type="button" data-value="100">100%</button><button type="button" data-value="125">125%</button><button type="button" data-value="150">150%</button>
+          </fieldset>
+          <fieldset data-setting="theme"><legend>Theme</legend>
+            <button type="button" data-value="system">System</button><button type="button" data-value="light">Light</button><button type="button" data-value="dark">Dark</button>
+          </fieldset>
+        </div>
+        <button id="settings-close" class="btn primary" type="button">Done</button>
+      </div>
+    </div>
+    <div id="status" class="sr-only" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,283 @@
+/* Results card, leaderboard panels and the busy notice. */
+.results {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -46%) scale(0.9);
+  min-width: calc(var(--u) * 760);
+  background: var(--cream);
+  color: var(--ink);
+  border: calc(var(--u) * 8) solid #fff;
+  border-radius: calc(var(--u) * 40);
+  padding: calc(var(--u) * 30) calc(var(--u) * 50) calc(var(--u) * 36);
+  box-shadow:
+    inset 0 calc(var(--u) * -14) 0 #00000014,
+    0 calc(var(--u) * 14) 0 #0000004d,
+    0 calc(var(--u) * 30) calc(var(--u) * 60) #00000059;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden; /* hidden card: its buttons are not Tab stops */
+  transition: all 0.4s cubic-bezier(0.2, 1.5, 0.4, 1);
+}
+.results.show {
+  visibility: visible;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.res-title {
+  font-size: calc(var(--u) * 92);
+  font-weight: 900;
+  color: var(--red);
+  -webkit-text-stroke: calc(var(--u) * 4) #fff;
+  paint-order: stroke fill;
+  line-height: 1;
+}
+.res-place {
+  font-size: calc(var(--u) * 36);
+  font-weight: 900;
+  margin: calc(var(--u) * 10) 0 calc(var(--u) * 20);
+}
+.res-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 calc(var(--u) * 8);
+  font-size: calc(var(--u) * 34);
+  font-weight: 900;
+}
+.res-table td {
+  padding: calc(var(--u) * 8) calc(var(--u) * 18);
+  background: #efe6d2;
+  text-align: left;
+}
+.res-table td:first-child {
+  border-radius: calc(var(--u) * 18) 0 0 calc(var(--u) * 18);
+  width: calc(var(--u) * 60);
+  text-align: center;
+}
+.res-table td:last-child {
+  border-radius: 0 calc(var(--u) * 18) calc(var(--u) * 18) 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.res-table tr.me td {
+  background: var(--yellow);
+}
+.res-table i {
+  display: inline-block;
+  width: calc(var(--u) * 26);
+  height: calc(var(--u) * 26);
+  border-radius: 50%;
+  border: calc(var(--u) * 4) solid #fff;
+  margin-right: calc(var(--u) * 14);
+  vertical-align: calc(var(--u) * -3);
+  box-shadow: 0 0 0 calc(var(--u) * 2) #0003;
+}
+.res-keys {
+  margin-top: calc(var(--u) * 22);
+  font-size: calc(var(--u) * 28);
+  font-weight: 900;
+}
+.results.show [data-key] {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.results:not(.board) .res-board,
+.results.board .res-table:not(.res-board) {
+  display: none;
+}
+.results:not(.asking) .res-save,
+.results.asking .res-keys {
+  display: none;
+}
+.res-save {
+  margin-top: calc(var(--u) * 18);
+}
+.res-ask {
+  font-size: calc(var(--u) * 36);
+  font-weight: 900;
+  margin-bottom: calc(var(--u) * 12);
+}
+.res-row {
+  display: flex;
+  gap: max(calc(var(--u) * 12), 8px); /* Skip sits >= 8px from Save */
+}
+.res-name {
+  flex: 1;
+  min-width: 0;
+  font: 900 calc(var(--u) * 36) var(--font);
+  color: var(--ink);
+  padding: calc(var(--u) * 12) calc(var(--u) * 22);
+  min-height: var(--tap);
+  border-radius: calc(var(--u) * 18);
+  border: calc(var(--u) * 4) solid var(--ink);
+  background: #fff;
+  pointer-events: auto;
+  touch-action: auto;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.res-row button {
+  font: 900 calc(var(--u) * 36) var(--font);
+  color: #fff;
+  background: var(--green);
+  border: 0;
+  padding: calc(var(--u) * 12) calc(var(--u) * 30);
+  min-height: var(--tap);
+  min-width: var(--tap);
+  border-radius: calc(var(--u) * 18);
+  pointer-events: auto;
+  cursor: pointer;
+}
+.res-row .res-skip {
+  background: #5b6168; /* white text 6.3:1 */
+}
+.res-row button:disabled {
+  opacity: 0.55;
+}
+.res-msg {
+  min-height: calc(var(--u) * 36);
+  margin-top: calc(var(--u) * 8);
+  font-size: calc(var(--u) * 28);
+  font-weight: 900;
+  color: var(--red);
+}
+.res-board {
+  display: table;
+  max-height: calc(var(--u) * 480);
+}
+.rec-board {
+  position: absolute;
+  right: calc(var(--u) * 30);
+  width: calc(var(--u) * 360);
+  padding: calc(var(--u) * 14) calc(var(--u) * 20) calc(var(--u) * 16);
+  background: #1e2126d1;
+  border: calc(var(--u) * 4) solid #fff;
+  border-radius: calc(var(--u) * 26);
+  color: #fff;
+  font-weight: 900;
+  font-size: calc(var(--u) * 28);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.rec-board.show {
+  visibility: visible;
+  opacity: 1;
+}
+.title-screen:not(.show) .rec-board {
+  visibility: hidden;
+}
+.title-board {
+  top: calc(var(--u) * 345);
+}
+.maps-board {
+  top: calc(var(--u) * 30);
+}
+.rec-head {
+  color: var(--yellow);
+  font-size: 1.14em;
+  margin-bottom: 0.3em;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rec-empty {
+  text-align: center;
+  padding: 0.5em 0;
+  font-size: 0.9em;
+}
+.rec-row {
+  display: flex;
+  gap: 0.5em;
+  line-height: 1.32;
+}
+.rec-p {
+  width: 1.2em;
+  text-align: right;
+  color: var(--yellow);
+  flex: none;
+}
+.rec-n {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+.rec-t {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+.maps.has-board .maps-best {
+  display: none;
+}
+
+/* ---- results details ---- */
+.res-extra {
+  margin: calc(var(--u) * -8) 0 calc(var(--u) * 16);
+  font-size: calc(var(--u) * 28);
+  font-weight: 800;
+  line-height: 1.35;
+}
+.res-extra .good {
+  color: #15703c; /* 5.7:1 on the cream card */
+}
+.res-extra:empty {
+  display: none;
+}
+
+.busy {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--u) * 24);
+  transform: translate(-50%, 0);
+  padding: calc(var(--u) * 10) calc(var(--u) * 30) calc(var(--u) * 14);
+  border-radius: calc(var(--u) * 24);
+  background: #23262bd9;
+  color: #fff;
+  font-weight: 900;
+  font-size: max(calc(var(--u) * 32), 12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 5;
+}
+.busy.show {
+  opacity: 1;
+}
+
+/* race again / menu: real buttons, >= 44px tall */
+.res-keys {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px max(calc(var(--u) * 28), 8px);
+}
+.res-key {
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding: 0 calc(var(--u) * 14);
+  font-size: inherit;
+  font-weight: 900;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--u) * 16);
+}
+
+/* never wider than the screen (the name row used to push the card past the edge on a 400px phone) */
+.results {
+  max-width: calc(100% - 24px);
+}
+.results .res-name {
+  min-width: 0;
+  width: 100%;
+}
+.res-row {
+  flex-wrap: wrap;
+}
+.res-row .res-name {
+  flex: 1 1 calc(var(--u) * 360);
+}

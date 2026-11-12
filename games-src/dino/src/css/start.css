@@ -1,0 +1,54 @@
+/* Title START button: loading progress bar, queued state. */
+.btn.start {
+  position: relative;
+  overflow: hidden;
+}
+.btn.start .start-label {
+  position: relative;
+  z-index: 1;
+}
+/* loading: the button reads as in progress, with a real progress bar; a press still queues the start */
+.btn.start.is-loading {
+  cursor: progress;
+  background: color-mix(in srgb, var(--ink) 82%, var(--cream));
+}
+.btn.start.is-loading:hover {
+  background: color-mix(in srgb, var(--ink) 82%, var(--cream));
+  color: var(--cream);
+}
+.btn.start .start-bar {
+  display: none;
+}
+.btn.start.is-loading .start-bar {
+  display: block;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 6px;
+  width: var(--p, 6%);
+  background: var(--cream);
+  border-radius: 0 3px 3px 0;
+  transition: width 0.35s ease;
+}
+.btn.start.is-loading .start-label::after {
+  content: "";
+  display: inline-block;
+  width: 1.2em;
+  text-align: left;
+  animation: dots 1.2s steps(4, jump-none) infinite;
+}
+@keyframes dots {
+  0% { content: ""; }
+  25% { content: "."; }
+  50% { content: ".."; }
+  75% { content: "..."; }
+}
+#title.is-loading .cta {
+  animation: none;
+  font-size: calc(clamp(12px, 1.7vw, 14px) * var(--ui-scale));
+  letter-spacing: 0.1em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn.start .start-bar { transition: none; }
+  .btn.start.is-loading .start-label::after { animation: none; content: "..."; }
+}

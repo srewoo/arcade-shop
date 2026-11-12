@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Pop Cannon: an arcade bubble shooter with Arcade, Puzzle and Time Rush modes." />
+    <title>Pop Cannon</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231b2140'/><circle cx='24' cy='24' r='11' fill='%23e8473f'/><circle cx='42' cy='28' r='11' fill='%233b82f6'/><circle cx='32' cy='44' r='11' fill='%23f5c518'/></svg>"
+    />
+  </head>
+  <body>
+    <main class="app">
+      <header class="top">
+        <div class="title">
+          <h1>
+            <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+              <circle cx="24" cy="24" r="14" fill="#cf2e2e" /><circle cx="42" cy="28" r="14" fill="#2e6bdc" /><circle cx="32" cy="45" r="14" fill="#ffe04a" />
+            </svg>
+            <span>Pop Cannon</span>
+          </h1>
+          <span id="hud-level" class="mode">Level 1</span>
+        </div>
+        <div class="top-actions">
+          <button id="btn-pause" class="icon-btn" type="button" aria-label="Pause (P or Esc)">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="5" width="4" height="14" rx="1.2" /><rect x="14" y="5" width="4" height="14" rx="1.2" /></svg>
+          </button>
+          <button id="mute" class="icon-btn" type="button" aria-pressed="false" aria-label="Sound on (M to mute)">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" /><path class="waves" d="M15 9a4 4 0 0 1 0 6M17.5 6.5a8 8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /><path class="slash" d="M15 9.5l5 5M20 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="hud" aria-label="Game status">
+        <div class="score"><span class="label">Score</span><b id="hud-score">0</b></div>
+        <div><span class="label">Best</span><b id="hud-best">0</b></div>
+        <div id="hud-combo-cell" class="combo" hidden><span class="label">Combo</span><b id="hud-combo" aria-label="Combo">-</b></div>
+        <div id="hud-meter-cell"><span class="label" id="hud-meter-label">Misses left</span><b id="hud-meter">8</b></div>
+      </section>
+
+      <div id="stage" class="stage">
+        <canvas
+          id="game"
+          tabindex="0"
+          role="application"
+          aria-label="Pop Cannon playfield. Left and right arrows aim, Space fires, X swaps bubbles."
+        ></canvas>
+        <div id="overlay" class="overlay"></div>
+      </div>
+      <p id="hint" class="hint" role="status" aria-live="polite"></p>
+
+      <div class="controls" role="group" aria-label="Cannon controls">
+        <button id="aim-left" class="btn pad" type="button" aria-label="Aim left (hold, or Left arrow)">&#9664;</button>
+        <button id="btn-swap" class="btn pad" type="button" aria-label="Swap current and next bubble (X)">Swap</button>
+        <button id="btn-fire" class="btn pad primary" type="button" aria-label="Fire (Space)">Fire</button>
+        <button id="aim-right" class="btn pad" type="button" aria-label="Aim right (hold, or Right arrow)">&#9654;</button>
+      </div>
+    </main>
+    <p id="sr-status" class="sr-only" role="status" aria-live="polite"></p>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

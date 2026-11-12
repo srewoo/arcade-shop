@@ -1,0 +1,75 @@
+/* Menu, level select, dialogs. */
+.hero { margin: 1rem 0 0.25rem; font-size: clamp(2rem, 7vw, 3.2rem); letter-spacing: -0.03em; line-height: 1.05; }
+.tagline { margin: 0 0 1.25rem; color: var(--muted); font-size: 1.1rem; max-width: 36rem; }
+.packs { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+.pack-card {
+  display: grid; gap: 0.3rem; text-align: left; min-height: 7rem; padding: 1rem 1.1rem;
+  background: var(--panel); border: 2px solid var(--line); border-left-width: 10px; border-radius: 16px; box-shadow: var(--shadow);
+}
+.pack-card b { font-size: 1.25rem; }
+.pack-card span { color: var(--muted); }
+.pack-card small { font-size: 0.85rem; font-weight: 700; color: var(--star); }
+.pack-card.bridge { border-left-color: #c9a46a; }
+.pack-card.raft { border-left-color: #3b8fb5; }
+.pack-card.daily { border-left-color: #c75d8a; }
+.pack-card:hover { border-color: var(--muted); }
+
+.lvl-head { margin: 0.75rem 0; font-size: 1.6rem; }
+.earned { margin: 0; font-weight: 700; color: var(--star); }
+.grid { display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr)); }
+.tile {
+  display: grid; justify-items: center; gap: 0.1rem; min-height: 5rem; padding: 0.4rem;
+  background: var(--panel); border: 2px solid var(--line); border-radius: 14px;
+}
+.tile b { font-size: 1.4rem; }
+.tile .stars { color: var(--star); font-size: 0.9rem; letter-spacing: 0.05em; }
+.tile small { color: var(--muted); font-size: 0.75rem; }
+.tile:hover { border-color: var(--muted); }
+
+.dlg {
+  width: min(26rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); overflow: auto;
+  padding: 1.1rem 1.25rem; border: 2px solid var(--line); border-radius: 18px;
+  background: var(--panel); color: var(--ink); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.dlg.wide { width: min(32rem, calc(100vw - 2rem)); }
+.dlg::backdrop { background: rgba(5, 8, 20, 0.7); }
+.dlg h2 { margin: 0 0 0.75rem; font-size: 1.4rem; }
+.dlg-body { display: grid; gap: 0.6rem; }
+.big-stars { margin: 0; font-size: 2.4rem; letter-spacing: 0.15em; color: var(--star); text-align: center; }
+.dlg p { margin: 0; }
+.help { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.5rem; }
+.route { margin: 0; padding-left: 1.5rem; display: grid; gap: 0.3rem; }
+
+.menu-art { position: relative; margin-top: 1.25rem; height: clamp(14rem, 46dvh, 34rem); border-radius: 18px; overflow: hidden; background: linear-gradient(var(--sky-top), var(--sky-bottom)); box-shadow: var(--shadow); }
+.ma-ground { position: absolute; inset: auto 0 0 0; height: 40%; display: flex; }
+.ma-bank { flex: 0 0 30%; background: linear-gradient(#6b9a62 0 0.15rem, var(--bank-edge) 0.15rem 0.4rem, transparent 0.4rem), radial-gradient(rgba(255,255,255,.07) 1.5px, transparent 2px) 0 0 / 18px 18px, linear-gradient(#2c5238, #12261b); }
+.ma-river { position: relative; overflow: hidden; flex: 1; background: linear-gradient(#1c4676, #0b2244); }
+.ma-river .water { position: absolute; inset: 0; overflow: hidden; }
+.ma-river .glitter { position: absolute; left: 50%; top: 0; width: 30%; height: 100%; translate: -50% 0; opacity: 0.7; mix-blend-mode: screen; }
+.menu-art > .skyline { top: auto; bottom: 40%; height: 7rem; }
+.menu-art .moon { top: 8%; }
+.ma-deck .rail { position: absolute; left: 0; right: 0; bottom: 100%; height: 1.2rem; background: linear-gradient(#a98550, #a98550) 0 22% / 100% 3px no-repeat, repeating-linear-gradient(90deg, #4a3520 0 5px, transparent 5px 56px); opacity: 0.9; }
+.ma-deck { position: absolute; left: 28%; right: 28%; bottom: calc(40% - 0.6rem); height: 0.6rem; background: repeating-linear-gradient(90deg, #7a5834 0 15px, #35240f 15px 17px); border-top: 3px solid #8a6a42; border-bottom: 4px solid #2a1c0c; box-shadow: 0 0.8rem 0.8rem -0.2rem rgba(0,0,0,.55); }
+.ma-fig { position: absolute; width: clamp(3.4rem, 9vw, 5.4rem); aspect-ratio: 64 / 72; translate: -50% 0; }
+.ma-fig svg { filter: drop-shadow(0 2px 1.5px rgba(0,0,0,.45)); width: 100%; height: 100%; display: block; overflow: visible; }
+.ma-lamp { position: absolute; left: 44.5%; bottom: calc(40% + 1.5rem); width: 1.8rem; filter: drop-shadow(0 0 10px rgba(255, 190, 90, 0.8)); }
+.ma-lamp svg { width: 100%; display: block; }
+@media (max-height: 30rem) { .menu-art { display: none; } }
+
+/* Result stars: earned gold, hint-capped shown as a dashed outline, never as a lost star. */
+.big-stars .bs { display: inline-block; }
+.big-stars .bs.empty { opacity: 0.45; }
+.big-stars .bs.capped { color: var(--star); border-bottom: 3px dashed var(--star); line-height: 0.9; }
+:root[data-motion='full'] .big-stars .bs.earned { animation: starpop 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) both; animation-delay: calc(var(--i) * 0.18s); }
+@keyframes starpop { from { transform: scale(0.2) rotate(-25deg); opacity: 0; } }
+.dlg .note { text-align: center; }
+.dlg .good { text-align: center; }
+
+/* Short landscape: keep the whole result card on screen. */
+@media (max-height: 30rem) {
+  .dlg { padding: 0.7rem 1rem; }
+  .dlg h2 { margin-bottom: 0.4rem; font-size: 1.2rem; }
+  .dlg-body { gap: 0.35rem; }
+  .dlg .stack { grid-template-columns: 1fr 1fr; margin-top: 0.25rem; }
+  .big-stars { font-size: 1.7rem; }
+}

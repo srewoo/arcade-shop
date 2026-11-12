@@ -1,0 +1,29 @@
+/* Colour tokens. Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3). */
+:root {
+  --bg: #f4f1fa;
+  --panel: #ffffff;
+  --ink: #1d1b2e;
+  --muted: #55516b;
+  --line: #8780a9;
+  --accent: #2f2a63;
+  --accent-ink: #ffffff;
+  --focus: #5b3fd0;
+  --danger: #b3261e;
+  --shadow: 0 1px 0 rgba(29, 27, 46, 0.06), 0 8px 24px rgba(29, 27, 46, 0.1);
+  --c0: #ff6b57; --c1: #ffc43d; --c2: #3fd98f; --c3: #47b8ff;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #12142a; --panel: #1c2040; --ink: #eef0ff; --muted: #a9afd6; --line: #6b76ac;
+    --accent: #eef0ff; --accent-ink: #12142a; --focus: #8fb4ff; --danger: #ff8a80;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.4); --glow1: rgba(71, 184, 255, 0.16); --glow2: rgba(181, 140, 255, 0.14);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #12142a; --panel: #1c2040; --ink: #eef0ff; --muted: #a9afd6; --line: #6b76ac;
+  --accent: #eef0ff; --accent-ink: #12142a; --focus: #8fb4ff; --danger: #ff8a80;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.4); --glow1: rgba(71, 184, 255, 0.16); --glow2: rgba(181, 140, 255, 0.14);
+  color-scheme: dark;
+}

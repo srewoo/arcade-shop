@@ -1,0 +1,128 @@
+/* Scene art layers: skyline, moon halo, textured banks, animated river, plank bridge, fireflies, vignette. */
+.scene { --horizon: clamp(2rem, 12dvh, 6rem); }
+.skyline { position: absolute; left: 0; top: 0; width: 100%; height: calc(var(--horizon) + 0.4rem); pointer-events: none; }
+.moon::before {
+  content: ''; position: absolute; inset: -140%; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(247, 241, 210, 0.22), rgba(247, 241, 210, 0.07) 38%, transparent 68%);
+}
+.sky { opacity: 0.95; }
+
+/* Banks: lit top edge, soft ground gradient, speckle, shaded shoreline. */
+.bank {
+  background:
+    linear-gradient(#6b9a62 0 0.18rem, var(--bank-edge) 0.18rem 0.42rem, transparent 0.42rem),
+    radial-gradient(rgba(255, 255, 255, 0.07) 1.5px, transparent 2px) 0 0 / 18px 18px,
+    radial-gradient(rgba(0, 0, 0, 0.16) 2px, transparent 2.5px) 9px 9px / 26px 26px,
+    linear-gradient(#2c5238, #1a3224 70%, #12261b);
+  margin-top: var(--horizon);
+}
+.bank.start { box-shadow: inset -0.9rem 0 1rem -0.5rem rgba(5, 12, 9, 0.7), inset -0.18rem 0 0 #4d7a55; }
+.bank.goal { box-shadow: inset 0.9rem 0 1rem -0.5rem rgba(5, 12, 9, 0.7), inset 0.18rem 0 0 #4d7a55; }
+
+/* River */
+.mid {
+  background: linear-gradient(#1c4676 0, #153a68 35%, #0b2244 100%);
+  margin-top: var(--horizon);
+}
+.scene[data-pack='raft'] .bank { margin-top: var(--horizon); }
+.mid > .water, .mid > .glitter, .mid > .deck { position: absolute; pointer-events: none; }
+.water { inset: 0; overflow: hidden; }
+.water-tile { position: absolute; left: 0; top: 0; width: 512px; height: 1200px; max-width: none; }
+.glitter { left: 50%; top: 0; width: 30%; height: 100%; translate: -50% 0; opacity: 0.8; mix-blend-mode: screen; }
+:root[data-motion='full'] .water-tile { animation: drift 14s linear infinite; }
+:root[data-motion='full'] .glitter { animation: shimmer 3.6s ease-in-out infinite; }
+@keyframes drift { to { transform: translateX(-256px); } }
+@keyframes shimmer { 50% { opacity: 0.4; scale: 1.06 1; } }
+
+/* Bridge: lit planks with beams, rail posts, support piles and a shadow on the water. */
+.mid > .deck {
+  left: -1px; right: -1px; top: 50%; height: 5.6rem; transform: translateY(-50%); z-index: 0;
+  background:
+    linear-gradient(rgba(255, 220, 160, 0.22), transparent 22%, rgba(0, 0, 0, 0.34)),
+    repeating-linear-gradient(90deg, #7a5834 0 15px, #35240f 15px 17px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.12) 0 37px, transparent 37px 83px),
+    var(--deck);
+  border-top: 5px solid #8a6a42;
+  border-bottom: 5px solid #2a1c0c;
+  box-shadow: 0 1.1rem 1rem -0.3rem rgba(0, 0, 0, 0.6), 0 0 0 1px #20150a;
+}
+.deck .rail { position: absolute; left: 0; right: 0; pointer-events: none; }
+.deck .rail.back {
+  bottom: 100%; height: 1.25rem; margin-bottom: 5px;
+  background:
+    linear-gradient(#a98550, #a98550) 0 22% / 100% 3px no-repeat,
+    linear-gradient(#6b4e2c, #6b4e2c) 0 70% / 100% 2px no-repeat,
+    repeating-linear-gradient(90deg, #4a3520 0 5px, transparent 5px 56px);
+  opacity: 0.9;
+}
+.deck .rail.front {
+  top: 100%; height: 1.6rem; margin-top: 5px;
+  background:
+    repeating-linear-gradient(90deg, #3a2812 0 9px, transparent 9px 112px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45));
+  -webkit-mask: linear-gradient(#000 40%, transparent);
+  mask: linear-gradient(#000 40%, transparent);
+}
+.deck .lamp-pool {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 196, 100, 0.32), transparent 70%);
+}
+:root[data-motion='full'] .deck .lamp-pool { animation: flicker 2.8s ease-in-out infinite; }
+@keyframes flicker { 0%, 100% { opacity: 1; } 30% { opacity: 0.78; } 55% { opacity: 0.95; } 75% { opacity: 0.7; } }
+.scene[data-pack='raft'] .mid > .deck { display: none; }
+
+/* Lantern and raft */
+.carrier { filter: drop-shadow(0 0 12px rgba(255, 190, 90, 0.9)) drop-shadow(0 0 3px rgba(255, 230, 150, 0.9)); }
+.carrier svg { transform-origin: 50% 5%; }
+:root[data-motion='full'] .carrier svg { animation: swing 3.4s ease-in-out infinite; }
+:root[data-motion='full'] .scene[data-pack='raft'] .carrier svg { transform-origin: 50% 100%; animation: bob 3s ease-in-out infinite; }
+@keyframes swing { 50% { transform: rotate(5deg); } 0%, 100% { transform: rotate(-5deg); } }
+@keyframes bob { 50% { transform: translateY(0.18rem) rotate(1.2deg); } }
+.scene[data-pack='raft'] .carrier { filter: drop-shadow(0 0.4rem 0.3rem rgba(0, 0, 0, 0.5)); }
+
+/* Characters */
+.fig { filter: drop-shadow(0 2px 1.5px rgba(0, 0, 0, 0.45)); transform-origin: 50% 100%; }
+:root[data-motion='full'] .scene .actor:not(.picked) .fig { animation: breathe 3.6s ease-in-out infinite; }
+:root[data-motion='full'] .scene .actor:nth-child(2n) .fig { animation-delay: -1.1s; }
+:root[data-motion='full'] .scene .actor:nth-child(3n) .fig { animation-delay: -2.3s; }
+@keyframes breathe { 50% { transform: scale(1.025, 0.975); } }
+.actor.picked { box-shadow: 0 0 18px rgba(255, 209, 102, 0.4), inset 0 0 12px rgba(255, 209, 102, 0.12); }
+:root[data-motion='full'] .actor.picked .fig { animation: lift 1.4s ease-in-out infinite; }
+@keyframes lift { 50% { transform: translateY(-0.2rem); } }
+
+/* Atmosphere */
+.fireflies { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.fireflies i {
+  position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #fff6b0; opacity: 0.55;
+  box-shadow: 0 0 8px 3px rgba(255, 232, 120, 0.7);
+}
+:root[data-motion='full'] .fireflies i { animation: fly var(--d) ease-in-out var(--dl) infinite alternate; }
+:root[data-motion='reduce'] .fireflies i:nth-child(2n) { display: none; }
+@keyframes fly { from { transform: translate(0, 0); opacity: 0.15; } 50% { opacity: 0.9; } to { transform: translate(var(--dx), -22px); opacity: 0.2; } }
+.vignette { position: absolute; inset: 0; pointer-events: none; z-index: 4; background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(2, 5, 16, 0.5)); }
+
+/* Win flare: warm light floods the scene. */
+.scene::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 4; opacity: 0; transition: opacity 0.6s;
+  background: radial-gradient(circle at 50% 55%, rgba(255, 214, 120, 0.28), transparent 62%);
+}
+.scene.won::after { opacity: 1; }
+
+/* Confetti variety */
+.bit.dot { border-radius: 50%; }
+.bit.dia { transform: rotate(45deg); border-radius: 1px; }
+.bit { box-shadow: 0 0 6px rgba(255, 255, 255, 0.35); }
+
+.ma-river .water-tile { position: absolute; left: 0; top: 0; width: 512px; height: 1200px; max-width: none; }
+:root[data-motion='full'] .ma-river .water-tile { animation: drift 14s linear infinite; }
+.ma-lamp { filter: drop-shadow(0 0 14px rgba(255, 190, 90, 0.9)); }
+
+/* Dirt path leading onto the bridge. */
+.bank::before {
+  content: ''; position: absolute; top: calc(50% - 2.8rem); height: 5.6rem; width: 70%; pointer-events: none; opacity: 0.5;
+  background: radial-gradient(rgba(0, 0, 0, 0.22) 1.5px, transparent 2px) 0 0 / 11px 11px, linear-gradient(var(--path-dir, 90deg), transparent, #6b5636 85%);
+  -webkit-mask: linear-gradient(#0000, #000 25% 75%, #0000); mask: linear-gradient(#0000, #000 25% 75%, #0000);
+}
+.scene[data-pack='raft'] .bank::before { display: none; }
+.bank.start::before { right: 0; }
+.bank.goal::before { left: 0; --path-dir: 270deg; }

@@ -1,0 +1,18 @@
+.overlay { position: fixed; inset: 0; background: rgba(10, 12, 28, 0.6); display: grid; place-items: center; padding: 1rem; z-index: 10; }
+.sheet {
+  width: min(100%, 26rem); max-height: 100%; overflow: auto; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 18px; padding: 1.2rem; box-shadow: var(--shadow); display: grid; gap: 0.8rem;
+}
+.sheet h2 { margin: 0; font-size: 1.4rem; }
+.sheet .desc { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.sheet .big { margin: 0; font-size: 2.4rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.stack { display: grid; gap: 0.5rem; }
+.confirm-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; border: 1px solid var(--danger); border-radius: 12px; padding: 0.6rem; }
+.confirm-bar span { flex: 1 1 100%; font-size: 0.95rem; }
+.options { display: grid; gap: 0.7rem; }
+.options .row { display: grid; grid-template-columns: auto 1fr 2.2rem; gap: 0.6rem; align-items: center; }
+.options input[type='range'] { width: 100%; min-height: 44px; accent-color: var(--focus); }
+.options output { font-variant-numeric: tabular-nums; text-align: right; }
+fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+legend { float: left; width: 100%; padding: 0; font-size: 0.875rem; color: var(--muted); margin-bottom: 0.25rem; }
+fieldset button[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

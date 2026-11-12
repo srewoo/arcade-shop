@@ -1,0 +1,102 @@
+/* ---- dialogs (pause, settings, how to play, game over) ---- */
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  background: rgba(8, 4, 6, 0.72);
+  font-size: calc(16px * var(--ui-scale));
+  touch-action: pan-y;
+}
+
+.modal-root:focus { outline: none; }
+
+.panel {
+  width: min(100%, 26em);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 1em 1.1em;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  line-height: 1.35;
+}
+
+.panel h2 { margin: 0 0 0.5em; font-size: 1.4em; color: var(--accent); }
+.panel h3 { margin: 0.6em 0 0.25em; font-size: 1em; color: var(--accent); }
+.panel p { margin: 0.4em 0; }
+.panel .note { color: #bde7ff; }
+.panel .hint { color: var(--muted); font-size: 0.85em; }
+.panel .badge { color: #9dffb0; font-weight: 700; }
+
+.stack { display: grid; gap: 0.5em; }
+.stack.gap { margin-top: 1em; gap: 1em; }
+.row-btns { grid-template-columns: repeat(auto-fit, minmax(7em, 1fr)); }
+
+.btn, .seg-btn, .switch {
+  min-height: 44px;
+  padding: 0.5em 0.9em;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #2a1a1c;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.btn.primary { background: #6b4a12; border-color: var(--accent); color: #fff6d8; }
+.btn.danger { border-color: var(--danger); color: var(--danger); }
+.btn[aria-disabled="true"] { opacity: 0.5; cursor: default; }
+.btn:hover, .seg-btn:hover, .switch:hover { background: #3b2528; }
+.btn.primary:hover { background: #7d5818; }
+
+.row { display: flex; align-items: center; justify-content: space-between; gap: 0.75em; min-height: 44px; margin: 0.25em 0; flex-wrap: wrap; }
+.row .lbl, .row label { flex: 1 1 8em; }
+.row.stack-row { align-items: stretch; }
+.row input[type="range"] { flex: 1 1 8em; min-height: 44px; accent-color: var(--accent); }
+.row .val { min-width: 3.2em; text-align: right; }
+
+.seg { display: flex; flex-wrap: wrap; gap: 0.35em; }
+.seg-btn { flex: 1; min-width: 44px; padding-inline: 0.7em; }
+.seg-btn[aria-pressed="true"], .switch[aria-checked="true"] { background: #6b4a12; border-color: var(--accent); color: #fff6d8; }
+.switch { min-width: 5em; }
+
+.card { padding: 0.5em 0.7em; margin: 0.5em 0; border-left: 3px solid var(--accent); background: #22141a; border-radius: 6px; }
+.card h3 { margin: 0 0 0.2em; }
+.card p { margin: 0; }
+
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4em 1em; margin: 0.5em 0; }
+.stat dt { color: var(--muted); font-size: 0.85em; }
+.stat dd { margin: 0; font-size: 1.15em; font-weight: 700; }
+.scores { list-style: none; margin: 0.25em 0 0; padding: 0; counter-reset: rank; }
+.scores li { counter-increment: rank; display: flex; justify-content: space-between; padding: 0.15em 0.3em; gap: 1em; }
+.scores li::before { content: counter(rank) "."; width: 1.5em; color: var(--muted); }
+.scores li span:first-of-type { flex: 1; font-weight: 700; }
+.scores li .sub { color: var(--muted); font-size: 0.8em; align-self: center; }
+.scores li.mine { background: #3a2a10; border-radius: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
+.modal-root[hidden] { display: none; }
+
+/* Toggles read as switches: a track and knob beside the On/Off word. */
+.switch { display: inline-flex; align-items: center; justify-content: space-between; gap: 0.6em; min-width: 6em; }
+.switch::after {
+  content: "";
+  order: -1;
+  width: 2.2em;
+  height: 1.2em;
+  border-radius: 1em;
+  border: 1px solid var(--line);
+  background: radial-gradient(circle at 0.6em 50%, var(--muted) 0.4em, transparent 0.45em), #140b0d;
+}
+.switch[aria-checked="true"]::after {
+  border-color: var(--accent);
+  background: radial-gradient(circle at calc(100% - 0.6em) 50%, #fff6d8 0.4em, transparent 0.45em), #8a6516;
+}

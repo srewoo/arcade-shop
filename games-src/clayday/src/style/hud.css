@@ -1,0 +1,56 @@
+/* Compact HUD: one stats strip, one gun/combo strip, one tally row. */
+.hud { display: grid; gap: 0.3rem; }
+.stats-row { display: grid; grid-template-columns: 0.8fr 1fr 0.8fr 1.4fr; gap: 0.3rem; }
+.gun-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.3rem; align-items: stretch; }
+.chip {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0.15rem 0.45rem;
+  display: flex; flex-direction: column; min-width: 0; justify-content: center;
+}
+.chip .k { font-size: 0.75rem; color: var(--muted); line-height: 1.1; }
+.chip b { font-size: 1.05rem; font-variant-numeric: tabular-nums; white-space: nowrap; line-height: 1.2; }
+.chip.low b { color: var(--bad); }
+.chip.low b::before { content: '\26A0\00a0'; }
+.chip.hot b { color: var(--clay); }
+.chip.shells { flex-direction: row; align-items: center; justify-content: flex-start; gap: 0.45rem; }
+.chip#chip-combo { flex-direction: row; align-items: center; justify-content: flex-start; gap: 0.4rem; }
+.shell-row { display: flex; gap: 4px; }
+.shell-row i { width: 11px; height: 22px; border-radius: 3px 3px 5px 5px; border: 2px solid var(--clay); background: var(--clay); }
+.shell-row i.empty { background: transparent; border-style: dashed; }
+.reload-btn { min-height: 44px; min-width: 44px; padding: 0 0.8rem; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-weight: 700; font-size: 0.875rem; }
+.reload-btn[disabled] { opacity: 0.6; }
+.reload-btn .bar { display: block; height: 3px; margin-top: 2px; background: var(--clay); width: 0; border-radius: 2px; }
+/* Tally: one row of pips. Hit = filled disc, miss = filled square with a cross, pending = hollow ring. */
+.tally { display: grid; grid-template-columns: repeat(25, minmax(0, 1fr)); gap: 2px; justify-items: center; padding: 1px 0; }
+.tally i { width: min(100%, 13px); aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--muted); }
+.tally i.hit { background: var(--good); border-color: var(--good); }
+.tally i.miss {
+  border-color: var(--bad); border-radius: 3px;
+  background: linear-gradient(45deg, transparent 40%, var(--panel) 40% 60%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, var(--panel) 40% 60%, transparent 60%), var(--bad);
+}
+@media (max-width: 24rem) { .chip b { font-size: 1rem; } .reload-btn { padding: 0 0.6rem; } }
+html[data-text='150'] .stats-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Side panel (landscape): 2x2 stats, shells + reload, combo, tally in two rows (13 + 12). */
+@media (orientation: landscape) and (min-width: 40rem), (min-aspect-ratio: 1/1) and (min-width: 36rem) {
+  .stats-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gun-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .gun-row #chip-combo { grid-column: 1 / -1; order: 3; }
+  .tally { grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 3px 2px; }
+}
+@media (orientation: landscape) and (min-height: 640px) and (min-width: 40rem) {
+  .hud { gap: 0.5rem; }
+  .chip { padding-block: 0.35rem; }
+  .chip b { font-size: 1.3rem; }
+}
+/* Short landscape (phone on its side, large text): one-line chips so the panel fits the viewport
+   and the field keeps the rest. Text stays at the chosen size. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .app { gap: 0.3rem; padding-block: max(0.4rem, env(safe-area-inset-top)) max(0.4rem, env(safe-area-inset-bottom)); }
+  .hud { gap: 0.25rem; }
+  .stats-row, .gun-row { gap: 0.25rem; }
+  .chip { flex-direction: row; align-items: baseline; justify-content: space-between; gap: 0.4rem; padding-block: 0.1rem; }
+  .chip.shells { align-items: center; }
+  .tally { padding: 0; }
+  .stage { grid-row: 1 / -1; contain: size; }
+}

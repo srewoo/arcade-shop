@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Sky Skirmish: a vertical-scrolling arcade air-combat shooter with waves, bosses and power-ups." />
+    <title>Sky Skirmish</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b2a55'/><path d='M32 8l9 30 10 10-19-5-19 5 10-10z' fill='%23f4f7fb' stroke='%2335c2ff' stroke-width='3' stroke-linejoin='round'/></svg>"
+    />
+  </head>
+  <body>
+    <div class="app" id="app" data-layout="stack">
+      <main class="stage" id="stage">
+        <div class="playfield" id="field">
+          <canvas id="game" role="img" aria-label="Sky Skirmish play field"></canvas>
+        </div>
+      </main>
+      <div class="insets" id="insets" aria-hidden="true"></div>
+      <div class="hud" id="hud" role="group" aria-label="Status">
+        <section class="hud-score panel-chip" aria-label="Score">
+          <span class="lbl">Score</span>
+          <strong class="score-val" id="hud-score">0</strong>
+          <span class="sub best-line"><span class="lbl">Best</span> <span id="hud-best">0</span></span>
+        </section>
+        <section class="hud-status panel-chip" aria-label="Run status">
+          <div class="st"><span class="lbl">Wave</span><b id="hud-wave">1</b></div>
+          <div class="st"><span class="lbl">Lives</span><span id="hud-lives" class="icons" role="img" aria-label="3 lives"></span></div>
+          <div class="st"><span class="lbl">Combo</span><b id="hud-mult" data-hot="false">x1</b></div>
+        </section>
+        <button id="pause-btn" class="icon-btn pause-btn" type="button" aria-label="Pause" title="Pause (P)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg>
+        </button>
+        <button id="bomb-btn" class="bomb-btn" type="button" aria-label="Bomb" title="Bomb (B)">
+          <span class="bomb-text">Bomb</span><span id="hud-bombs" class="icons" aria-hidden="true"></span>
+        </button>
+        <div class="chips" aria-hidden="true">
+          <span class="chip shield" id="chip-shield" hidden></span>
+          <span class="chip spread" id="chip-spread" hidden></span>
+        </div>
+        <p class="hint-banner" id="hint" hidden>
+          <span id="hint-text"></span>
+          <button id="hint-close" class="icon-btn" type="button">×</button>
+        </p>
+      </div>
+      <p id="status" class="sr-only" role="status" aria-live="polite"></p>
+      <div id="overlay" class="overlay" hidden></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

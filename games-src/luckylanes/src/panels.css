@@ -1,0 +1,104 @@
+/* Side column, scoreboard, help, overlays, settings and results. */
+.play > * { min-width: 0; }
+.sb-wrap { overflow-x: auto; border: 1px solid var(--ui-border); border-radius: 12px; background: var(--card); }
+.sb { border-collapse: collapse; width: 100%; min-width: 340px; font-variant-numeric: tabular-nums; font-size: 0.8125rem; }
+.sb th, .sb td { border: 1px solid var(--border); text-align: center; padding: 1px 1px; }
+.sb thead th { background: var(--accent-soft); font-size: 0.8125rem; padding: 3px; }
+.sb .name { text-align: left; padding-inline: 4px; min-width: 2.8rem; white-space: nowrap; font-size: 0.8125rem; }
+.sb tr.active .name { color: var(--accent); }
+.sb .boxes { display: flex; justify-content: flex-end; gap: 1px; min-height: 20px; }
+.sb .box { min-width: 0.8rem; height: 20px; line-height: 18px; border: 1px solid var(--border); border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+.sb .box.mark { color: var(--accent); }
+.sb .run { height: 22px; font-weight: 800; }
+.sb .total { font-size: 1.05rem; font-weight: 900; min-width: 2.3rem; }
+.sb .leave { font-size: 0.8125rem; font-weight: 700; }
+.sb .leave.now, .sb td.now { background: var(--accent-soft); }
+
+@media (max-width: 420px) {
+  .sb { min-width: 0; }
+  .sb th, .sb td { padding: 1px 0; }
+  .sb thead th { font-size: 0.75rem; padding: 3px 1px; }
+  .sb .name { min-width: 0; padding-inline: 2px; font-size: 0.75rem; }
+  .sb .box { min-width: 0.7rem; font-size: 0.6875rem; }
+  .sb .total { min-width: 0; font-size: 0.95rem; }
+}
+
+.help-list { margin: 2px 0 12px; padding-left: 18px; color: var(--fg); }
+.help-list li { margin: 6px 0; }
+
+.overlay {
+  position: fixed; inset: 0; z-index: 10; display: grid; place-items: center;
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: rgba(10, 6, 28, 0.78);
+}
+#settings { z-index: 12; }
+.panel {
+  width: min(560px, 100%); max-height: 94dvh; overflow: auto; padding: 20px;
+  border-radius: 18px; background: var(--card); border: 1px solid var(--border);
+}
+.panel.small { width: min(420px, 100%); }
+.panel h2 { margin-top: 0; }
+.tag { margin: 4px 0 12px; color: var(--muted); }
+.stack { display: grid; gap: 10px; }
+.modes { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; margin-bottom: 12px; }
+@media (max-width: 480px) { .modes { grid-template-columns: 1fr; } }
+.mode {
+  text-align: left; font: inherit; color: var(--fg); background: transparent; cursor: pointer;
+  padding: 10px 12px; border-radius: 12px; border: 2px solid var(--ui-border); display: grid; gap: 2px; min-height: 44px;
+}
+.mode b { font-size: 1rem; }
+.mode span { font-size: 0.8125rem; color: var(--muted); }
+.mode[aria-checked='true'] { border-color: var(--accent); background: var(--accent-soft); }
+.row { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; margin-bottom: 12px; }
+label { display: grid; gap: 4px; font-weight: 600; font-size: 0.875rem; }
+select {
+  font: inherit; min-height: 44px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--ui-border);
+  background: var(--card); color: var(--fg);
+}
+.fields { display: grid; gap: 12px; margin-bottom: 14px; }
+.fields input[type='range'] { width: 100%; height: 44px; margin: 0; accent-color: var(--accent); }
+.fields .check { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 600; }
+.fields .check input { width: 24px; height: 24px; flex: none; accent-color: var(--accent); }
+h3 { margin: 6px 0; font-size: 0.95rem; }
+.scores, .result-list { margin: 0 0 4px; padding-left: 22px; }
+.scores li, .result-list li { padding: 2px 0; font-variant-numeric: tabular-nums; }
+.scores .empty { list-style: none; margin-left: -22px; color: var(--muted); }
+.result-list { font-size: 1.15rem; font-weight: 700; }
+
+/* Results: payoff first (banner + confetti on the lane), then a tiered card. */
+.tier {
+  display: inline-block; margin: 0 0 6px; padding: 3px 12px; border-radius: 999px; font-weight: 800; font-size: 0.875rem;
+  letter-spacing: 0.04em; text-transform: uppercase; background: var(--accent-soft); color: var(--fg); border: 2px solid var(--ui-border);
+}
+.tier[data-tier='2'] { border-color: var(--cyan); }
+.tier[data-tier='3'] { border-color: var(--accent); }
+.tier[data-tier='4'] { border-color: #e8a800; background: #fff1b8; color: #3a2a00; }
+.big-score { margin: 0 0 8px; font-size: 3.2rem; line-height: 1; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--accent); }
+.panel.tiered { animation: card-in 0.35s ease-out both; }
+@keyframes card-in { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
+html[data-rm='on'] .panel.tiered { animation: none; }
+
+/* Phone landscape: lane on the left, scoreboard, meters and controls on the right. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .app { height: 100dvh; padding-block: 4px calc(6px + env(safe-area-inset-bottom, 0px)); }
+  .top { margin-bottom: 4px; }
+  .logo { font-size: 1.1rem; }
+  .layout { grid-template-columns: minmax(0, 1fr) minmax(300px, 350px); grid-template-rows: minmax(0, 1fr); gap: 10px; }
+  .side { align-content: start; overflow-y: auto; gap: 6px; }
+  .tipbar { min-height: 0; }
+  .tip:empty { display: none; }
+  .status { min-height: 2.4em; font-size: 0.8125rem; }
+  .stage { min-height: 160px; }
+  body.coach-on .status { display: none; }
+}
+#helpdlg { z-index: 13; }
+@media (max-width: 560px) {
+  .sb .box { min-width: 0.72rem; font-size: 0.6875rem; }
+  .sb .name { min-width: 2.4rem; font-size: 0.75rem; }
+  .sb .total { min-width: 2rem; }
+}
+.result-list { list-style: none; padding-left: 0; }
+
+.hero { margin: 0 0 0.7rem; }
+.hero svg { display: block; width: 100%; max-width: 320px; height: auto; border-radius: 14px; box-shadow: 0 6px 18px rgba(40, 20, 90, 0.35); }
+@media (max-height: 640px) { .hero { display: none; } }

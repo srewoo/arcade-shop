@@ -1,0 +1,36 @@
+/* Colour tokens. Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3).
+   The course scene and HUD chips are dark in every theme; only the dialog sheets follow the theme. */
+:root {
+  --bg: #eef5ee;
+  --panel: #ffffff;
+  --ink: #14241a;
+  --muted: #46594b;
+  --line: #6d8473;
+  --accent: #1f6e3d;
+  --accent-ink: #ffffff;
+  --brand: #3a9d5d;
+  --focus: #0b5cad;
+  --cell: #f1f6f1;
+  --cell-head: #dfeadf;
+  --rough: #1f4a2b;
+  --hud-bg: #0d1f14;
+  --hud-ink: #f2f9f3;
+  --hud-dim: #b2c8b8;
+  --gold: #ffd23f;
+  --shadow: 0 1px 0 rgba(20, 36, 26, 0.06), 0 8px 24px rgba(20, 36, 26, 0.14);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0c140f; --panel: #15231a; --ink: #eaf3ec; --muted: #a5b9aa; --line: #6e8776;
+    --accent: #86d9a0; --accent-ink: #0b1a10; --focus: #7cc0ff; --cell: #1b2c20; --cell-head: #22372a;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #0c140f; --panel: #15231a; --ink: #eaf3ec; --muted: #a5b9aa; --line: #6e8776;
+  --accent: #86d9a0; --accent-ink: #0b1a10; --focus: #7cc0ff; --cell: #1b2c20; --cell-head: #22372a;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}

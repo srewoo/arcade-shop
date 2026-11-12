@@ -1,0 +1,87 @@
+/* Game screen: the field fills the screen; the HUD floats over the scene. */
+.game { gap: 0.5rem; }
+.stage { flex: 1; min-height: 0; display: grid; gap: 0.5rem; grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr); grid-template-areas: 'field'; }
+.field { grid-area: field; position: relative; min-height: 0; min-width: 0; border-radius: 16px; overflow: hidden; background: #3f6b3a; border: 2px solid var(--road); }
+.field canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; outline: none; }
+
+.top { position: absolute; left: 0; right: 0; top: 0; display: flex; flex-direction: column; gap: 0.3rem; padding: 0.4rem; pointer-events: none; }
+.top button { pointer-events: auto; }
+.hud {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.5rem; padding: 0.3rem 0.4rem; border-radius: 14px;
+  background: rgba(14, 18, 22, 0.78); color: #f2f5f8; --muted: #c3ccd6; --line: #8f9aa8; --focus: #6cb4ff;
+}
+.hud .icon-btn { background: rgba(255, 255, 255, 0.1); color: #f2f5f8; border-color: var(--line); }
+.hud .icon-btn[aria-pressed='false'] { color: #c3ccd6; }
+.hud .chip { color: #f2f5f8; border-color: var(--line); }
+.hud-name { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 0; }
+.hud-name strong { font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stats { display: flex; gap: 0.3rem; margin: 0; width: 100%; order: 5; }
+.stats > div { flex: 1; padding: 0.1rem 0.35rem; min-width: 0; border-left: 1px solid rgba(255, 255, 255, 0.18); }
+.stats > div:first-child { border-left: 0; }
+.stats dt { font-size: 0.72rem; color: var(--muted); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stats dd { margin: 0; font-weight: 800; font-size: 0.95rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stats .primary { flex: 1.5; }
+.stats .primary dd { font-size: 1.45rem; line-height: 1.1; }
+.stats .low dd { color: #ff9d94; }
+.stats .low dt::after { content: ' (low)'; }
+.stats .ok dd { color: #7be3a8; }
+.hud-bump dd { color: #ff9d94; }
+:root[data-motion='full'] .hud-bump { animation: bump 0.3s; }
+@keyframes bump { 30% { transform: scale(1.08); } }
+@media (min-width: 640px) {
+  .stats { width: auto; order: 0; flex: 2; }
+  .hud-name { flex: 1 1 8rem; }
+}
+
+/* Reserved toast row: never changes the layout when a hint appears or fades. */
+.toasts { min-height: 2.6rem; display: flex; justify-content: center; align-items: flex-start; }
+.wait, .hintbar { background: rgba(14, 18, 22, 0.85); color: #fff; border-radius: 12px; font-size: 0.85rem; font-weight: 700; }
+.wait { padding: 0.25rem 0.8rem; border-radius: 999px; white-space: nowrap; }
+.wait:empty { display: none; }
+.hintbar { padding: 0.25rem 0.3rem 0.25rem 0.8rem; display: flex; gap: 0.5rem; align-items: center; max-width: 100%; }
+.hintbar span { flex: 1; }
+.hintbar .btn { background: rgba(255, 255, 255, 0.12); color: #fff; border-color: #aab3be; }
+.toasts:has(.hintbar:not([hidden])) .wait { display: none; }
+@media (max-width: 639px) { .toasts { min-height: 3.4rem; } }
+
+/* Juice (only when motion is allowed) */
+.pop { position: absolute; left: 50%; top: 42%; transform: translate(-50%, 0); font-weight: 900; font-size: 2.6rem; color: #ffe27a; text-shadow: 0 2px 0 #3a2a00, 0 0 18px rgba(0, 0, 0, 0.6); pointer-events: none; opacity: 0; }
+.pop.show { opacity: 1; }
+:root[data-motion='full'] .pop.show { animation: popup 1.4s ease-out both; }
+@keyframes popup { from { transform: translate(-50%, 20px) scale(0.6); opacity: 0; } 20% { transform: translate(-50%, 0) scale(1.1); opacity: 1; } to { transform: translate(-50%, -40px) scale(1); opacity: 0; } }
+:root[data-motion='full'] .field.flash-hit { animation: flashHit 0.35s; }
+:root[data-motion='full'] .field.flash-win { animation: flashWin 0.7s; }
+@keyframes flashHit { 0% { box-shadow: inset 0 0 0 6px rgba(255, 70, 60, 0.85), inset 0 0 60px rgba(255, 70, 60, 0.6); } 100% { box-shadow: inset 0 0 0 0 transparent; } }
+@keyframes flashWin { 0% { box-shadow: inset 0 0 0 6px rgba(75, 224, 138, 0.9), inset 0 0 90px rgba(75, 224, 138, 0.55); } 100% { box-shadow: inset 0 0 0 0 transparent; } }
+
+/* Touch controls */
+.touch-only { display: none; }
+html[data-touch='on'] .touch-only { display: flex; }
+html[data-touch='on'] .stage { grid-template-rows: minmax(0, 1fr) auto; grid-template-columns: 1fr auto; grid-template-areas: 'field field' 'wheel pedals'; }
+.wheel-wrap { grid-area: wheel; align-items: center; justify-content: center; }
+.pedals { grid-area: pedals; gap: 0.5rem; align-items: stretch; }
+.wheel { width: 7.5rem; height: 7.5rem; border-radius: 50%; touch-action: none; user-select: none; background: var(--panel); border: 1px solid var(--line); display: grid; place-items: center; }
+.wheel svg { width: 92%; height: 92%; fill: none; stroke: var(--ink); stroke-width: 7; stroke-linecap: round; transition: none; }
+.wheel .hub { fill: var(--ink); }
+.wheel .tick { fill: var(--focus); stroke: none; }
+.pedal {
+  min-width: 4.6rem; min-height: 5rem; border: 2px solid var(--line); background: var(--panel); border-radius: 14px;
+  font-weight: 800; font-size: 0.9rem; touch-action: none; user-select: none; padding: 0.4rem;
+}
+.pedal.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.pedal.brake { border-color: var(--warn); }
+
+/* Landscape touch: wheel and pedals flank the field; pedals stretch to the full height. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .game { gap: 0.35rem; }
+  html[data-touch='on'] .stage { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr); grid-template-areas: 'wheel field pedals'; }
+  html[data-touch='on'] .pedals { flex-direction: column; }
+  .pedal { flex: 1; min-height: 3.5rem; min-width: 5rem; }
+  .wheel { width: 6.5rem; height: 6.5rem; }
+  .toasts { min-height: 2.2rem; }
+}
+@media (orientation: landscape) and (min-height: 501px) {
+  html[data-touch='on'] .stage { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr); grid-template-areas: 'wheel field pedals'; }
+  html[data-touch='on'] .pedals { flex-direction: column; }
+  .pedal { flex: 1; }
+}

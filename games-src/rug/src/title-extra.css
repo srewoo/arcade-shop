@@ -1,0 +1,63 @@
+/* Title screen extras, real <button> reset, help button (loaded right after title.css). */
+/* ---- title screen extras ---- */
+.title-best {
+  min-height: calc(var(--u) * 40);
+  margin-top: calc(var(--u) * 22);
+  font-size: calc(var(--u) * 28);
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 calc(var(--u) * 3) 0 rgba(0, 0, 0, 0.45);
+}
+.menu-skins .key-btn {
+  padding-left: calc(var(--u) * 34);
+  padding-right: calc(var(--u) * 34);
+}
+.key-btn.set-btn {
+  background: var(--blue);
+  rotate: -1deg;
+  animation-delay: -2.4s;
+}
+.key-btn.trial-btn {
+  background: var(--yellow);
+  color: var(--ink);
+  text-shadow: none;
+}
+.key-btn:focus-visible {
+  outline: calc(var(--u) * 6) solid var(--yellow);
+  outline-offset: calc(var(--u) * 4);
+}
+
+
+/* ---- real <button> elements: reset the browser look, keep the original design ---- */
+button.key-btn,
+button.sound-btn,
+button.gar-done,
+button.res-key,
+button.pause-btn {
+  font-family: var(--font);
+  margin: 0;
+  line-height: normal;
+  appearance: none;
+  -webkit-appearance: none;
+}
+button.key-btn {
+  text-align: center;
+}
+.key-btn.help-btn {
+  background: var(--ink);
+  rotate: 1deg;
+  animation-delay: -1.1s;
+}
+.menu-skins .key-btn.help-btn {
+  padding-left: calc(var(--u) * 30);
+  padding-right: calc(var(--u) * 30);
+}
+.key-btn,
+.sound-btn {
+  min-height: var(--tap);
+  min-width: var(--tap);
+}
+.sound-btn {
+  width: max(calc(var(--u) * 74), var(--tap));
+  height: max(calc(var(--u) * 74), var(--tap));
+}

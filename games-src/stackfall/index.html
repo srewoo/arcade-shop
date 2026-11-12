@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Stackfall: a glass-terrarium falling-block puzzle game with five modes." />
+    <title>Stackfall</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23123a38'/><rect x='14' y='34' width='16' height='16' rx='4' fill='%233fbf95'/><rect x='30' y='34' width='16' height='16' rx='4' fill='%23ee9bb5'/><rect x='30' y='18' width='16' height='16' rx='4' fill='%23d98a52'/></svg>"
+    />
+  </head>
+  <body>
+    <main class="app">
+      <header class="bar">
+        <h1>Stack<span>fall</span></h1>
+        <div class="bar-actions">
+          <button id="btn-pause" class="chip" type="button"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg><span class="lbl">Pause</span> <kbd>P</kbd></button>
+          <button id="btn-sound" class="chip" type="button" aria-pressed="true" aria-label="Sound"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg><span class="lbl">Sound on </span><kbd>M</kbd></button>
+          <button id="btn-settings" class="chip" type="button"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm7.4-2.5a7.6 7.6 0 0 0 0-2l2-1.6-2-3.4-2.4.9a7.7 7.7 0 0 0-1.7-1L15 3.4h-4l-.3 2.5a7.7 7.7 0 0 0-1.7 1l-2.4-.9-2 3.4 2 1.6a7.6 7.6 0 0 0 0 2l-2 1.6 2 3.4 2.4-.9c.5.4 1.1.7 1.7 1l.3 2.5h4l.3-2.5c.6-.3 1.2-.6 1.7-1l2.4.9 2-3.4z"/></svg><span class="lbl">Settings</span></button>
+        </div>
+      </header>
+
+      <section class="hud" aria-label="Game stats">
+        <div><span class="k">Score</span><b id="hud-score">0</b></div>
+        <div><span class="k" id="hud-lines-k">Lines</span><b id="hud-lines">0</b></div>
+        <div><span class="k">Level</span><b id="hud-level">1</b></div>
+        <div id="hud-time-cell"><span class="k" id="hud-time-k">Time</span><b id="hud-time">0:00.0</b></div>
+        <div class="best" id="hud-best-cell"><span class="k" id="hud-best-k">Best</span><b id="hud-best">-</b></div>
+      </section>
+
+      <div class="stage" id="stage">
+        <canvas id="well" role="img" aria-label="Stackfall play area: the well, your stash and the next five shapes"></canvas>
+        <p id="coach" class="coach" hidden></p>
+        <div id="overlay" class="overlay" role="dialog" aria-modal="true" hidden></div>
+      </div>
+
+      <div id="pad" class="pad" role="group" aria-label="On-screen controls" hidden>
+        <div class="pad-l">
+          <button type="button" data-act="left" aria-label="Move left" title="Move left">&#9664;</button>
+          <button type="button" data-act="right" aria-label="Move right" title="Move right">&#9654;</button>
+          <button type="button" data-act="down" aria-label="Soft drop" title="Soft drop">&#9660;</button>
+        </div>
+        <div class="pad-r">
+          <button type="button" data-act="rotCCW" aria-label="Rotate left" title="Rotate left">&#8634;</button>
+          <button type="button" data-act="rotCW" aria-label="Rotate right" title="Rotate right">&#8635;</button>
+          <button type="button" data-act="stash" aria-label="Stash" title="Stash">Stash</button>
+          <button type="button" data-act="hard" aria-label="Hard drop" title="Hard drop">Drop</button>
+        </div>
+      </div>
+
+      <details class="hint" id="hint"><summary>Controls</summary><p>
+        Arrows or WASD move, <kbd>Z</kbd>/<kbd>X</kbd>/<kbd>Up</kbd> rotate, <kbd>C</kbd>/<kbd>Shift</kbd> stash,
+        <kbd>Space</kbd> hard drop, <kbd>P</kbd>/<kbd>Esc</kbd> pause, <kbd>M</kbd> mute. Touch: swipe, tap to rotate, swipe up to drop.
+      </p></details>
+      <p id="sr-status" class="sr-only" role="status" aria-live="polite"></p>
+    </main>
+
+    <dialog id="settings" aria-labelledby="settings-title"></dialog>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

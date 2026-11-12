@@ -1,0 +1,83 @@
+# Living Room GP (rug): polish changes, 2026-11-11
+
+Work list: `rug-review-2026-11-11.md` (25 items) plus `CONVENTIONS.md`. All edits are inside `rug/` (not `original/` or `beautified/`).
+Screenshots: `scratchpad/polish-shots/after-rug-*.png` (desk 1280x800, phone 400x860, land 860x400, reduced-motion + dark title, HUD 150 %, tips, pause, maps, results).
+
+## Gates (final run)
+| Check | Result |
+|---|---|
+| `__rug.sim()` six original maps | bit-identical: sol 31.954166666665174, sol-twist 36.39583333333533, sol-mirror 34.0958333333335, claude 29.11249999999867, claude-bend 31.591666666665194, claude-wild 32.46249999999887 |
+| `__rug.sim()` new maps (after scenery change) | round 23.37916666666566, runner 27.09166666666545 (unchanged) |
+| `npx vitest run` | 17 files, 134 tests pass (was 7 files, 82 tests) |
+| `npm run build` | passes; main chunk 272.46 kB (100.47 kB gzip) + `three` chunk 554.78 kB (140.72 kB gzip); was one 806.10 kB (233.71 kB gzip) chunk |
+| `npm audit` | found 0 vulnerabilities (no new runtime dependency) |
+| Console during all runs (desk, phone, land, reduced motion, dark) | 0 page errors, 0 console errors |
+
+The six originals were re-checked after: the AI/drift/camera config moves, the CSS split, the pause/interpolation work, the render changes, the scenery change for shaped maps. The sim gate script must now open `/?debug=1&map=<id>` (hooks are gated, see RUG-16).
+
+## Report items
+| ID | Status | What changed (files) | Verified how |
+|---|---|---|---|
+| RUG-01 pause | done | `logic/pauseState.js`, `main/overlays.js` (pause + tips controllers, auto-pause on `visibilitychange` hidden and `blur`), `ui/pausePanel.js`, `ui/focusTrap.js`, `ui/template.js` (dialog), `main/loop.js` (freeze: no `updateMode`, dt 0, engine gain off), `main/input.js` (P / Esc pause, Esc = Resume, held keys and touch stick cleared), `input/touchControls.js` (touch button now sends `KeyP`), `overlays.css` | Playwright: Esc/P open the overlay, `player.x/z` and `race.time` identical after 1.5 s, Resume continues, Restart and Quit need an in-page confirm (Esc backs out), Settings from pause hides the card and returns focus to the Settings button, blur and hidden-tab auto-pause, mode stays `race` (Esc no longer forfeits), Quit reaches `grab`; touch pause tap on phone and landscape. Unit tests `pauseState.test.js`. Menu button is now 52x52 and moved away from the minimap |
+| RUG-02 touch targets | done | `--tap: 44px` floors in `settings.css`, `panels.css`, `results.css`, `title.css`, `touch.css`; sound / menu / reset / camera buttons 52 px; settings panel scrolls (`max-height 94 %`) | Measured on 400x860 and 860x400: every `button/select/input/[data-key]` on title, settings, maps, garage, HUD, pause, results is >= 44x44 (before: settings options 27x34, swatches 39, sound 39, menu 39, results Save 69x34, Skip 64x34, name input 34 high, map chips 36 high). `scrollWidth` 400 at 400 px |
+| RUG-03 HUD text 8 px | done | `--hud-min: 12px` and `max(calc(var(--u)*N), var(--hud-min))` on every HUD font size (`hud*.css`, `nitro.css`, `touch.css`); portrait touch layout re-stacked (`touch.css`) | Computed font-size of every visible `.hud` text node >= 12 px at 400x860 and 860x400 (before ~8.1 px stat labels, ~9.6 px gap names). Bounding boxes: no overlaps between pos, lap, timer, gaps, stats, minimap, nitro bar, stick, buttons at 400x860 and 860x400 (also at HUD size 150 %) |
+| RUG-04 reduced motion | done | setting `reduceMotion` (System / On / Off) in `logic/settings.js`, `main/prefs.js` (`html[data-reduce-motion]`, `cameraRig.motionScale`, `particles.density`), `a11y.css` (loops off, popups become plain fades), `CameraRig.addShake` and `motionScale`, `Particles.scaled`, `fx/emitters.js` | `emulateMedia({reducedMotion:'reduce'})`: running infinite animations 18 -> 0 on title and in race; hits/lands/sofa add 0 shake (shake stays 0); "Off" overrides the OS; particle counts x0.4. Intro dive skippable by any key or tap (t 2.9 -> chase camera). Keeps the hop/sway for the default |
+| RUG-05 stale gap row | done | `ui/gapRow.js` (`fillGapRow`), `raceHud.js`, `hud-extra.css` (`visibility:hidden` instead of 25 % opacity) | Unit tests `gapRow.test.js`; Playwright at 1st and last place: the empty row has no text and is `visibility:hidden` |
+| RUG-06 hint overlap | done | `nitro.css`, `hud-extra.css`, `hud-overlay.css`: left-aligned above the nitro bar, wraps, `max-width: 100% - 520u`; WASD first; fades after 12 s (`config/hud.js`) and on the first pad pickup | 1280x800: hint right 924 <= minimap left 959 - 16; hint bottom 628 < nitro label top 649 (was 312-968 x 577-615 over the minimap and the car) |
+| RUG-07 onboarding | done | `logic/onboarding.js` (`rug-racers-seen`), tips card (`ui/pausePanel.js`, `ui/strings.js`, `overlays.css`), title "? How to play" button / `?` key, goal line, touch wording; hint lists WASD; settings footer lists H / V / M | Fresh storage: card shows at first race start, the race clock is frozen until a key or tap, flag stored, not shown after reload; replay from the title. Returning players: no delay |
+| RUG-08 touch camera / nitro | partial | `t-cam` button (`KeyC`), BOOST charge ring + percent + dim when empty (`--nitro`, `ui/UI.js`), stick raised in portrait so the nitro bar clears it (`touch.css`). Declined: separate DRIFT button (drift coaching is in the touch tips text: "pull the stick down while turning") | Phone: tap `.t-cam` changes `app.camView` chase -> far; BOOST shows 100 % and `aria-label`; bar and stick rects do not intersect |
+| RUG-09 sparse Round / Runner | partial | `logic/shapeRoutes.js` (4 outer-ring zones G-J for round), `config/maps.js` (round `arrange`, runner loses the zone outside the band), `world/layoutGenerator.js` (`ctx.inside` keeps houses and trees on the cloth, second pass of small trees for shaped rugs only), `world/sol/solArrange.js`. Own seeded stream only, original maps untouched | Houses on round 14 -> 28; props per 1000 u^2 (houses, trees, ponds, fields, parking, fences, towers): round 2.27, runner 1.38 vs Wild City 1.63 (139 % / 85 %, target >= 70 %); screenshots `after-rug-v2/v3-*-top.png`. Runner stays a narrow strip with only a few houses (no room outside the road). `sim()` round / runner unchanged; six originals bit-identical; unit tests `layoutGenerator.test.js` |
+| RUG-10 maps panel | done | `ui/template.js` (title inside the panel), `ui/settingsPanel.js` (`drawMapStyle`: theme / pattern / floor as three dropdowns), `panels.css`, `touch.css` | Panel height 41 % of 800 at 1280x800 (before 59 %, 470 of 800); 335 of 860 on the phone; full rug preview visible above the panel (screenshot). Left/Right browse kept |
+| RUG-11 settings over title | done | `main/settingsMenu.js` hides the title while open and restores it, scrim `#17120dd9`, heading inside the panel | Screenshot; focus returns to the Settings button that opened it; Tab stays inside the dialog (40 Tabs) |
+| RUG-12 contrast | done | `--green #17804a`, `--red #c8271f`, nitro label plate `#1e2126bf`, gap pill `#1e2126e6`, hint `#23262be6`, Skip `#5b6168`, `.res-extra .good #15703c`, `.split-pop.good #17804a` | Ratios (computed): white on green 3.22 -> 4.97; white on red 4.35 -> 5.58; Skip 3.26 -> 6.26; results "good" 4.06 -> 5.70; yellow nitro % on its plate worst case 5.09; gap text on the plate >= 5.94; hint 11.09; red message 4.04 -> 5.17 |
+| RUG-13 colour-blind / HUD scale / input | partial | `colourBlind` (blue / amber palette, symbols on deltas, FAST / SLOW words on splits, position numbers on minimap dots, drift tier words MINI / SUPER), `hudScale` 100 / 125 / 150 %, `boostMode` hold / toggle (`logic/boostToggle.js`). Declined: key remapping for the 6 actions (needs a capture UI and conflict rules, human decision) | Settings unit tests; toggle verified in race (press on, press off); HUD 150 % has no overlaps at 1280x800 and 400x860 (minimap, nitro bar and touch controls keep their size); screenshot `after-rug-desk-race-cb-hud150.png` |
+| RUG-14 audio events | done | `audio/sfx.js` (lap, split, driftTier, driftBank, driftLost, wrongWay, nitroReady, overtake, newBest, pad, turbo, confirm, back, pause, resume), `audio/audioEvents.js` event table, SFX and Engine buses (`audioEngine.js`), sliders; HUD emits events (`ui.onEvent`) | `audioEvents.test.js`: every event plays exactly one cue and passes its payload; buses default to 1. Listening / loudness pass not possible headless (limitation) |
+| RUG-15 pad stacking / mix constants | done | `sfx.pad()` single cue, `sfx.turbo(tier)` pitched per tier, `config/audio.js` engine mix | Unit test (one cue per event). Existing sounds keep their gains |
+| RUG-16 debug hooks | partial | `main.js`: hooks only with `import.meta.env.DEV` or `?debug=1` | Production build without `?debug`: `window.__rug` is `undefined`; gate script passes with `?debug=1`. Declined: leaderboard server rejecting impossible times (server is outside this folder; client checks would not help against a tampered client) |
+| RUG-17 tuning config | done | `config/ai.js` (AI profiles, difficulty table, driver constants), `config/drift.js`, `config/camera.js`, `config/hud.js`, `config/audio.js`, `config/medals.js`; modules import and re-export, values unchanged | `aiConfig.test.js` pins the values (Normal is bit-for-bit x1); six `sim()` numbers identical |
+| RUG-18 file / function size | partial | CSS split into 14 files <= 300 lines (`base`, `hud`, `hud-overlay`, `nitro`, `hud-extra`, `results`, `panels`, `title`, `title-extra`, `touch`, `touch-layout`, `settings`, `overlays`, `a11y`); `template.js` per-panel builders; `modes.js` -> `modes.js` + `modeUpdate.js`; `Particles.js` + `emitters.js`; `handleMenuKeys`, `createTouchControls`, `Particles` constructor, `syncCar` split | Style equivalence: computed styles of every UI element at 3 viewports, shown and hidden panel states, identical before/after the split. Remaining >50-line functions (44, all in sim, world, vehicle and scene builders: `Car.step`, `driveAi`, `generateRandomLayout`, `buildScenery`, ...) left on purpose (hard constraint, report says not before the gate is in CI) |
+| RUG-19 perf | partial | `vite.config.js` `manualChunks` (three in its own chunk), reused wheel buffer instead of per-frame arrays, cheap visual random source in the particle branches, `Session.step` only snapshots poses | Build sizes above. GPU fps and long-task budgets not measurable headless (software GL). Lazy-loading maps / garage UI not done |
+| RUG-20 results over HUD | done | `modeUpdate.js` (`showHUD(false)` on results), `frame.js` (no HUD refresh in results) | Phone results screenshot; `.hud` opacity 0.001 |
+| RUG-21 medals | done | `config/medals.js` (par from the autopilot, x1.04 / 1.12 / 1.25), `logic/medals.js`, map chips (stars as the non-colour cue), results card (medal, NEW!, next target), `docs/balance.md` | `medals.test.js`; phone results show "★★ Silver medal NEW! - Next: Gold at 0:59.00" |
+| RUG-22 favicon | done | `index.html` single valid SVG data URL | Parses as one `<link rel=icon type=image/svg+xml>` |
+| RUG-23 display font | done | `public/fonts/nunito-latin-900.woff2` (16.7 kB, SIL OFL, `OFL.txt` beside it), `@font-face` with `font-display: swap`, preload | `document.fonts.check('900 20px Nunito')` true, face status "loaded" |
+| RUG-24 nitro label spacing | done | `nitro.css` (wrap, `min-width: 4ch`, key chip `flex:none`) | At HUD 150 %: percent right 590 < key left 608, no collision |
+| RUG-25 balance | partial | `docs/balance.md` sweep (8 maps x 4 difficulties, autopilot player); difficulty shown on the results card. Not changed: the table (Hard / Insane are only ~1 % / ~3 % faster than Normal in practice, a feel call for a human playtest) | Sweep numbers in the doc; six `sim()` numbers unchanged |
+
+Counts: done 18, partial 7, declined 0 (sub-parts declined inside partials: DRIFT touch button, key remapping, leaderboard server validation).
+
+## Conventions items
+| Item | Status | Notes |
+|---|---|---|
+| Pause + auto-pause | done | see RUG-01. Settings (title or pause) freeze the sim and timers; the title background keeps no timers |
+| Settings fields | done | `reduceMotion`, `colourBlind`, `hudScale`, `boostMode`, `sfxVolume`, `engineVolume` added; saved under `rug-racers-settings`; each field validated with its own fallback; old saves load with defaults (test) |
+| Theme System / Light / Dark | n/a | the game has no light UI chrome (all panels dark); dark scheme emulation shows no change or error |
+| Accessibility floor | done (after follow-up) | text >= 12 px, targets >= 44, focus ring fallback, Settings / Pause / Tips / Maps / Garage trap Tab, Esc closes and focus returns to the opener (Maps, Garage and How-to only after the 2026-11-11 follow-up; the first pass covered Settings and Pause only), `<button>` for every control (title, Done, Back, Use, sound, results keys), `aria-live` status line, canvas `role=img` + label, minimap label |
+| Interpolation | done | `main/interpolation.js`, `logic/interp.js`: draw-only blend by accumulator / step at 240 Hz sim, restored after the frame, no blend across teleports. Verified: model position differs from the sim position on 60 / 60 frames (max 0.17 u), sim numbers identical. Unit tests |
+| Layout | done | checked at 1280x800, 400x860, 860x400; landscape phone moves lap stats left, buttons clear the timer and minimap; results card capped to the viewport width; DPR capped at 2 already |
+| Strings module | partial | `src/ui/strings.js` holds all new UI text, the hint and the dialogs; older title / settings labels are still inline |
+
+## Extra bugs found and fixed
+* `bootstrap.js` imported `../ui/ui.js` while the file is `UI.js` (works on macOS, breaks on a case-sensitive CI): fixed.
+* Results name row pushed the card wider than a 400 px screen: card capped to `100% - 24px`, row wraps.
+* Title buttons were `div role=button`: Enter on a focused button also started a race; now real buttons whose Enter / Space activate the button, not the game (unless driving).
+* Houses and trees on Runner / Round were placed outside the cloth (generator ignored the shape): fixed with `ctx.inside`.
+* Esc during intro also forfeited: now pauses.
+
+## Known remaining issues
+* Real-GPU frame rate, long tasks, loudness mix and the human difficulty curve were not measurable (software GL, no ears).
+* Key remapping and a touch DRIFT button are not built.
+* Leaderboard server validation (impossible times) needs a server change.
+* Runner has only a few houses (narrow strip); Hard / Insane feel unverified (see `docs/balance.md`).
+* 44 functions over 50 lines remain in sim, world and vehicle builders.
+* Maps / garage UI is not lazy-loaded.
+* Title and older settings labels are not yet in the strings module.
+
+## Follow-up fixes 2026-11-11
+Fixes for the verification round 1 findings (`rug-verification-2026-11-11.md`).
+* Hidden results buttons (finding 1): `.results` is now `visibility: hidden` until `.show`, so its two buttons are no longer Tab stops on the title. Browser check: 14 Tabs on the title visit only title buttons and the sound button.
+* Dialog focus (finding 2): Maps, Garage and How-to now use the shared `focusTrap.js` helper (`setDialogOpen` / `pickReturnTarget`): focus moves onto the panel (tabindex -1, so arrows / Space / Enter / Esc still reach the game), Tab and Shift+Tab stay inside (25 presses, 0 escapes), and on close focus returns to the opener, or to the matching title button when opened with K / L / ?. Maps and Garage close now show the title before hiding the panel so the opener is focusable. Unit tests in `tests/focusTrap.test.js`, `tests/hiddenPanels.test.js`.
+* Stray backup (finding 3): `src/input/touchControls.js.bak` deleted.
+* Title sway (finding 5): PARTIAL. The sway now pauses while a title button is hovered or keyboard-focused, so the real click target holds still under the pointer. It still runs while idle, so Playwright's "stable" check on an un-hovered title button still reports "not stable" (verified: `hover()` times out; moving the mouse onto the button then clicking works). Moving the animation to an inner element would change how the buttons look (the visuals live on the button), so it was not done. Reduce motion still removes the animation entirely.
+* Corrected claims: "dialogs return focus to the opener" was only true for Settings and Pause in the first pass; the "Title buttons were not stable" fix is only complete under Reduce motion (see above). Finding 4 (HUD 150 % `.stats` / `.drift-pop` bounding boxes overlap, transient pop) is not addressed.
+* Gates after the follow-up: vitest 142 pass, build ok, sim gate all six originals ok:true.

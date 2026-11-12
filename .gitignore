@@ -1,0 +1,34 @@
+# Dependencies (root and every games-src/<game>/)
+node_modules/
+
+# Build output (root dist/ and per-game games-src/<game>/dist/)
+dist/
+*.tsbuildinfo
+.vite/
+
+# Release artefacts (npm run package)
+*.zip
+*.crx
+*.pem
+
+# Generated promo video project
+brag-output/
+
+# Test / coverage output
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

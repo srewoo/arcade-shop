@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Kerbside: top-down precision parking with realistic steering, 24 levels, parallel, reverse, angled and trailer bays." />
+    <title>Kerbside</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23343a43'/><rect x='10' y='14' width='44' height='36' rx='4' fill='none' stroke='%23ffd23f' stroke-width='4' stroke-dasharray='6 4'/><rect x='18' y='24' width='28' height='16' rx='6' fill='%23ff5a3c'/></svg>"
+    />
+  </head>
+  <body>
+    <main class="app" id="app">
+      <section id="screen-title" class="screen title" aria-labelledby="title-h">
+        <canvas id="title-art" class="mark" aria-hidden="true"></canvas>
+        <h1 id="title-h">Kerbside</h1>
+        <p class="tag" id="tagline"></p>
+        <div class="stack">
+          <button id="btn-play" class="btn primary" type="button">Play</button>
+          <button id="btn-levels" class="btn" type="button">Levels</button>
+          <button id="btn-settings-title" class="btn" type="button" aria-haspopup="dialog">Settings</button>
+        </div>
+        <p class="desc" id="title-stars"></p>
+        <ul class="how" aria-label="How it works"><li id="how-goal"></li><li id="how-keys"></li></ul>
+      </section>
+
+      <section id="screen-levels" class="screen levels" aria-labelledby="levels-h" hidden>
+        <header class="bar">
+          <button id="levels-back" class="icon-btn" type="button" aria-label="Back to title">&#8592;</button>
+          <h2 id="levels-h">Levels</h2>
+          <span id="levels-stars" class="chip"></span>
+        </header>
+        <div id="level-grid" class="grid" role="list"></div>
+      </section>
+
+      <section id="screen-game" class="screen game" aria-label="Game" hidden>
+        
+        <div class="stage" id="stage">
+          <div class="field" id="field">
+            <canvas id="canvas" tabindex="-1" role="img" aria-label=""></canvas>
+            <div class="top" id="top">
+              <header class="hud" id="hud">
+          <button id="btn-pause" class="icon-btn" type="button" aria-label="Pause" title="Pause (P)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+          </button>
+          <div class="hud-name"><span id="hud-num" class="chip"></span><strong id="hud-name"></strong></div>
+          <dl class="stats">
+            <div class="primary"><dt>Time</dt><dd id="hud-time">0:00.0</dd></div>
+            <div><dt>Par</dt><dd id="hud-par">0:00.0</dd></div>
+            <div id="hud-damage-box"><dt>Damage</dt><dd id="hud-damage">0/5</dd></div>
+            <div><dt title="km/h">Speed</dt><dd id="hud-gear">N 0</dd></div>
+            <div id="hud-align-box"><dt>Align</dt><dd id="hud-align">0%</dd></div>
+          </dl>
+          <button id="btn-sound" class="icon-btn" type="button" aria-pressed="true" aria-label="Sound on" title="Sound (M)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9v6h4l5 4V5L8 9z"/><path class="waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="slash" d="M17 9l5 6M22 9l-5 6"/></svg>
+          </button>
+        </header>
+              <div class="toasts">
+                <div id="wait" class="wait" aria-hidden="true"></div>
+                <div id="hint" class="hintbar" role="note" hidden>
+                  <span id="hint-text"></span>
+                  <button id="hint-ok" class="btn small" type="button">Got it</button>
+                </div>
+              </div>
+            </div>
+            <div id="pop" class="pop" aria-hidden="true"></div>
+          </div>
+          <div class="wheel-wrap touch-only">
+            <div id="wheel" class="wheel" role="slider" aria-label="Steering wheel" aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+              <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42"/><circle cx="50" cy="50" r="11" class="hub"/><path d="M50 50V92M50 50L14 36M50 50L86 36"/><rect x="44" y="5" width="12" height="11" rx="2" class="tick"/></svg>
+            </div>
+          </div>
+          <div class="pedals touch-only">
+            <button id="pedal-rev" class="pedal" type="button" data-pedal="rev"><span>Reverse</span></button>
+            <button id="pedal-fwd" class="pedal" type="button" data-pedal="fwd"><span>Drive</span></button>
+            <button id="pedal-brake" class="pedal brake" type="button" data-pedal="brake"><span>Brake</span></button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="pause-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+      <div class="sheet">
+        <h2 id="pause-title">Paused</h2>
+        <p id="pause-note" class="desc"></p>
+        <div class="stack">
+          <button id="pause-resume" class="btn primary" type="button">Resume</button>
+          <button id="pause-restart" class="btn" type="button">Restart</button>
+          <button id="pause-settings" class="btn" type="button" aria-haspopup="dialog">Settings</button>
+          <button id="pause-quit" class="btn" type="button">Quit to levels</button>
+        </div>
+        <div id="pause-confirm" class="confirm-bar" role="group" aria-label="Confirm" hidden>
+          <span id="pause-confirm-text"></span>
+          <button id="pause-confirm-yes" class="btn small primary" type="button">Yes</button>
+          <button id="pause-confirm-no" class="btn small" type="button">Keep playing</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="result-title" hidden>
+      <div class="sheet">
+        <h2 id="result-title"></h2>
+        <p id="result-note" class="desc"></p>
+        <div id="result-stars" class="stars" role="img" aria-label=""></div>
+        <ul id="result-list" class="results"></ul>
+        <div class="stack">
+          <button id="result-next" class="btn primary" type="button">Next level</button>
+          <button id="result-retry" class="btn" type="button">Try again</button>
+          <button id="result-levels" class="btn" type="button">All levels</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+      <div class="sheet">
+        <h2 id="settings-title">Settings</h2>
+        <div class="options">
+          <div class="row">
+            <label for="volume" class="lbl">Volume</label>
+            <input id="volume" type="range" min="0" max="100" step="5" value="70" />
+            <output id="volume-out" for="volume">70</output>
+          </div>
+          <fieldset data-setting="sound">
+            <legend>Sound</legend>
+            <button type="button" data-value="true">On</button>
+            <button type="button" data-value="false">Muted</button>
+          </fieldset>
+          <fieldset data-setting="reduceMotion">
+            <legend>Reduce motion</legend>
+            <button type="button" data-value="system">System</button>
+            <button type="button" data-value="on">On</button>
+            <button type="button" data-value="off">Off</button>
+          </fieldset>
+          <fieldset data-setting="colorAssist">
+            <legend>Colour-blind assist</legend>
+            <button type="button" data-value="false">Off</button>
+            <button type="button" data-value="true">On</button>
+          </fieldset>
+          <fieldset data-setting="textSize">
+            <legend>Text size</legend>
+            <button type="button" data-value="100">100%</button>
+            <button type="button" data-value="125">125%</button>
+            <button type="button" data-value="150">150%</button>
+          </fieldset>
+          <fieldset data-setting="theme">
+            <legend>Theme</legend>
+            <button type="button" data-value="system">System</button>
+            <button type="button" data-value="light">Light</button>
+            <button type="button" data-value="dark">Dark</button>
+          </fieldset>
+          <fieldset data-setting="touchControls">
+            <legend>On-screen pedals and wheel</legend>
+            <button type="button" data-value="auto">Auto</button>
+            <button type="button" data-value="on">On</button>
+            <button type="button" data-value="off">Off</button>
+          </fieldset>
+        </div>
+        <button id="settings-close" class="btn primary" type="button">Done</button>
+      </div>
+    </div>
+    <div id="status" class="sr-only" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

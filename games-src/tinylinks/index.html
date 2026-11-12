@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Tiny Links: top-down mini golf with 18 original holes for one to four players." />
+    <title>Tiny Links</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%233a9d5d'/><circle cx='28' cy='42' r='9' fill='%23fff' stroke='%230d1b12' stroke-width='3'/><path d='M40 12v32' stroke='%23fff' stroke-width='3' stroke-linecap='round'/><path d='M40 12l14 6-14 6z' fill='%23e8453c' stroke='%230d1b12' stroke-width='2' stroke-linejoin='round'/></svg>"
+    />
+  </head>
+  <body>
+    <main class="app" id="app">
+      <div class="stage" id="stage">
+        <canvas id="cv" role="img" aria-label="Tiny Links course"></canvas>
+
+        <section class="hud" id="hud" aria-label="Round status" hidden>
+          <div class="chip who"><span class="pmark" id="hud-mark" aria-hidden="true"></span><b id="hud-name"></b></div>
+          <div class="chip"><span class="label">Hole</span><b id="hud-hole"></b></div>
+          <div class="chip"><span class="label">Par</span><b id="hud-par"></b></div>
+          <div class="chip"><span class="label">Strokes</span><b id="hud-strokes"></b></div>
+          <div class="chip"><span class="label">Total</span><b id="hud-total"></b></div>
+        </section>
+
+        <div class="top-actions">
+          <button id="open-card" class="icon-btn" type="button" aria-label="Scorecard" aria-haspopup="dialog" title="Scorecard (C)" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M4 15h16M10 4v16"/></svg>
+          </button>
+          <button id="sound" class="icon-btn" type="button" aria-pressed="true" aria-label="Sound on" title="Sound (M)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9v6h4l5 4V5L8 9z"/><path class="waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="slash" d="M17 9l5 6M22 9l-5 6"/></svg>
+          </button>
+          <button id="open-settings" class="icon-btn" type="button" aria-label="Settings" aria-haspopup="dialog" title="Settings">
+            <svg class="cog" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.18 10.22L21.9 10.59L21.9 13.41L19.18 13.78L18.34 15.82L20 18L18 20L15.82 18.34L13.78 19.18L13.41 21.9L10.59 21.9L10.22 19.18L8.18 18.34L6 20L4 18L5.66 15.82L4.82 13.78L2.1 13.41L2.1 10.59L4.82 10.22L5.66 8.18L4 6L6 4L8.18 5.66L10.22 4.82L10.59 2.1L13.41 2.1L13.78 4.82L15.82 5.66L18 4L20 6L18.34 8.18ZM15 12a3 3 0 1 0-6 0a3 3 0 1 0 6 0Z"/></svg>
+          </button>
+          <button id="pause" class="icon-btn" type="button" aria-label="Pause" aria-haspopup="dialog" title="Pause (P)" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+          </button>
+        </div>
+
+        <div class="dock" id="dock" hidden>
+          <div class="meter-wrap">
+            <span class="label" id="power-label">Power 55%</span>
+            <div class="meter" id="power-meter" role="meter" aria-labelledby="power-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55"><i id="power-fill"></i></div>
+          </div>
+          <button id="putt" class="btn primary putt" type="button">Putt</button>
+        </div>
+        <div id="hint" class="hintbox" hidden>
+          <span id="hint-text"></span>
+          <button id="hint-ok" class="btn small" type="button">Got it</button>
+        </div>
+      </div>
+    </main>
+
+    <div id="title-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="title-h" hidden>
+      <div class="sheet wide">
+        <h2 id="title-h" class="wordmark">
+          <svg class="glyph" viewBox="0 0 64 64" aria-hidden="true"><circle cx="24" cy="44" r="10"/><path class="pole" d="M40 8v38"/><path class="flagp" d="M40 8l18 8-18 8z"/></svg>
+          <span>Tiny Links</span>
+        </h2>
+        <p class="desc">Top-down mini golf: 18 original holes, one to four players on one screen.</p>
+        <fieldset class="seg" data-group="course"><legend>Course</legend>
+          <button type="button" data-course="front9" class="btn">Front 9</button>
+          <button type="button" data-course="back9" class="btn">Back 9</button>
+          <button type="button" data-course="all18" class="btn">Full 18</button>
+        </fieldset>
+        <p id="course-desc" class="desc"></p>
+        <fieldset class="seg" data-group="count"><legend>Players</legend>
+          <button type="button" data-count="1" class="btn">1</button>
+          <button type="button" data-count="2" class="btn">2</button>
+          <button type="button" data-count="3" class="btn">3</button>
+          <button type="button" data-count="4" class="btn">4</button>
+        </fieldset>
+        <div id="player-rows" class="player-rows"></div>
+        <p id="title-best" class="desc"></p>
+        <p class="desc keyhint"><kbd>←</kbd><kbd>→</kbd> aim · <kbd>↑</kbd><kbd>↓</kbd> power · <kbd>Space</kbd> putt · <kbd>P</kbd> pause · <kbd>M</kbd> mute</p>
+        <div class="stack">
+          <button id="title-play" class="btn primary" type="button">Tee off</button>
+          <button id="title-settings" class="btn" type="button">Settings</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="card-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="card-h" hidden>
+      <div class="sheet card">
+        <h2 id="card-h">Scorecard</h2>
+        <p id="card-sub" class="desc"></p>
+        <p id="card-badge" class="badge" hidden></p>
+        <div class="tablewrap" tabindex="0" role="region" aria-label="Scorecard table, scrolls sideways">
+          <table id="card-table"></table>
+        </div>
+        <p id="card-legend" class="desc legend">○ birdie or better · ▢ bogey or worse · · not played</p>
+        <div class="stack">
+          <button id="card-main" class="btn primary" type="button">Next hole</button>
+          <button id="card-alt" class="btn" type="button" hidden>Change setup</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pause-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pause-h" hidden>
+      <div class="sheet">
+        <h2 id="pause-h">Paused</h2>
+        <div class="stack">
+          <button id="pause-resume" class="btn primary" type="button">Resume</button>
+          <button id="pause-restart" class="btn" type="button">Restart</button>
+          <button id="pause-settings" class="btn" type="button">Settings</button>
+          <button id="pause-quit" class="btn" type="button">Quit to title</button>
+        </div>
+        <div id="pause-confirm" class="confirm-bar" role="group" aria-label="Confirm" hidden>
+          <span id="pause-confirm-text"></span>
+          <button id="pause-confirm-yes" class="btn small primary" type="button">Yes</button>
+          <button id="pause-confirm-no" class="btn small" type="button">Keep playing</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="settings-h" hidden>
+      <div class="sheet">
+        <h2 id="settings-h">Settings</h2>
+        <div class="options">
+          <div class="row">
+            <label for="volume" class="lbl">Volume</label>
+            <input id="volume" type="range" min="0" max="100" step="5" value="70" />
+            <output id="volume-out" for="volume">70</output>
+          </div>
+          <fieldset data-setting="sound"><legend>Sound</legend>
+            <button type="button" data-value="true">On</button><button type="button" data-value="false">Muted</button>
+          </fieldset>
+          <fieldset data-setting="reduceMotion"><legend>Reduce motion</legend>
+            <button type="button" data-value="system">System</button><button type="button" data-value="on">On</button><button type="button" data-value="off">Off</button>
+          </fieldset>
+          <fieldset data-setting="colorAssist"><legend>Colour-blind assist</legend>
+            <button type="button" data-value="false">Off</button><button type="button" data-value="true">On</button>
+          </fieldset>
+          <fieldset data-setting="textSize"><legend>Text size</legend>
+            <button type="button" data-value="100">100%</button><button type="button" data-value="125">125%</button><button type="button" data-value="150">150%</button>
+          </fieldset>
+          <fieldset data-setting="theme"><legend>Theme</legend>
+            <button type="button" data-value="system">System</button><button type="button" data-value="light">Light</button><button type="button" data-value="dark">Dark</button>
+          </fieldset>
+        </div>
+        <button id="settings-close" class="btn primary" type="button">Done</button>
+      </div>
+    </div>
+    <div id="status" class="sr-only" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

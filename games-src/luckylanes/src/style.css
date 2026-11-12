@@ -1,0 +1,127 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f1fb;
+  --fg: #1d1633;
+  --muted: #5b5476;
+  --card: #ffffff;
+  --border: #d6d0e8;
+  --ui-border: #7a7298;
+  --accent: #c4207a;
+  --accent-fg: #ffffff;
+  --accent-soft: #fbe3f1;
+  --cyan: #0b7a9c;
+  --focus: #5b2bd6;
+  --good: #14804a;
+  --done: #2457c5;
+  --zone-bg: rgba(20, 128, 74, 0.22);
+  --danger: #b3261e;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #130f26;
+    --fg: #f1ecff;
+    --muted: #b3aad3;
+    --card: #1e1838;
+    --border: #3a3163;
+    --ui-border: #8f87b5;
+    --accent: #ff5cae;
+    --accent-fg: #1a0b16;
+    --accent-soft: #4a1b39;
+    --cyan: #5cf0ff;
+    --focus: #b69bff;
+    --good: #6fe3a4;
+    --done: #7aa7ff;
+    --zone-bg: rgba(111, 227, 164, 0.25);
+    --danger: #ff8a80;
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #130f26;
+  --fg: #f1ecff;
+  --muted: #b3aad3;
+  --card: #1e1838;
+  --border: #3a3163;
+  --ui-border: #8f87b5;
+  --accent: #ff5cae;
+  --accent-fg: #1a0b16;
+  --accent-soft: #4a1b39;
+  --cyan: #5cf0ff;
+  --focus: #b69bff;
+  --good: #6fe3a4;
+  --done: #7aa7ff;
+  --zone-bg: rgba(111, 227, 164, 0.25);
+  --danger: #ff8a80;
+}
+
+* { box-sizing: border-box; }
+html { font-size: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 0.9375rem/1.45 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+kbd {
+  font: 600 0.8125rem ui-monospace, monospace;
+  padding: 0.05em 0.4em;
+  border: 1px solid var(--ui-border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--card);
+}
+
+.app {
+  max-width: 1480px; margin: 0 auto; min-height: 100dvh; display: flex; flex-direction: column;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 8px calc(10px + env(safe-area-inset-bottom, 0px));
+}
+.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.logo, .big-logo { margin: 0; font-weight: 900; letter-spacing: -0.02em; }
+.logo { font-size: 1.4rem; white-space: nowrap; }
+.big-logo { font-size: 2.2rem; }
+.logo span, .big-logo span { color: var(--accent); }
+.top-actions { display: flex; gap: 6px; }
+
+.icon-btn, .btn {
+  font: inherit;
+  font-weight: 600;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--ui-border);
+  background: var(--card);
+  color: var(--fg);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.icon-btn { min-width: 44px; padding: 0 10px; font-size: 0.875rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.ico { width: 22px; height: 22px; flex: none; }
+#sound[aria-pressed='true'] .mute, #sound[aria-pressed='false'] .waves { display: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.btn.danger { border-color: var(--danger); color: var(--danger); }
+.btn.ghost { background: transparent; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn:not(:disabled):active { transform: translateY(1px); }
+
+/* The page is exactly one viewport tall: the lane takes whatever the side column leaves. */
+.layout { flex: 1 1 auto; min-height: 0; display: grid; gap: 8px; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(220px, 1fr) auto; }
+.play { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+@media (max-width: 560px) {
+  #sound .lbl, #sound kbd { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .logo { font-size: 1.2rem; }
+}
+@media (min-width: 900px) and (min-height: 521px) {
+  .layout { grid-template-columns: minmax(0, 1fr) minmax(400px, 460px); grid-template-rows: minmax(0, 1fr); gap: 14px; }
+  .app { height: 100dvh; }
+  .side { align-content: start; overflow-y: auto; }
+}
+html[data-ts='150'] .layout, html[data-ts='125'] .layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(220px, 1fr) auto; }

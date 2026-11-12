@@ -1,0 +1,286 @@
+/* In-run HUD: score, badges, power-ups, clock, toast, coaching pill, countdown, flash, hint line, corner buttons. */
+#score {
+  top: calc(10px + env(safe-area-inset-top));
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  background: var(--pill);
+  border-radius: 16px;
+  padding: 2px 16px 4px;
+  pointer-events: none;
+  z-index: 5;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 2px;
+  font-weight: 700;
+  display: flex;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%);
+}
+#points {
+  transform-origin: 50%;
+  font-size: calc(clamp(28px, 4.6vw, 48px) * var(--ui-scale));
+  line-height: 1;
+}
+#best {
+  font-size: calc(clamp(12px, 1.6vw, 16px) * var(--ui-scale));
+}
+#points.pop {
+  animation: 0.5s ease-out pop;
+}
+@keyframes pop {
+  0% {
+    color: var(--accent);
+    transform: scale(1);
+  }
+  30% {
+    color: var(--accent);
+    transform: scale(1.28);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+#ui {
+  pointer-events: none;
+  z-index: 4;
+  position: fixed;
+  inset: 0;
+}
+body.ui-hidden #ui {
+  display: none;
+}
+#badges {
+  top: calc(14px + env(safe-area-inset-top));
+  left: calc(14px + env(safe-area-inset-left));
+  gap: 8px;
+  display: flex;
+  position: absolute;
+}
+.badge {
+  font-family: var(--mono);
+  letter-spacing: 0.14em;
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: calc(12px * var(--ui-scale));
+  font-weight: 700;
+}
+#badge-auto {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+#btn-pause,
+#btn-help {
+  display: none;
+}
+body.is-playing #btn-pause,
+body.is-playing #btn-help {
+  display: grid;
+}
+#btn-pause {
+  top: calc(10px + env(safe-area-inset-top));
+  right: calc(12px + env(safe-area-inset-right));
+}
+#btn-help {
+  left: calc(12px + env(safe-area-inset-left));
+  bottom: calc(10px + env(safe-area-inset-bottom));
+}
+#btn-end {
+  position: absolute;
+  right: calc(14px + env(safe-area-inset-right));
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  margin: 0;
+}
+
+#clock {
+  position: absolute;
+  top: calc(10px + env(safe-area-inset-top));
+  right: calc(12px + env(safe-area-inset-right));
+  font: 700 calc(clamp(24px, 4vw, 40px) * var(--ui-scale)) var(--mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: var(--pill);
+  border-radius: 14px;
+  padding: 0 12px;
+}
+body.is-playing #clock {
+  right: calc(70px + env(safe-area-inset-right));
+}
+#clock.low {
+  color: var(--accent);
+  animation: 0.6s steps(2, jump-none) infinite blink;
+}
+#toast {
+  position: absolute;
+  top: calc(104px + env(safe-area-inset-top));
+  left: 50%;
+  transform: translate(-50%, -8px);
+  max-width: calc(100vw - 32px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--cream);
+  font: 700 calc(14px * var(--ui-scale)) var(--mono);
+  letter-spacing: 0.1em;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+#toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+#coach {
+  position: absolute;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 32px);
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 800 calc(16px * var(--ui-scale)) var(--mono);
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+#countdown {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font: italic 900 clamp(80px, 22vw, 180px) var(--display);
+  color: var(--scene-ink);
+  text-shadow: 0 4px 0 var(--scene-cream);
+}
+#flash {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, #ffffff00 40%, #ffffffcc 100%);
+}
+#flash.go {
+  animation: 0.38s ease-out flash;
+}
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+#confetti {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  width: 100%;
+  height: 100%;
+}
+#fps {
+  position: fixed;
+  left: 8px;
+  bottom: 60px;
+  z-index: 9;
+  margin: 0;
+  padding: 4px 8px;
+  font: 600 11px var(--mono);
+  color: #fff;
+  background: #000a;
+  border-radius: 6px;
+  white-space: pre;
+  pointer-events: none;
+}
+
+/* hint line */
+#hints {
+  position: absolute;
+  left: 50%;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 140px);
+  text-align: center;
+  background: var(--pill);
+  color: var(--ink);
+  border-radius: 14px;
+  padding: 4px 14px;
+  font-size: calc(13px * var(--ui-scale));
+  font-weight: 600;
+}
+.hint-title,
+.hint-more {
+  display: none;
+}
+/* the short line stays; the extra keys (pause, mute, double jump) appear on the title and when "?" is pressed */
+body.is-title .hint-more,
+body.hints-show .hint-more {
+  display: inline;
+}
+.hint-more::before {
+  content: " · ";
+}
+#hints {
+  transition: opacity 0.6s ease;
+}
+body.is-playing:not(.hints-show) #hints {
+  animation: hint-fade 0.6s ease 4.4s forwards;
+}
+@keyframes hint-fade {
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.is-playing:not(.hints-show) #hints {
+    animation-duration: 0.01s;
+  }
+}
+/* the mode badge only names the mode while the run is settling in */
+body.is-playing #badge-mode {
+  animation: hint-fade 0.6s ease 5s forwards;
+}
+body.is-title .hint-title {
+  display: inline;
+}
+body.is-playing.hints-off:not(.hints-show) #hints {
+  display: none;
+}
+/* the title already carries a START button; keep the keyboard hint line only where there is room under the panel */
+@media (hover: none), (max-aspect-ratio: 13/10) {
+  body.is-title #hints {
+    display: none;
+  }
+}
+
+@media (max-width: 480px), (max-height: 460px) {
+  #toast {
+    top: calc(132px + env(safe-area-inset-top));
+  }
+  #hints {
+    max-width: calc(100vw - 130px);
+  }
+}
+@media (max-height: 460px) {
+  #toast {
+    /* clears the score box, whose BEST line ends at about 74 px */
+    top: calc(84px + env(safe-area-inset-top));
+  }
+  #coach {
+    bottom: calc(60px + env(safe-area-inset-bottom));
+  }
+}
+
+/* game-over card: the in-run coaching pill and controls hint no longer apply */
+body.is-over #coach,
+body.is-over #hints {
+  display: none;
+}

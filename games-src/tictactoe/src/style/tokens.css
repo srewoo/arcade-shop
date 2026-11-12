@@ -1,0 +1,35 @@
+/* Colour tokens. Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3). */
+:root {
+  --bg: #fbf4e8;
+  --panel: #ffffff;
+  --ink: #2b2420;
+  --muted: #6b5e54;
+  --line: #d9c8b0;
+  --grid: #9a8873;
+  --x: #d6432c;
+  --o: #117d75;
+  --accent: #2b2420;
+  --accent-ink: #fbf4e8;
+  --win-ring: #b7791f;
+  --win-fill: #f7e3a1;
+  --win-tint: color-mix(in srgb, var(--win-ring) 20%, var(--panel));
+  --shadow: 0 1px 0 rgba(43, 36, 32, 0.06), 0 8px 24px rgba(43, 36, 32, 0.08);
+  --focus: #117d75;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #1b1816; --panel: #26221f; --ink: #f3ebe1; --muted: #a89a8d; --line: #4a423b;
+    --grid: #7a6e63; --x: #ff7a5f; --o: #3cc4b7; --accent: #f3ebe1; --accent-ink: #1b1816;
+    --win-ring: #ffd25a; --win-fill: #5b4a17; --win-tint: color-mix(in srgb, var(--win-ring) 20%, var(--panel));
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.35); --focus: #3cc4b7;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #1b1816; --panel: #26221f; --ink: #f3ebe1; --muted: #a89a8d; --line: #4a423b;
+  --grid: #7a6e63; --x: #ff7a5f; --o: #3cc4b7; --accent: #f3ebe1; --accent-ink: #1b1816;
+  --win-ring: #ffd25a; --win-fill: #5b4a17; --win-tint: color-mix(in srgb, var(--win-ring) 20%, var(--panel));
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.35); --focus: #3cc4b7;
+  color-scheme: dark;
+}

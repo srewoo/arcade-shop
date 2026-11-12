@@ -1,0 +1,51 @@
+.board-wrap { position: relative; width: 100%; max-width: 36rem; margin: 0 auto; }
+.board {
+  display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); grid-template-rows: repeat(9, minmax(0, 1fr)); aspect-ratio: 1; width: 100%;
+  border: 3px solid var(--ink); border-radius: 0.6rem; overflow: hidden; background: var(--panel); box-shadow: var(--shadow);
+}
+.cell {
+  position: relative; padding: 0; margin: 0; border: 0; border-right: 1px solid var(--grid); border-bottom: 1px solid var(--grid);
+  background: var(--panel); color: var(--accent); font-weight: 800; font-size: clamp(18px, 5.6vw, 35px); line-height: 1;
+  display: grid; place-items: center; min-width: 0; border-radius: 0; touch-action: manipulation;
+  font-variant-numeric: tabular-nums;
+}
+.cell.alt { background: color-mix(in srgb, var(--accent) 5%, var(--panel)); }
+.cell.bR { border-right: 3px solid var(--ink); }
+.cell.bB { border-bottom: 3px solid var(--ink); }
+.cell:nth-child(9n) { border-right: 0; }
+.cell:nth-child(n + 73) { border-bottom: 0; }
+.cell.given { color: var(--ink); font-weight: 900; }
+.cell.peer { background: var(--accent-soft); }
+.cell.same { background: color-mix(in srgb, var(--accent) 15%, var(--panel)); }
+.cell.sel { background: color-mix(in srgb, var(--accent) 32%, var(--panel)); }
+.cell.sel.has-val { color: var(--ink); }
+/* Wrong digits: tint + diagonal stripes + a corner cross, so the state never relies on hue alone. */
+.cell.wrong {
+  color: var(--bad);
+  background-color: color-mix(in srgb, var(--bad) 10%, var(--panel));
+  background-image: repeating-linear-gradient(135deg, color-mix(in srgb, var(--bad) 7%, transparent) 0 3px, transparent 3px 8px);
+}
+.cell.wrong::after {
+  content: '\00d7'; position: absolute; top: 1px; right: 3px; font-size: 14px; line-height: 1; font-weight: 900; color: var(--bad);
+}
+/* Rule clash: dashed ring. */
+.cell.conflict { color: var(--bad); }
+.cell.conflict::before, .cell.h-target::before {
+  content: ''; position: absolute; inset: 1px; border: 3px dashed var(--bad); pointer-events: none; z-index: 1;
+}
+.cell:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; z-index: 2; }
+.cell .notes { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 2px; pointer-events: none; }
+.cell .notes i { font-style: normal; font-size: clamp(11px, 3vw, 15px); line-height: 1; font-weight: 800; color: var(--muted); display: grid; place-items: center; }
+.cell .notes i.hl { color: var(--accent); font-weight: 900; }
+.cell.sel .notes i { color: var(--ink); }
+.cell.h-region { background-image: linear-gradient(color-mix(in srgb, var(--gold) 20%, transparent), color-mix(in srgb, var(--gold) 20%, transparent)); }
+.cell.h-region .notes i { color: var(--ink); }
+.cell.h-source { box-shadow: inset 0 0 0 3px var(--hint); }
+.cell.h-target { background-image: linear-gradient(color-mix(in srgb, var(--good) 34%, transparent), color-mix(in srgb, var(--good) 34%, transparent)); }
+.cell.h-target::before { border-color: var(--good); }
+.cell.h-focus {
+  box-shadow: inset 0 0 0 4px var(--ink); color: var(--on-gold);
+  background-image: linear-gradient(color-mix(in srgb, var(--gold) 70%, transparent), color-mix(in srgb, var(--gold) 70%, transparent));
+}
+.cell.h-focus.wrong { background-image: linear-gradient(color-mix(in srgb, var(--gold) 70%, transparent), color-mix(in srgb, var(--gold) 70%, transparent)); }
+.cell.h-focus.wrong::after { color: var(--on-gold); }

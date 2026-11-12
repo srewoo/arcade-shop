@@ -1,0 +1,199 @@
+/* Garage and map picker panels. */
+.garage {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s;
+}
+.garage.show {
+  opacity: 1;
+  visibility: visible;
+}
+.gar-title {
+  position: absolute;
+  top: calc(var(--u) * 36);
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-weight: 900;
+  font-size: calc(var(--u) * 84);
+  color: #fff;
+  letter-spacing: calc(var(--u) * 6);
+  text-shadow: 0 calc(var(--u) * 6) 0 rgba(0, 0, 0, 0.35);
+}
+.gar-panel {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--u) * 30);
+  transform: translate(-50%);
+  width: calc(var(--u) * 1180);
+  max-width: 96%;
+  padding: calc(var(--u) * 22) calc(var(--u) * 30);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 16);
+  background: #1e2126d1;
+  border: calc(var(--u) * 5) solid #fff;
+  border-radius: calc(var(--u) * 32);
+}
+.gar-row {
+  display: flex;
+  gap: max(calc(var(--u) * 12), 8px);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.garage.show button,
+.garage.show .gar-done {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.gar-kinds button,
+.gar-models button,
+.gar-done {
+  font-family: var(--font);
+  font-weight: 900;
+  font-size: calc(var(--u) * 34);
+  color: var(--ink);
+  background: var(--cream);
+  border: calc(var(--u) * 4) solid transparent;
+  border-radius: calc(var(--u) * 18);
+  padding: calc(var(--u) * 8) calc(var(--u) * 30);
+  min-height: var(--tap);
+  min-width: var(--tap);
+}
+.gar-kinds button.on,
+.gar-models button.on {
+  background: var(--yellow);
+  border-color: #fff;
+}
+.gar-colors button {
+  width: max(calc(var(--u) * 70), var(--tap));
+  height: max(calc(var(--u) * 70), var(--tap));
+  padding: 0;
+  border-radius: calc(var(--u) * 18);
+  border: calc(var(--u) * 5) solid rgba(255, 255, 255, 0.35);
+}
+.gar-colors button.on {
+  border-color: #fff;
+  transform: scale(1.14);
+  box-shadow: 0 0 0 calc(var(--u) * 4) var(--yellow);
+}
+.gar-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  font-weight: 800;
+  font-size: calc(var(--u) * 26);
+}
+.gar-done {
+  background: var(--green);
+  color: #fff;
+  padding: calc(var(--u) * 8) calc(var(--u) * 60);
+  margin-left: auto;
+}
+.touch .gar-help {
+  display: none;
+}
+.vertical .gar-panel {
+  width: calc(var(--u) * 1020);
+}
+.vertical .gar-colors button {
+  width: max(calc(var(--u) * 92), var(--tap));
+  height: max(calc(var(--u) * 92), var(--tap));
+}
+.vertical .gar-title {
+  top: calc(var(--u) * 200);
+}
+.maps {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s;
+}
+.maps.show {
+  opacity: 1;
+  visibility: visible;
+}
+.maps.show button,
+.maps.show .gar-done {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.maps-list button {
+  font-family: var(--font);
+  font-weight: 900;
+  font-size: calc(var(--u) * 34);
+  color: var(--ink);
+  background: var(--cream);
+  border: calc(var(--u) * 4) solid transparent;
+  border-radius: calc(var(--u) * 18);
+  padding: calc(var(--u) * 10) calc(var(--u) * 28);
+  min-height: var(--tap);
+  min-width: var(--tap);
+}
+.maps-list button.on {
+  background: var(--yellow);
+  border-color: #fff;
+}
+.key-btn.maps-btn {
+  background: var(--blue);
+  animation-delay: -2.2s;
+}
+.maps .maps-back {
+  background: var(--cream);
+  color: var(--ink);
+  margin-left: auto;
+}
+.maps .maps-use {
+  margin-left: calc(var(--u) * 14);
+}
+button.rnd,
+button.rnd.on {
+  background: linear-gradient(
+    100deg,
+    #e5322b,
+    #f08a24,
+    #f2bd1d,
+    #1fa45a,
+    #2f6fd0,
+    #8a3fd1
+  ) !important;
+  color: #fff !important;
+  text-shadow: 0 calc(var(--u) * 3) 0 rgba(0, 0, 0, 0.4);
+}
+button.rnd.on {
+  border-color: #fff !important;
+  box-shadow: 0 0 0 calc(var(--u) * 4) #fff;
+}
+.maps-best {
+  font-size: calc(var(--u) * 32);
+  font-weight: 900;
+  color: var(--yellow);
+}
+
+/* ---- map picker: compact panel so most of the rug preview stays visible ---- */
+.maps .gar-panel {
+  gap: max(calc(var(--u) * 10), 8px);
+  padding: calc(var(--u) * 14) calc(var(--u) * 24) calc(var(--u) * 16);
+}
+.maps-head {
+  font-weight: 900;
+  font-size: max(calc(var(--u) * 40), 16px);
+  letter-spacing: calc(var(--u) * 6);
+  color: #fff;
+  text-align: center;
+  line-height: 1;
+}
+.maps-list {
+  gap: max(calc(var(--u) * 8), 8px);
+}
+.maps-list button {
+  font-size: max(calc(var(--u) * 30), 14px);
+  padding: calc(var(--u) * 6) calc(var(--u) * 22);
+}
+.vertical .maps .gar-panel {
+  width: calc(var(--u) * 1040);
+}

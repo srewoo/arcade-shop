@@ -1,0 +1,35 @@
+/* Colour tokens. Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3). */
+:root {
+  --bg: #f6efe4;
+  --panel: #ffffff;
+  --ink: #2b2420;
+  --muted: #62554b;
+  --line: #cdb99c;
+  --accent: #1f6f78;
+  --accent-ink: #ffffff;
+  --gold: #8a5a00;
+  --warn: #b3361f;
+  --good: #1d6b3a;
+  --cell-now: #fff3d1;
+  --chip-bg: rgba(35, 28, 24, 0.82);
+  --chip-ink: #fff8ec;
+  --shadow: 0 1px 0 rgba(43, 36, 32, 0.06), 0 8px 24px rgba(43, 36, 32, 0.12);
+  --focus: #0b5ed7;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #1b1816; --panel: #26221f; --ink: #f3ebe1; --muted: #b3a597; --line: #5a5047;
+    --accent: #5cc2cc; --accent-ink: #10201f; --gold: #ffcf6b; --warn: #ff8f78; --good: #7ad79a;
+    --cell-now: #4a3d1f; --chip-bg: rgba(0, 0, 0, 0.72); --chip-ink: #fff8ec;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.4); --focus: #8ab8ff;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #1b1816; --panel: #26221f; --ink: #f3ebe1; --muted: #b3a597; --line: #5a5047;
+  --accent: #5cc2cc; --accent-ink: #10201f; --gold: #ffcf6b; --warn: #ff8f78; --good: #7ad79a;
+  --cell-now: #4a3d1f; --chip-bg: rgba(0, 0, 0, 0.72); --chip-ink: #fff8ec;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.4); --focus: #8ab8ff;
+  color-scheme: dark;
+}

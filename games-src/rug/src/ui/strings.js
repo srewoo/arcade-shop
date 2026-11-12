@@ -1,0 +1,102 @@
+// User-facing strings for the UI added in the polish pass (one place, no i18n framework).
+// Key glyphs inside strings are written as <kbd> markup where the template renders them.
+
+export const STR = Object.freeze({
+  hint: {
+    keys: [
+      ["W A S D", "drive"],
+      ["Shift", "boost"],
+      ["Space", "jump"],
+      ["S", "+ turn: drift"],
+      ["C", "camera"],
+      ["R", "back on road"],
+      ["P", "pause"],
+    ],
+  },
+  pause: {
+    title: "PAUSED",
+    resume: "Resume",
+    restart: "Restart",
+    settings: "Settings",
+    quit: "Quit to title",
+    restartQ: "Restart this race?",
+    restartNote: "Your current run will be lost.",
+    quitQ: "Quit to the title screen?",
+    quitNote: "Your current run will be lost.",
+    yesRestart: "Yes, restart",
+    yesQuit: "Yes, quit",
+    cancel: "Keep playing",
+    auto: "Paused while the window was in the background",
+    pauseButton: "Pause",
+  },
+  tips: {
+    title: "HOW TO PLAY",
+    goal: (laps) => `Goal: finish first. Race ${laps} lap${laps > 1 ? "s" : ""} around the rug.`,
+    steps: {
+      keys: [
+        ["Drive", "W A S D or the arrow keys"],
+        ["Nitro", "Hold Shift. Grab batteries to refill."],
+        ["Drift", "Hold S while turning. A longer drift gives a bigger boost."],
+      ],
+      touch: [
+        ["Drive", "Steer with the stick on the left"],
+        ["Nitro", "Hold BOOST. Grab batteries to refill."],
+        ["Drift", "Pull the stick down while turning. A longer drift gives a bigger boost."],
+      ],
+    },
+    pauseNote: "Pause any time with P or Esc.",
+    dismiss: "Got it",
+    dismissHint: "Press any key or tap to start",
+    dismissHintHelp: "Press any key or tap to close",
+    touchTip: "Stick to steer, hold BOOST for nitro. Pull down while turning to drift.",
+    open: "How to play",
+  },
+  settings: {
+    reduceMotion: "Reduce motion",
+    colourBlind: "Colour-blind assist",
+    hudScale: "Text and HUD size",
+    boostMode: "Nitro button",
+    sfxVolume: "SFX volume",
+    engineVolume: "Engine volume",
+    master: "Master volume",
+    systemOpt: "System",
+    on: "On",
+    off: "Off",
+    hold: "Hold",
+    toggle: "Toggle",
+    footKeys: "H hide HUD, V flip layout, M mute",
+  },
+  maps: {
+    theme: "Rug theme",
+    pattern: "Rug pattern",
+    floor: "Floor",
+  },
+  hud: {
+    gapNone: "--",
+    ahead: "AHEAD",
+    behind: "BEHIND",
+    wrongWay: "WRONG WAY!",
+    cbFast: "FAST",
+    cbSlow: "SLOW",
+    boostAria: (pct) => `Boost, ${pct} percent`,
+  },
+  results: {
+    difficulty: (label) => `${label} AI`,
+    medal: { gold: "Gold", silver: "Silver", bronze: "Bronze" },
+    medalLine: (medal, stars) => `${"★".repeat(stars)} ${medal} medal`,
+    nextMedal: (name, time) => `Next: ${name} at ${time}`,
+    noMedal: (time) => `Bronze at ${time}`,
+    offlineBoard: "Online leaderboard unavailable offline. Your local best is saved.",
+  },
+  status: {
+    paused: "Paused",
+    resumed: "Resumed",
+    finished: (place) => `Race finished, you placed ${place}`,
+    lap: (n, total) => `Lap ${n} of ${total}`,
+    countdown: (n) => String(n),
+    go: "Go",
+  },
+  canvasLabel: "Living Room GP game view",
+});
+
+export const HINT_HTML = STR.hint.keys.map(([key, text]) => `<kbd>${key}</kbd> ${text}`).join(" &nbsp; ");

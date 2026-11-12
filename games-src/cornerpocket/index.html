@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Corner Pocket: an arcade mini-pool game with timed racks, trick shots and 8-ball against the CPU." />
+    <title>Corner Pocket</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230c5c4c'/><circle cx='14' cy='14' r='13' fill='%23111'/><circle cx='40' cy='38' r='9' fill='%23f2c230'/><circle cx='26' cy='46' r='7' fill='%23f7f4ea'/></svg>"
+    />
+  </head>
+  <body>
+    <main class="app" id="app">
+      <header class="top" id="top">
+        <h1><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#14100e"/><circle cx="17" cy="15" r="8.500" fill="#f2c230"/><circle cx="17" cy="15" r="3.600" fill="#fbf8ee"/><circle cx="14" cy="12" r="2" fill="#fff" opacity=".7"/></svg>Corner<span>Pocket</span></h1>
+        <div class="top-actions">
+          <button id="sound" class="icon-btn" type="button" aria-pressed="true" title="Mute (M)">Sound on</button>
+          <button id="settings-btn" class="icon-btn" type="button" aria-label="Settings"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6a.5.5 0 0 0 .1-.6l-1.9-3.3a.5.5 0 0 0-.6-.2l-2.4 1a7.4 7.4 0 0 0-1.7-1l-.4-2.5a.5.5 0 0 0-.5-.4h-3.8a.5.5 0 0 0-.5.4L9.3 5.3a7.4 7.4 0 0 0-1.7 1l-2.4-1a.5.5 0 0 0-.6.2L2.700 8.800a.5.5 0 0 0 .1.6l2 1.600a7.600 7.600 0 0 0 0 2l-2 1.600a.5.5 0 0 0-.1.600l1.900 3.300c.1.200.4.300.6.200l2.400-1c.5.400 1.100.7 1.700 1l.4 2.500c0 .2.200.4.500.4h3.800c.3 0 .5-.2.500-.4l.4-2.500c.6-.3 1.200-.6 1.700-1l2.400 1c.2.100.5 0 .6-.2l1.900-3.300a.5.5 0 0 0-.1-.6zM12 15.500A3.500 3.500 0 1 1 12 8.500a3.500 3.500 0 0 1 0 7z"/></svg><span class="lbl-txt">Settings</span></button>
+        </div>
+      </header>
+
+      <section id="menu" class="menu" aria-label="Game modes">
+        <canvas id="preview" class="preview" role="img" aria-label="A pool table with a racked set of balls"></canvas>
+        <p class="lede">Sink every ball. Beat the clock. Mind the scratch.</p>
+        <button id="play-last" class="btn primary hero" type="button">Play Rack Attack</button>
+        <div class="modes">
+          <button class="mode" type="button" data-mode="rack"><strong>Rack Attack</strong><span>Timed racks. Chain pots for extra seconds, clear clean for a sweep bonus.</span><em class="mbest" data-best="rack"></em></button>
+          <button class="mode" type="button" data-mode="trick"><strong>Trick Shots</strong><span>15 hand-made puzzles with a shot limit and 1 to 3 stars.</span><em class="mbest" data-best="trick"></em></button>
+          <button class="mode" type="button" data-mode="cpu"><strong>8-Ball vs CPU</strong><span>Simplified rules. The CPU plans shots by simulating them.</span><em class="mbest" data-best="cpu"></em></button>
+          <button class="mode" type="button" data-mode="duo"><strong>2-Player 8-Ball</strong><span>Hot-seat on one screen. Pass the device after each turn.</span><em class="mbest" data-best="duo"></em></button>
+        </div>
+        <fieldset class="seg" data-setting="level">
+          <legend>Difficulty</legend>
+          <button type="button" data-value="easy">Easy (long guides, loose CPU)</button>
+          <button type="button" data-value="pro">Pro (short guides, sharp CPU)</button>
+        </fieldset>
+        <p class="help">Drag back from the cue ball to shoot. Mouse, touch and keyboard all work.</p>
+      </section>
+
+      <section id="tricks" class="tricks" aria-label="Trick shot puzzles" hidden>
+        <div class="row"><h2>Trick Shots</h2><button id="tricks-back" class="btn ghost" type="button">Back</button></div>
+        <div id="trick-grid" class="trick-grid"></div>
+      </section>
+
+      <section id="play" class="play" aria-label="Game" hidden>
+        <div class="hudbar">
+          <div id="hud" class="hud"></div>
+          <div class="hudbtns">
+            <button id="help-btn" class="hbtn" type="button" aria-label="How to play and keys"><span aria-hidden="true">?</span></button>
+            <button id="settings-btn-play" class="hbtn" type="button" aria-label="Settings"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.6a.5.5 0 0 0 .1-.6l-1.9-3.3a.5.5 0 0 0-.6-.2l-2.4 1a7.4 7.4 0 0 0-1.7-1l-.4-2.5a.5.5 0 0 0-.5-.4h-3.8a.5.5 0 0 0-.5.4L9.3 5.3a7.4 7.4 0 0 0-1.7 1l-2.4-1a.5.5 0 0 0-.6.2L2.700 8.800a.5.5 0 0 0 .1.6l2 1.600a7.600 7.600 0 0 0 0 2l-2 1.600a.5.5 0 0 0-.1.600l1.900 3.300c.1.200.4.300.6.200l2.400-1c.5.400 1.100.7 1.700 1l.4 2.500c0 .2.200.4.500.4h3.800c.3 0 .5-.2.500-.4l.4-2.500c.6-.3 1.200-.6 1.700-1l2.400 1c.2.100.5 0 .6-.2l1.900-3.300a.5.5 0 0 0-.1-.6zM12 15.500A3.500 3.500 0 1 1 12 8.500a3.500 3.500 0 0 1 0 7z"/></svg></button>
+            <button id="pause-btn" class="hbtn" type="button" aria-label="Pause game (P)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.200" height="14" rx="1" fill="currentColor"/><rect x="13.800" y="5" width="4.200" height="14" rx="1" fill="currentColor"/></svg></button>
+          </div>
+        </div>
+        <div id="stage" class="stage">
+          <canvas id="table" tabindex="0" aria-label="Pool table. Drag back from the cue ball to shoot, or use arrow keys and hold Space."></canvas>
+          <div id="power" class="meter" role="meter" aria-label="Shot power" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>
+          <div id="coach" class="coach" hidden></div>
+          <div id="overlay" class="overlay" hidden></div>
+        </div>
+        <div class="controls" aria-label="Shot controls">
+          <div class="spinrow" role="group" aria-labelledby="spin-lbl" id="spin-group">
+            <span id="spin-lbl" class="lbl">Spin: Centre</span>
+            <button type="button" data-spin="-1">Back</button>
+            <button type="button" data-spin="0">Centre</button>
+            <button type="button" data-spin="1">Top</button>
+          </div>
+          <div class="shootrow">
+            <button type="button" id="aim-left" class="btn" aria-label="Aim left (hold)">&#9664; Aim</button>
+            <button id="shoot" class="btn primary" type="button">Shoot <kbd>Space</kbd></button>
+            <button type="button" id="aim-right" class="btn" aria-label="Aim right (hold)">Aim &#9654;</button>
+          </div>
+        </div>
+        <p id="sr-status" class="sr-only" role="status" aria-live="polite"></p>
+        <p id="sr-timer" class="sr-only" role="timer"></p>
+      </section>
+    </main>
+    <div id="modal" class="modal" hidden></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

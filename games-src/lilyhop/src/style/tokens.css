@@ -1,0 +1,42 @@
+/* Colour tokens. Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3). */
+:root {
+  --bg: #eef3ea;
+  --panel: #ffffff;
+  --ink: #15302a;
+  --muted: #4a6158;
+  --line: #b9ccbd;
+  --accent: #1c5a46;
+  --accent-ink: #ffffff;
+  --warn: #9c3416;
+  --gold: #a86b00;
+  --focus: #0a6a86;
+  --shadow: 0 1px 0 rgba(21, 48, 42, 0.06), 0 8px 24px rgba(21, 48, 42, 0.1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0f1d1a; --panel: #172a26; --ink: #e8f3ec; --muted: #a2bdb0; --line: #36524a;
+    --accent: #86dcaa; --accent-ink: #0c1f19; --warn: #ff9b7a; --gold: #ffd25e; --focus: #7bd6f0;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.4); --glow1: rgba(60, 160, 140, 0.2); --glow2: rgba(120, 90, 30, 0.12);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #0f1d1a; --panel: #172a26; --ink: #e8f3ec; --muted: #a2bdb0; --line: #36524a;
+  --accent: #86dcaa; --accent-ink: #0c1f19; --warn: #ff9b7a; --gold: #ffd25e; --focus: #7bd6f0;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.4); --glow1: rgba(60, 160, 140, 0.2); --glow2: rgba(120, 90, 30, 0.12);
+  color-scheme: dark;
+}
+/* The pond is the same in every theme (a night scene). */
+:root {
+  --water: #0c3a4b;
+  --pad: #5db870;
+  --pad-dk: #2c7a45;
+  --frog: #bdee5e;
+  --frog-dk: #3f6a10;
+  --toad: #ffb64d;
+  --toad-dk: #7c3d08;
+  --outline: #0a2616;
+  --glow: #fff3a0;
+  --pond-ink: #f4fbf5;
+}

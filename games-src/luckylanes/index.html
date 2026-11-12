@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Lucky Lanes: an arcade ten-pin bowling game with solo, hot-seat, CPU rival and spare-challenge modes." />
+    <title>Lucky Lanes</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23241449'/><circle cx='32' cy='38' r='15' fill='%23ff4fa3'/><circle cx='27' cy='34' r='2.5' fill='%23241449'/><circle cx='35' cy='33' r='2.5' fill='%23241449'/><circle cx='31' cy='40' r='2.5' fill='%23241449'/><rect x='28' y='8' width='8' height='14' rx='4' fill='%23ffffff'/></svg>"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <header class="top">
+        <h1 class="logo">Lucky <span>Lanes</span></h1>
+        <div class="top-actions">
+          <button id="menu-btn" class="icon-btn" type="button">Menu</button>
+          <button id="sound" class="icon-btn" type="button" aria-pressed="true">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.6L12 5.8v12.4l-4.4-3.7H4z" fill="currentColor"/><path class="waves" d="M15 9.2a4 4 0 0 1 0 5.6M17.4 6.8a7.4 7.4 0 0 1 0 10.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="mute" d="M15.2 9.4l5 5.2M20.2 9.4l-5 5.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span class="lbl">Sound on</span> <kbd>M</kbd>
+          </button>
+          <button id="help-btn" class="icon-btn" type="button" aria-label="How to play" title="How to play">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.3 9.4a2.8 2.8 0 1 1 4.2 2.4c-.9.6-1.5 1.1-1.5 2.3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.1" fill="currentColor"/></svg>
+          </button>
+          <button id="settings-btn" class="icon-btn" type="button" aria-label="Settings" title="Settings">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M19.75 10.46 L22.13 10.80 L22.13 13.20 L19.75 13.54 L18.57 16.39 L20.01 18.31 L18.31 20.01 L16.39 18.57 L13.54 19.75 L13.20 22.13 L10.80 22.13 L10.46 19.75 L7.61 18.57 L5.69 20.01 L3.99 18.31 L5.43 16.39 L4.25 13.54 L1.87 13.20 L1.87 10.80 L4.25 10.46 L5.43 7.61 L3.99 5.69 L5.69 3.99 L7.61 5.43 L10.46 4.25 L10.80 1.87 L13.20 1.87 L13.54 4.25 L16.39 5.43 L18.31 3.99 L20.01 5.69 L18.57 7.61Z M12 8.4a3.6 3.6 0 1 0 0 7.2a3.6 3.6 0 1 0 0-7.2Z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="play" aria-label="Lane">
+          <div class="stage" id="stage">
+            <canvas id="lane" role="img" aria-label="Bowling lane, drawn in 3D-style perspective"></canvas>
+            <div id="turn" class="turn" aria-hidden="true"></div>
+            <div id="banner" class="banner" aria-hidden="true"><span id="banner-text" class="plate"></span></div>
+            <div id="callout" class="callout" aria-hidden="true"></div>
+          </div>
+          <p id="sr-live" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+        </section>
+
+        <aside class="side">
+          <div id="tipbar" class="tipbar">
+            <p id="hint" class="tip"></p>
+            <div id="coach" class="coach" role="region" aria-labelledby="coach-title" hidden>
+              <h2 id="coach-title" class="coach-title"></h2>
+              <ol id="coach-steps" class="coach-steps"></ol>
+              <button id="coach-ok" class="btn primary" type="button"></button>
+            </div>
+          </div>
+          <section aria-label="Scoreboard">
+            <div id="scoreboard" class="sb-wrap" tabindex="0"></div>
+          </section>
+          <p id="status" class="status" role="status" aria-live="polite"></p>
+
+          <div class="meters" aria-label="Shot meters">
+            <div class="meter-row" id="r-aim">
+              <span class="m-label" id="l-aim">Aim</span>
+              <div id="m-aim" class="meter aim" role="meter" aria-labelledby="l-aim" aria-valuemin="-1" aria-valuemax="1" aria-valuenow="0" aria-valuetext="centre"><b class="zone"></b><i></i></div>
+              <output class="m-read" id="o-aim" for="m-aim"></output>
+            </div>
+            <div class="meter-row" id="r-power">
+              <span class="m-label" id="l-power">Power</span>
+              <div id="m-power" class="meter power" role="meter" aria-labelledby="l-power" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.5" aria-valuetext="50%"><i></i></div>
+              <output class="m-read" id="o-power" for="m-power"></output>
+            </div>
+            <div class="meter-row" id="r-spin">
+              <span class="m-label" id="l-spin">Hook</span>
+              <div id="m-spin" class="meter spin" role="meter" aria-labelledby="l-spin" aria-valuemin="-1" aria-valuemax="1" aria-valuenow="0" aria-valuetext="straight"><i></i></div>
+              <output class="m-read" id="o-spin" for="m-spin"></output>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button id="left" class="btn" type="button" aria-label="Move ball left">&lsaquo; Left</button>
+            <button id="lock" class="btn primary" type="button">Set position</button>
+            <button id="right" class="btn" type="button" aria-label="Move ball right">Right &rsaquo;</button>
+            <button id="back" class="btn ghost" type="button" aria-label="Go back one step" title="Back one step (Backspace)">&#8630;<span class="back-lbl"> Back</span></button>
+          </div>
+        </aside>
+      </main>
+
+      <div id="helpdlg" class="overlay" role="dialog" aria-modal="true" aria-labelledby="help-title" hidden>
+        <div class="panel">
+          <h2 id="help-title">How to play</h2>
+          <ul class="help-list">
+            <li><kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>A</kbd> <kbd>D</kbd>: slide along the foul line. Line up with a pocket tick (the two white marks).</li>
+            <li><kbd>Space</kbd> / <kbd>Enter</kbd>: lock position, aim, power, then hook (the last lock throws). Once the pins settle it skips the replay.</li>
+            <li><kbd>Backspace</kbd>: step back one meter. <kbd>Esc</kbd> / <kbd>P</kbd>: pause. <kbd>M</kbd>: mute.</li>
+            <li>Mouse or touch: drag up from anywhere on the lane to throw. Longer drag = more power, a curved drag = hook. Tap the lane to lock the current meter.</li>
+            <li>Aim for the pocket, just beside the head pin, with good power to make strikes. The tinted centre of the aim bar is the sweet spot.</li>
+          </ul>
+          <div class="row"><button id="help-close" class="btn primary" type="button">Got it</button></div>
+        </div>
+      </div>
+
+      <div id="menu" class="overlay" role="dialog" aria-modal="true" aria-labelledby="menu-title">
+        <div class="panel">
+          <div class="hero" aria-hidden="true">
+            <svg viewBox="0 0 320 96" role="presentation" focusable="false">
+              <defs>
+                <linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1f86"/><stop offset="1" stop-color="#160c3d"/></linearGradient>
+                <radialGradient id="hb" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#b79cff"/><stop offset="0.55" stop-color="#4128a8"/><stop offset="1" stop-color="#120a3a"/></radialGradient>
+                <linearGradient id="hp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cfc8e6"/><stop offset="0.4" stop-color="#ffffff"/><stop offset="1" stop-color="#9a93b8"/></linearGradient>
+                <path id="hpin" d="M0-30C4-30 5-23 2.6-19C8-11 7 7 0 7C-7 7-8-11-2.6-19C-5-23-4-30 0-30Z"/>
+              </defs>
+              <rect width="320" height="96" rx="14" fill="url(#hg)"/>
+              <path d="M0 78 L320 78 L320 96 L0 96Z" fill="#d9a15e" opacity="0.9"/>
+              <path d="M0 78 H320" stroke="#ffe3b0" stroke-width="1.5" opacity="0.7"/>
+              <path d="M6 14 Q160 -4 314 14" fill="none" stroke="#ff5cae" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>
+              <path d="M6 22 Q160 4 314 22" fill="none" stroke="#4dd8ff" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>
+              <g transform="translate(206 70)">
+                <use href="#hpin" transform="translate(0 0)" fill="url(#hp)"/>
+                <use href="#hpin" transform="translate(-22 -6) scale(0.86)" fill="url(#hp)"/>
+                <use href="#hpin" transform="translate(22 -6) scale(0.86)" fill="url(#hp)"/>
+                <use href="#hpin" transform="translate(-44 -12) scale(0.72)" fill="url(#hp)"/>
+                <use href="#hpin" transform="translate(44 -12) scale(0.72)" fill="url(#hp)"/>
+                <path d="M-3.500 -18h7M-4 -14h8" stroke="#d02a40" stroke-width="2.2"/>
+              </g>
+              <circle cx="92" cy="58" r="26" fill="url(#hb)"/>
+              <circle cx="85" cy="52" r="3.200" fill="#05030f"/><circle cx="95" cy="50" r="3.200" fill="#05030f"/><circle cx="90" cy="60" r="3.200" fill="#05030f"/>
+              <ellipse cx="82" cy="44" rx="6" ry="3.400" fill="#fff" opacity="0.7" transform="rotate(-35 82 44)"/>
+              <path d="M118 60 Q150 52 180 50" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round" opacity="0.7"/>
+              <path d="M262 24l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff4c2"/>
+              <path d="M44 28l2 4.500 4.500 2-4.500 2-2 4.500-2-4.500-4.500-2 4.500-2z" fill="#ffd1ea"/>
+            </svg>
+          </div>
+          <h2 id="menu-title" class="big-logo">Lucky <span>Lanes</span></h2>
+          <p class="tag">Arcade ten-pin bowling. Pick a mode and roll.</p>
+          <div id="mode-group" class="modes" role="radiogroup" aria-label="Game mode"></div>
+          <div class="row">
+            <label id="players-field" for="players" hidden>Players
+              <select id="players"><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>
+            </label>
+            <label id="cpu-field" for="cpu-level" hidden>CPU level
+              <select id="cpu-level"><option value="casual">Casual (relaxed)</option><option value="easy">Easy (shaky aim)</option><option value="pro">Pro (steady aim)</option></select>
+            </label>
+          </div>
+          <div class="row">
+            <button id="start" class="btn primary" type="button">Start game</button>
+            <button id="menu-settings" class="btn" type="button">Settings</button>
+          </div>
+          <h3 id="scores-title">Best scores</h3>
+          <ol id="scores-list" class="scores"></ol>
+          <h3 id="stats-title"></h3>
+          <p id="stats-line" class="tag"></p>
+        </div>
+      </div>
+
+      <div id="pause" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+        <div class="panel small">
+          <h2 id="pause-title">Paused</h2>
+          <div id="pause-main" class="stack">
+            <button id="pause-resume" class="btn primary" type="button">Resume</button>
+            <button id="pause-restart" class="btn" type="button">Restart</button>
+            <button id="pause-settings" class="btn" type="button">Settings</button>
+            <button id="pause-quit" class="btn" type="button">Quit to title</button>
+          </div>
+          <div id="pause-confirm" class="stack" hidden>
+            <p id="pause-confirm-text" class="tag" role="alert"></p>
+            <button id="pause-no" class="btn primary" type="button">No, keep playing</button>
+            <button id="pause-yes" class="btn danger" type="button">Yes</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="settings" class="overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+        <div class="panel small">
+          <h2 id="settings-title">Settings</h2>
+          <div class="fields">
+            <label for="set-volume">Volume <output id="set-volume-out"></output>
+              <input id="set-volume" type="range" min="0" max="100" step="5" />
+            </label>
+            <label for="set-motion">Reduce motion
+              <select id="set-motion"></select>
+            </label>
+            <label for="set-size">Text size
+              <select id="set-size"></select>
+            </label>
+            <label for="set-theme">Theme
+              <select id="set-theme"></select>
+            </label>
+            <label class="check" for="set-cb"><input id="set-cb" type="checkbox" /><span id="set-cb-text"></span></label>
+            <label class="check" for="set-wide"><input id="set-wide" type="checkbox" /><span id="set-wide-text"></span></label>
+            <label class="check" for="set-fast"><input id="set-fast" type="checkbox" /><span id="set-fast-text"></span></label>
+          </div>
+          <div class="row">
+            <button id="settings-close" class="btn primary" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="results" class="overlay" role="dialog" aria-modal="true" aria-labelledby="results-title" hidden>
+        <div class="panel small">
+          <p id="results-tier" class="tier" data-tier="0"></p>
+          <h2 id="results-title">Game over</h2>
+          <p id="results-big" class="big-score"></p>
+          <ul id="results-list" class="result-list"></ul>
+          <p id="results-detail" class="tag"></p>
+          <p id="results-note" class="tag"></p>
+          <div class="row">
+            <button id="results-again" class="btn primary" type="button">Play again</button>
+            <button id="results-menu" class="btn" type="button">Menu</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

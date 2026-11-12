@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Pounce Pins: ten-frame comic bowling where the pins are goofy office cats that always land on their feet." />
+    <title>Pounce Pins</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231f6f78'/><circle cx='32' cy='36' r='17' fill='%23f2a33a'/><path d='M18 26l2-14 11 8zM46 26l-2-14-11 8z' fill='%23f2a33a'/><circle cx='26' cy='34' r='3' fill='%232b2420'/><circle cx='38' cy='34' r='3' fill='%232b2420'/><path d='M29 42q3 3 6 0' stroke='%232b2420' stroke-width='2' fill='none'/></svg>"
+    />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="top">
+        <h1 class="logo"><span class="paw" aria-hidden="true">&#128062;</span> Pounce Pins</h1>
+        <section class="board" id="board" aria-label="Scoreboard" hidden></section>
+        <div class="top-actions">
+          <button id="mute" class="icon-btn" type="button" aria-pressed="true" aria-label="Sound on" title="Sound (M)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9v6h4l5 4V5L8 9z"/><path class="waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="slash" d="M17 9l5 6M22 9l-5 6"/></svg>
+          </button>
+          <button id="open-settings" class="icon-btn" type="button" aria-label="Settings" aria-haspopup="dialog" title="Settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.41 4.77L10.87 2.47L13.13 2.47L13.59 4.77L15.99 5.77L17.94 4.46L19.54 6.06L18.23 8.01L19.23 10.41L21.53 10.87L21.53 13.13L19.23 13.59L18.23 15.99L19.54 17.94L17.94 19.54L15.99 18.23L13.59 19.23L13.13 21.53L10.87 21.53L10.41 19.23L8.01 18.23L6.06 19.54L4.46 17.94L5.77 15.99L4.77 13.59L2.47 13.13L2.47 10.87L4.77 10.41L5.77 8.01L4.46 6.06L6.06 4.46L8.01 5.77Z"/><circle cx="12" cy="12" r="3.2"/></svg>
+          </button>
+          <button id="pause" class="icon-btn" type="button" aria-label="Pause" aria-haspopup="dialog" title="Pause (P)" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="stage" id="stage">
+        <section class="play" id="play" hidden>
+          <div class="scene-wrap" id="scene-wrap">
+            <canvas id="scene" role="img" aria-label="Bowling lane with ten cartoon office cats at the far end"></canvas>
+            <p id="chip" class="chip" aria-hidden="true"></p>
+            <p id="down" class="down" aria-hidden="true"></p>
+            <div id="banner" class="banner" aria-hidden="true"></div>
+            <output id="curve-out" class="curve-out" aria-live="off">Straight</output>
+            <p id="hint" class="hint" hidden>
+              <span id="hint-text"></span>
+              <button id="hint-close" class="btn small" type="button">Got it</button>
+            </p>
+          </div>
+          <div class="controls" id="controls">
+            <div class="meter-box">
+              <div class="meter" id="meter" role="meter" aria-label="Power" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="sweet" id="sweet"></div>
+                <div class="fill" id="meter-fill"></div>
+              </div>
+              <span class="meter-label" id="meter-label">Power</span>
+            </div>
+            <div class="curve" role="group" aria-label="Curve">
+              <button id="curve-l" class="btn" type="button" aria-label="Curve left">&#9664;</button>
+              <button id="curve-r" class="btn" type="button" aria-label="Curve right">&#9654;</button>
+            </div>
+            <button id="bowl" class="btn primary bowl" type="button">Lock aim</button>
+          </div>
+        </section>
+
+        <section class="title" id="title" aria-labelledby="title-h">
+          <div class="title-card">
+            <div class="title-head">
+            <canvas id="title-art" class="title-art" width="640" height="280" aria-hidden="true"></canvas>
+            <h2 id="title-h" class="title-h">Pounce Pins</h2>
+            <p class="tagline" id="tagline"></p>
+            </div>
+            <div class="title-body">
+            <fieldset data-setting="players"><legend id="lg-players">Players</legend>
+              <button type="button" data-value="1">Solo</button>
+              <button type="button" data-value="2">Two players</button>
+            </fieldset>
+            <fieldset data-setting="difficulty"><legend id="lg-diff">Arrow speed</legend>
+              <button type="button" data-value="easy">Lazy Sunday</button>
+              <button type="button" data-value="normal">Office hours</button>
+              <button type="button" data-value="tricky">Zoomies</button>
+            </fieldset>
+            <button id="play-btn" class="btn primary big" type="button">Play</button>
+            <details class="how"><summary id="how-sum"><span id="how-label">How to play</span><span class="chev" aria-hidden="true"></span></summary><ul id="how-list"></ul></details>
+            <p class="stats" id="stats"></p>
+            </div>
+          </div>
+        </section>
+      </main>
+      <p class="keys" id="keys"></p>
+    </div>
+
+    <div id="pause-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+      <div class="sheet">
+        <h2 id="pause-title">Paused</h2>
+        <div class="stack">
+          <button id="pause-resume" class="btn primary" type="button">Resume</button>
+          <button id="pause-settings" class="btn" type="button">Settings</button>
+          <button id="pause-restart" class="btn" type="button">Restart</button>
+          <button id="pause-quit" class="btn" type="button">Quit to title</button>
+        </div>
+        <div id="pause-confirm" class="confirm-bar" role="group" aria-label="Confirm" hidden>
+          <span id="confirm-text"></span>
+          <button id="confirm-yes" class="btn small primary" type="button">Yes</button>
+          <button id="confirm-no" class="btn small" type="button">Keep playing</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+      <div class="sheet">
+        <h2 id="settings-title">Settings</h2>
+        <div class="options">
+          <div class="row">
+            <label for="volume" class="lbl" id="lbl-volume">Volume</label>
+            <input id="volume" type="range" min="0" max="100" step="5" value="70" />
+            <output id="volume-out" for="volume">70</output>
+          </div>
+          <fieldset data-setting="sound"><legend id="lg-sound">Sound</legend>
+            <button type="button" data-value="true">On</button>
+            <button type="button" data-value="false">Muted</button>
+          </fieldset>
+          <fieldset data-setting="reduceMotion"><legend id="lg-motion">Reduce motion</legend>
+            <button type="button" data-value="system">System</button>
+            <button type="button" data-value="on">On</button>
+            <button type="button" data-value="off">Off</button>
+          </fieldset>
+          <fieldset data-setting="colorAssist"><legend id="lg-assist">Colour-blind assist</legend>
+            <button type="button" data-value="false">Off</button>
+            <button type="button" data-value="true">On</button>
+          </fieldset>
+          <fieldset data-setting="textSize"><legend id="lg-text">Text size</legend>
+            <button type="button" data-value="100">100%</button>
+            <button type="button" data-value="125">125%</button>
+            <button type="button" data-value="150">150%</button>
+          </fieldset>
+          <fieldset data-setting="theme"><legend id="lg-theme">Theme</legend>
+            <button type="button" data-value="system">System</button>
+            <button type="button" data-value="light">Light</button>
+            <button type="button" data-value="dark">Dark</button>
+          </fieldset>
+        </div>
+        <button id="settings-close" class="btn primary" type="button">Done</button>
+      </div>
+    </div>
+
+    <div id="over-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="over-title" hidden>
+      <div class="sheet">
+        <h2 id="over-title">Game over</h2>
+        <p id="over-rank" class="rank"></p>
+        <p id="over-score" class="big-score"></p>
+        <p id="over-best" class="best-line"></p>
+        <ul id="over-lines" class="over-lines"></ul>
+        <p id="over-tip" class="over-tip" hidden></p>
+        <div class="stack">
+          <button id="over-again" class="btn primary" type="button">Play again</button>
+          <button id="over-title-btn" class="btn" type="button">Title</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="live" class="sr-only" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+/* Colour tokens. The playfield is dark in every theme; only dialog sheets follow the theme.
+   Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3). */
+:root {
+  --bg: #0b0820;
+  --panel: #ffffff;
+  --ink: #17123a;
+  --muted: #4d4780;
+  --line: #7d77a8;
+  --accent: #4b2fc4;
+  --accent-ink: #ffffff;
+  --focus: #5b3fd6;
+  --hud-bg: #120d33;
+  --hud-ink: #f4f1ff;
+  --hud-dim: #b9b2e6;
+  --hud-line: rgba(185, 166, 255, 0.4);
+  --gold: #ffd25c;
+  --danger: #ff3d5e;
+  --shadow: 0 1px 0 rgba(23, 18, 58, 0.06), 0 10px 30px rgba(23, 18, 58, 0.25);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --panel: #19134a; --ink: #f1eeff; --muted: #b9b2e6; --line: #7f78bb;
+    --accent: #b9a6ff; --accent-ink: #130d36; --focus: #c9bbff;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --panel: #19134a; --ink: #f1eeff; --muted: #b9b2e6; --line: #7f78bb;
+  --accent: #b9a6ff; --accent-ink: #130d36; --focus: #c9bbff;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}

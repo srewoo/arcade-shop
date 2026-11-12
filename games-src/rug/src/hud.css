@@ -1,0 +1,234 @@
+/* Race HUD: badges, nitro meter, minimap. */
+.hud,
+.hint {
+  --u: var(--hud-u, 1px); /* HUD-only unit: follows the Text and HUD size setting */
+}
+.hud {
+  position: absolute;
+  inset: 0;
+  opacity: 0.001;
+  transition: opacity 0.45s;
+}
+.hud.show {
+  opacity: 1;
+}
+.badge {
+  position: absolute;
+  font-weight: 900;
+  color: #fff;
+  padding: calc(var(--u) * 10) calc(var(--u) * 26) calc(var(--u) * 14);
+  border-radius: calc(var(--u) * 28);
+  border: calc(var(--u) * 5) solid #fff;
+  box-shadow:
+    inset 0 calc(var(--u) * -9) 0 #0000002e,
+    inset 0 calc(var(--u) * 7) 0 #ffffff47,
+    0 calc(var(--u) * 7) 0 #00000047,
+    0 calc(var(--u) * 14) calc(var(--u) * 24) #00000040;
+  text-shadow: 0 calc(var(--u) * 4) 0 rgba(0, 0, 0, 0.28);
+  line-height: 1;
+  white-space: nowrap;
+}
+.pos {
+  left: calc(var(--u) * 40);
+  top: calc(var(--u) * 36);
+  background: var(--red);
+  transform-origin: 30% 50%;
+}
+.pos .pos-num {
+  font-size: max(calc(var(--u) * 96), var(--hud-min));
+}
+.pos .pos-suf {
+  font-size: max(calc(var(--u) * 44), var(--hud-min));
+  vertical-align: top;
+  margin-left: calc(var(--u) * 2);
+}
+.pos .pos-of {
+  font-size: max(calc(var(--u) * 36), var(--hud-min));
+  opacity: 0.8;
+  margin-left: calc(var(--u) * 8);
+}
+.pos.bump {
+  animation: bump 0.45s cubic-bezier(0.3, 1.8, 0.5, 1);
+}
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.22) rotate(-4deg);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.lap {
+  left: 50%;
+  top: calc(var(--u) * 36);
+  transform: translate(-50%);
+  background: var(--blue);
+}
+.lap .lap-lbl {
+  font-size: max(calc(var(--u) * 34), var(--hud-min));
+  margin-right: calc(var(--u) * 12);
+  letter-spacing: calc(var(--u) * 2);
+}
+.lap .lap-num {
+  font-size: max(calc(var(--u) * 64), var(--hud-min));
+}
+.lap .lap-of {
+  font-size: max(calc(var(--u) * 38), var(--hud-min));
+  opacity: 0.85;
+}
+.timer {
+  right: calc(var(--u) * 40);
+  top: calc(var(--u) * 36);
+  background: var(--yellow);
+  color: var(--ink);
+  text-shadow: 0 calc(var(--u) * 3) 0 rgba(255, 255, 255, 0.4);
+}
+.timer .time {
+  font-size: max(calc(var(--u) * 54), var(--hud-min));
+  font-variant-numeric: tabular-nums;
+}
+.timer .clock {
+  display: inline-block;
+  width: calc(var(--u) * 40);
+  height: calc(var(--u) * 40);
+  border-radius: 50%;
+  border: calc(var(--u) * 6) solid var(--ink);
+  margin-right: calc(var(--u) * 14);
+  vertical-align: calc(var(--u) * -4);
+  position: relative;
+}
+.timer .clock:after {
+  content: "";
+  position: absolute;
+  left: 42%;
+  top: 12%;
+  width: 16%;
+  height: 42%;
+  background: var(--ink);
+  border-radius: 4px;
+}
+.boost {
+  position: absolute;
+  left: calc(var(--u) * 40);
+  bottom: calc(var(--u) * 44);
+  width: calc(var(--u) * 430);
+}
+.boost-lbl {
+  font-weight: 900;
+  font-size: max(calc(var(--u) * 34), var(--hud-min));
+  color: #fff;
+  letter-spacing: calc(var(--u) * 3);
+  text-shadow:
+    0 calc(var(--u) * 4) 0 rgba(0, 0, 0, 0.35),
+    0 0 calc(var(--u) * 10) rgba(0, 0, 0, 0.3);
+  margin: 0 0 calc(var(--u) * 8) calc(var(--u) * 10);
+}
+.boost-tube {
+  position: relative;
+  height: calc(var(--u) * 46);
+  border-radius: calc(var(--u) * 26);
+  border: calc(var(--u) * 5) solid #fff;
+  background: #1e22288c;
+  overflow: hidden;
+  box-shadow:
+    0 calc(var(--u) * 6) 0 #00000047,
+    inset 0 calc(var(--u) * 5) calc(var(--u) * 6) #00000059;
+}
+.boost-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 50%;
+  background: repeating-linear-gradient(
+    -45deg,
+    #ffb21f 0 calc(var(--u) * 18),
+    #ff8a1a calc(var(--u) * 18) calc(var(--u) * 36)
+  );
+  border-radius: calc(var(--u) * 20);
+  transition: transform 0.08s linear;
+}
+.boost.active .boost-fill {
+  background: repeating-linear-gradient(
+    -45deg,
+    #fff06a 0 calc(var(--u) * 18),
+    #ffb21f calc(var(--u) * 18) calc(var(--u) * 36)
+  );
+  animation: stripes 0.35s linear infinite;
+  background-size: calc(var(--u) * 51) calc(var(--u) * 51);
+}
+.boost.active .boost-tube {
+  box-shadow:
+    0 calc(var(--u) * 6) 0 #00000047,
+    0 0 calc(var(--u) * 24) #ffd650e6;
+}
+.boost.full .boost-lbl:after {
+  content: " READY!";
+  color: #fff06a;
+}
+@keyframes stripes {
+  0% {
+    background-position: 0 0;
+  }
+  to {
+    background-position: calc(var(--u) * 51) 0;
+  }
+}
+.boost-shine {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 12%;
+  height: 24%;
+  border-radius: 99px;
+  background: #fff6;
+}
+.minimap {
+  --u: var(--u-base, 1px); /* the map is a graphic: the HUD size setting does not enlarge it */
+  position: absolute;
+  right: calc(var(--u) * 40);
+  bottom: calc(var(--u) * 40);
+  width: calc(var(--u) * 390);
+  height: calc(var(--u) * 273);
+  border-radius: calc(var(--u) * 26);
+  border: calc(var(--u) * 6) solid #fff;
+  overflow: hidden;
+  background: #2c5ca6;
+  box-shadow:
+    0 calc(var(--u) * 7) 0 #00000047,
+    0 calc(var(--u) * 16) calc(var(--u) * 28) #0000004d;
+  transform: rotate(-1.5deg);
+}
+.minimap canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.minimap:after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--u) * 7);
+  border: calc(var(--u) * 3) dashed rgba(255, 255, 255, 0.6);
+  border-radius: calc(var(--u) * 18);
+  pointer-events: none;
+}
+.wrongway {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translate(-50%, -50%) scale(0.6);
+  font-weight: 900;
+  font-size: max(calc(var(--u) * 70), var(--hud-min));
+  color: #fff;
+  background: var(--red);
+  padding: calc(var(--u) * 10) calc(var(--u) * 34);
+  border-radius: calc(var(--u) * 24);
+  border: calc(var(--u) * 6) solid #fff;
+  opacity: 0;
+  transition: all 0.25s;
+}
+.wrongway.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}

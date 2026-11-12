@@ -1,0 +1,296 @@
+/* Touch UI: stick and buttons, plus touch overrides of the HUD and menus. */
+.touch-ui {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.touch.racing .touch-ui {
+  display: block;
+}
+.t-btn {
+  position: absolute;
+  border-radius: 50%;
+  border: calc(var(--u) * 6) solid #fff;
+  color: #fff;
+  font-family: var(--font);
+  font-weight: 900;
+  font-size: max(calc(var(--u) * 42), var(--hud-min));
+  padding: 0;
+  pointer-events: auto;
+  touch-action: none;
+  box-shadow:
+    inset 0 calc(var(--u) * -10) 0 #0003,
+    0 calc(var(--u) * 8) 0 #0000004d;
+}
+.t-btn.down {
+  transform: translateY(calc(var(--u) * 6)) scale(0.96);
+  filter: brightness(1.2);
+}
+.t-boost {
+  right: calc(var(--u) * 50);
+  bottom: calc(var(--u) * 260);
+  width: calc(var(--u) * 240);
+  height: calc(var(--u) * 240);
+  background: #ff8a1a;
+}
+.t-jump {
+  right: calc(var(--u) * 320);
+  bottom: calc(var(--u) * 60);
+  width: calc(var(--u) * 220);
+  height: calc(var(--u) * 220);
+  background: var(--blue);
+}
+.t-reset {
+  right: calc(var(--u) * 90);
+  bottom: calc(var(--u) * 70);
+  width: calc(var(--u) * 140);
+  height: calc(var(--u) * 140);
+  background: #23262bcc;
+  font-size: calc(var(--u) * 80);
+  line-height: 1;
+}
+.touch .hint,
+.touch .controls {
+  display: none;
+}
+.touch .boost {
+  left: 50%;
+  transform: translate(-50%);
+  bottom: calc(var(--u) * 26);
+  width: calc(var(--u) * 480);
+}
+.touch .boost-lbl {
+  display: none;
+}
+.touch .minimap {
+  bottom: auto;
+  top: calc(var(--u) * 170);
+  right: calc(var(--u) * 40);
+  width: calc(var(--u) * 300);
+  height: calc(var(--u) * 210);
+}
+.touch.vertical .boost {
+  bottom: calc(var(--u) * 30);
+  width: calc(var(--u) * 700);
+}
+.touch.vertical .minimap {
+  top: calc(var(--u) * 300);
+}
+.touch.vertical .t-boost {
+  bottom: calc(var(--u) * 330);
+}
+.touch.vertical .t-jump {
+  bottom: calc(var(--u) * 110);
+  right: calc(var(--u) * 290);
+}
+.touch.vertical .t-reset {
+  bottom: calc(var(--u) * 130);
+  right: calc(var(--u) * 70);
+}
+.touch .sound-btn kbd,
+.touch .key-btn kbd {
+  display: none;
+}
+.t-stick {
+  position: absolute;
+  left: calc(var(--u) * 30);
+  bottom: calc(var(--u) * 30);
+  width: calc(var(--u) * 470);
+  height: calc(var(--u) * 470);
+  pointer-events: auto;
+  touch-action: none;
+}
+.t-stick-base {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: #23262b80;
+  border: calc(var(--u) * 6) solid rgba(255, 255, 255, 0.85);
+}
+.t-knob {
+  position: absolute;
+  left: 32%;
+  top: 32%;
+  width: 36%;
+  height: 36%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 32%,
+    #ff7a70,
+    var(--red) 62%,
+    #b3201b
+  );
+  border: calc(var(--u) * 6) solid #fff;
+  box-shadow: 0 calc(var(--u) * 8) calc(var(--u) * 12) #00000059;
+  transition: transform 0.14s ease-out;
+}
+.t-knob.held {
+  transition: none;
+}
+.touch.vertical .t-stick {
+  bottom: calc(var(--u) * 90);
+}
+.t-menu {
+  top: calc(var(--u) * 30);
+  right: calc(var(--u) * 30);
+  width: calc(var(--u) * 104);
+  height: calc(var(--u) * 104);
+  background: #23262bcc;
+  font-size: calc(var(--u) * 54);
+  line-height: 1;
+}
+.touch .timer {
+  right: calc(var(--u) * 160);
+}
+.touch.vertical .t-menu {
+  top: calc(var(--u) * 30);
+  right: calc(var(--u) * 44);
+}
+.touch.vertical .timer {
+  right: auto;
+}
+.touch .menu:not(.menu-skins) .key-btn {
+  font-size: calc(var(--u) * 92);
+  padding: calc(var(--u) * 26) calc(var(--u) * 130);
+}
+.touch .menu-skins {
+  margin-top: calc(var(--u) * -6);
+  gap: calc(var(--u) * 40);
+}
+.touch .menu-skins .key-btn {
+  font-size: calc(var(--u) * 66);
+  padding: calc(var(--u) * 20) calc(var(--u) * 76);
+}
+.touch .sound-btn {
+  font-size: calc(var(--u) * 44);
+  padding: calc(var(--u) * 14) calc(var(--u) * 32);
+}
+.touch .gar-kinds button,
+.touch .gar-models button,
+.touch .gar-done {
+  font-size: calc(var(--u) * 50);
+  padding: calc(var(--u) * 16) calc(var(--u) * 40);
+}
+.touch .gar-colors button {
+  width: max(calc(var(--u) * 104), var(--tap));
+  height: max(calc(var(--u) * 104), var(--tap));
+}
+.touch .gar-panel {
+  width: calc(var(--u) * 1500);
+  padding: calc(var(--u) * 18) calc(var(--u) * 24);
+  gap: calc(var(--u) * 14);
+}
+.touch.vertical .gar-panel {
+  width: calc(var(--u) * 1040);
+}
+.touch .results [data-key] {
+  font-size: max(calc(var(--u) * 46), 14px);
+  padding: calc(var(--u) * 10);
+  display: inline-block;
+}
+.touch .all-games {
+  font-size: calc(var(--u) * 44);
+  padding: calc(var(--u) * 14) calc(var(--u) * 32);
+}
+.touch .res-name,
+.touch .res-row button,
+.touch .res-ask {
+  font-size: calc(var(--u) * 54);
+}
+.touch .results:has(.res-name:focus) {
+  top: 3%;
+  transform: translate(-50%) scale(1);
+}
+.touch .results:has(.res-name:focus) .res-table,
+.touch .results:has(.res-name:focus) .res-place {
+  display: none;
+}
+.touch .rec-board {
+  width: calc(var(--u) * 520);
+  font-size: calc(var(--u) * 42);
+}
+.touch .all-games,
+.touch .sound-btn {
+  height: max(calc(var(--u) * 104), var(--tap));
+}
+.touch .sound-btn {
+  width: max(calc(var(--u) * 104), var(--tap));
+  padding: 0;
+}
+
+/* ---- touch layout: the minimap sits top-right, so the stats move below it ---- */
+.touch .stats {
+  top: calc(var(--u) * 400);
+}
+.touch.vertical .stats {
+  top: calc(var(--u) * 590);
+}
+.touch .boost {
+  width: calc(var(--u) * 560);
+}
+
+
+/* portrait: the title's secondary menu row is tighter than the touch default (must follow .touch .menu-skins) */
+.vertical .menu-skins {
+  gap: calc(var(--u) * 18);
+}
+
+/* ---- touch controls: >= 44px (52px for the corner buttons), charge ring on BOOST, camera + pause ---- */
+.touch-ui {
+  --u: var(--u-base, 1px); /* the HUD size setting does not rescale the controls */
+}
+.t-menu {
+  width: max(calc(var(--u) * 104), 52px);
+  height: max(calc(var(--u) * 104), 52px);
+  font-size: max(calc(var(--u) * 40), 18px);
+  letter-spacing: 0.05em;
+}
+.t-reset {
+  width: max(calc(var(--u) * 140), 52px);
+  height: max(calc(var(--u) * 140), 52px);
+}
+.t-cam {
+  right: calc(var(--u) * 570);
+  bottom: calc(var(--u) * 70);
+  width: max(calc(var(--u) * 140), 52px);
+  height: max(calc(var(--u) * 140), 52px);
+  background: #23262bcc;
+  font-size: max(calc(var(--u) * 34), 12px);
+}
+.touch.vertical .t-cam {
+  right: calc(var(--u) * 44 + max(calc(var(--u) * 104), 52px) + 10px);
+  bottom: auto;
+  top: calc(var(--u) * 30);
+  width: max(calc(var(--u) * 104), 52px);
+  height: max(calc(var(--u) * 104), 52px);
+}
+.t-boost {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.1;
+}
+.t-boost .t-pct {
+  font-size: max(calc(var(--u) * 34), 12px);
+  font-variant-numeric: tabular-nums;
+  opacity: 0.95;
+}
+.t-boost:before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--u) * -22);
+  border-radius: 50%;
+  background: conic-gradient(#ffd650 calc(var(--nitro, 1) * 360deg), #ffffff3d 0);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - var(--u) * 12), #000 calc(100% - var(--u) * 11));
+  mask: radial-gradient(farthest-side, #0000 calc(100% - var(--u) * 12), #000 calc(100% - var(--u) * 11));
+  pointer-events: none;
+}
+.t-boost.empty {
+  opacity: 0.55;
+  filter: grayscale(0.7);
+}
+.touch.vertical .t-stick {
+  bottom: calc(var(--u) * 140); /* clears the nitro bar */
+}

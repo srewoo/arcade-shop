@@ -1,0 +1,99 @@
+/* Larger nitro meter (readout, key chip, ticks, ready pulse). */
+/* HUD additions: gaps, lap stats, split/drift popups, bigger nitro meter, title extras.
+   Everything is sized in --u (1/1080 of the stage's short side) like the original HUD. */
+
+/* ---- nitro meter: larger, with % readout, key chip, quarter ticks and a ready pulse ---- */
+.boost {
+  width: calc(var(--u) * 640);
+}
+.boost-lbl {
+  display: flex;
+  flex-wrap: wrap; /* a bigger HUD size or longer text wraps instead of colliding */
+  row-gap: calc(var(--u) * 4);
+  align-items: center;
+  gap: calc(var(--u) * 14);
+  width: fit-content;
+  max-width: 100%;
+  padding: calc(var(--u) * 4) calc(var(--u) * 16) calc(var(--u) * 6);
+  border-radius: calc(var(--u) * 24);
+  background: #1e2126bf; /* backing plate: the yellow percent reads on any rug colour */
+  font-size: max(calc(var(--u) * 40), var(--hud-min));
+  margin-bottom: calc(var(--u) * 10);
+}
+.boost-lbl .bl-name {
+  text-shadow:
+    0 calc(var(--u) * 4) 0 rgba(0, 0, 0, 0.45),
+    0 0 calc(var(--u) * 14) rgba(0, 0, 0, 0.5);
+}
+.boost-pct {
+  margin-left: auto;
+  min-width: 4ch;
+  text-align: right;
+  font-size: max(calc(var(--u) * 46), var(--hud-min));
+  font-variant-numeric: tabular-nums;
+  color: #ffd650;
+}
+.boost-lbl .bl-key {
+  flex: none;
+  font-size: max(calc(var(--u) * 26), var(--hud-min));
+  letter-spacing: 0;
+}
+.boost.full .boost-lbl:after {
+  content: none;
+}
+.boost.full .bl-name:after {
+  content: " READY";
+  color: #fff06a;
+}
+.boost-tube {
+  height: calc(var(--u) * 78);
+  border-width: calc(var(--u) * 7);
+  border-radius: calc(var(--u) * 42);
+  background: #14171cc9;
+  box-shadow:
+    0 calc(var(--u) * 7) 0 #00000059,
+    0 0 calc(var(--u) * 16) #ff9a1f66,
+    inset 0 calc(var(--u) * 6) calc(var(--u) * 8) #00000066;
+}
+.boost-fill {
+  border-radius: calc(var(--u) * 34);
+}
+.boost-ticks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 24.4%, #ffffff8c 24.4% 25.2%, transparent 25.2% 49.4%, #ffffff8c 49.4% 50.2%, transparent 50.2% 74.4%, #ffffff8c 74.4% 75.2%, transparent 75.2%);
+}
+.boost.low .boost-fill {
+  background: repeating-linear-gradient(-45deg, #ff5a3c 0 calc(var(--u) * 18), #d92f1c calc(var(--u) * 18) calc(var(--u) * 36));
+}
+.boost.low .boost-pct {
+  color: #ff8a73;
+}
+.boost.full .boost-tube {
+  animation: boostReady 0.9s ease-in-out infinite;
+}
+@keyframes boostReady {
+  0%,
+  to {
+    box-shadow:
+      0 calc(var(--u) * 7) 0 #00000059,
+      0 0 calc(var(--u) * 16) #ffd65080,
+      inset 0 calc(var(--u) * 6) calc(var(--u) * 8) #00000066;
+  }
+  50% {
+    box-shadow:
+      0 calc(var(--u) * 7) 0 #00000059,
+      0 0 calc(var(--u) * 42) #fff06af2,
+      inset 0 calc(var(--u) * 6) calc(var(--u) * 8) #00000066;
+  }
+}
+.hint {
+  /* over the nitro bar, left aligned; never under the minimap (it sits right of the bar) */
+  left: calc(var(--u) * 40);
+  transform: none;
+  bottom: calc(var(--u) * 232);
+  max-width: calc(100% - var(--u) * 520);
+  white-space: normal;
+}
+

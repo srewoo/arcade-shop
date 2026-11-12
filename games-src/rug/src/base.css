@@ -1,0 +1,82 @@
+/* Display font: Nunito Black, Latin subset (SIL Open Font License, see public/fonts/OFL.txt). Without it
+   Windows / Android fall back to Arial Rounded or Segoe UI Black and the look differs from macOS. */
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 800 900;
+  font-display: swap;
+  src: url("/fonts/nunito-latin-900.woff2") format("woff2");
+}
+/* Design tokens, reset, stage and shared basics. */
+:root {
+  --u: 1px;
+  --ink: #23262b;
+  --red: #c8271f; /* white text 5.6:1 (was #e5322b, 4.35:1) */
+  --yellow: #f2bd1d;
+  --blue: #2f6fd0;
+  --green: #17804a; /* white text 5.0:1 (was #1fa45a, 3.2:1) */
+  --cream: #fbf6ea;
+  --hud-min: 12px; /* HUD text never renders smaller than this */
+  --tap: 44px; /* minimum touch target */
+  --font: "Nunito", "Arial Rounded MT Bold", "Varela Round", "Segoe UI Black",
+    "Arial Black", system-ui, sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #17120d;
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+#stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  background: #d9c7ad;
+}
+#gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--cream);
+}
+kbd {
+  display: inline-block;
+  font-family: var(--font);
+  font-weight: 900;
+  font-size: 0.85em;
+  padding: 0.12em 0.45em 0.18em;
+  border-radius: 0.45em;
+  background: var(--cream);
+  color: var(--ink);
+  box-shadow:
+    inset 0 -0.18em #0000002e,
+    0 0.12em #00000059;
+  margin: 0 0.1em;
+}
+html,
+body,
+#stage {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.ui {
+  inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}

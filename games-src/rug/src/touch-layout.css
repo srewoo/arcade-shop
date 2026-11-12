@@ -1,0 +1,57 @@
+/* Touch layout fixes for portrait, short landscape phones and HUD size 125 / 150 % (loaded right after touch.css). */
+/* portrait touch: the corner buttons are >= 52px tall, so the badges below them start lower */
+.touch.vertical .pos,
+.touch.vertical .lap {
+  top: max(calc(var(--u) * 150), 70px);
+}
+.touch.vertical .timer {
+  top: max(calc(var(--u) * 300), 122px);
+}
+
+/* landscape touch: keep the corner buttons clear of the timer and the minimap */
+.touch .timer {
+  right: calc(var(--u) * 30 + max(calc(var(--u) * 104), 52px) + 8px);
+}
+.touch .minimap {
+  top: max(calc(var(--u) * 170), 72px);
+}
+.touch.vertical .timer {
+  right: auto;
+}
+.touch.vertical .minimap {
+  top: calc(var(--u) * 300);
+}
+/* short landscape screens (phones): lap stats move under the gaps, left side, and drop the last-lap row */
+@media (max-height: 520px) {
+  .touch:not(.vertical) .stats {
+    right: auto;
+    left: calc(var(--u) * 40);
+    top: calc(var(--u) * 196 + 56px);
+    align-items: flex-start;
+  }
+  .touch:not(.vertical) .stats .stat-last {
+    display: none;
+  }
+}
+
+/* HUD size 125 / 150 %: the nitro bar stays at its touch size (it must clear the stick and buttons) and
+   the portrait minimap sits below the scaled lap badge */
+.touch .boost {
+  --u: var(--u-base, 1px);
+}
+.touch.vertical .minimap {
+  top: calc(max(var(--hud-u, 1px) * 150, 70px) + var(--hud-u, 1px) * 100 + 8px);
+}
+
+/* map picker on touch */
+/* map picker on touch */
+.touch .maps-list button {
+  font-size: max(calc(var(--u) * 40), 14px);
+  padding: calc(var(--u) * 10) calc(var(--u) * 30);
+}
+.touch .maps .gar-panel {
+  width: calc(var(--u) * 1500);
+}
+.touch.vertical .maps .gar-panel {
+  width: calc(var(--u) * 1040);
+}

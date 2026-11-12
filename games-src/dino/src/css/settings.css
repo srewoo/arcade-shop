@@ -1,0 +1,165 @@
+/* Settings dialog: touch targets are at least 44 px; rows are fully tappable; text follows --ui-scale. */
+#settings-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: var(--scrim);
+}
+#settings {
+  width: min(94vw, 520px);
+  max-height: 88vh;
+  max-height: 88dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  background: var(--cream); /* opaque: --panel is 97% alpha and the pause card showed through it */
+  border: 3px solid var(--line);
+  box-shadow: 0 10px 40px #0005;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+#settings h2 {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: calc(34px * var(--ui-scale));
+  margin: 0;
+  animation: none;
+}
+#settings fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+#settings legend {
+  font: 700 calc(12px * var(--ui-scale)) var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0;
+  margin-bottom: 6px;
+}
+#settings legend small,
+#skin-note {
+  font-size: calc(12px * var(--ui-scale));
+  text-transform: none;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+.seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.seg-btn {
+  flex: 1 1 30%;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink);
+  font: 700 calc(14px * var(--ui-scale)) var(--mono);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.seg-btn[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--cream);
+}
+#settings .row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+#settings label {
+  font: 700 calc(14px * var(--ui-scale)) var(--mono);
+}
+#set-volume {
+  width: 100%;
+  min-height: 44px;
+  accent-color: var(--accent);
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.check input {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--accent);
+  flex: none;
+}
+.check small {
+  display: block;
+  font-weight: 600;
+  font-size: 0.86em;
+}
+.skins {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 8px;
+}
+.skin {
+  min-height: 64px;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 8px 6px;
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink);
+  font: 700 calc(13px * var(--ui-scale)) var(--mono);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.skin small {
+  font-size: calc(12px * var(--ui-scale));
+  letter-spacing: 0.06em;
+}
+.skin[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--cream);
+}
+/* locked: dashed hatched card, full-contrast text, a lock glyph in the label (no reliance on dimming) */
+.skin.locked {
+  border-style: dashed;
+  background: repeating-linear-gradient(135deg, transparent 0 6px, color-mix(in srgb, var(--ink) 12%, transparent) 6px 8px);
+  cursor: not-allowed;
+}
+.skin.locked small::before {
+  content: "";
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-right: 0.3em;
+  vertical-align: -0.12em;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 10V8a6 6 0 0 1 12 0v2h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1h1Zm2 0h8V8a4 4 0 0 0-8 0v2Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 10V8a6 6 0 0 1 12 0v2h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1h1Zm2 0h8V8a4 4 0 0 0-8 0v2Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+}
+.skin[aria-pressed="true"] .swatch {
+  border-color: var(--cream);
+}
+#settings-close {
+  align-self: center;
+  margin-top: 4px;
+}

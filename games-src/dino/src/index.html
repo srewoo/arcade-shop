@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#f7dfc2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1d1a16" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Fossil Frenzy - a 3D ragdoll endless runner with four game modes, power-ups, day and night, snow and rain. Maximum frenzy, minimum coordination." />
+    <title>Fossil Frenzy</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A6%96%3C/text%3E%3C/svg%3E"
+    />
+    <!-- Classic (non-module) script so it runs before first paint; kept as a file so a strict CSP (no inline script) works. -->
+    <script src="./theme-boot.js"></script>
+    <script type="module" src="./main.js"></script>
+    <link rel="stylesheet" href="./css/base.css" />
+    <link rel="stylesheet" href="./css/title.css" />
+    <link rel="stylesheet" href="./css/start.css" />
+    <link rel="stylesheet" href="./css/hud.css" />
+    <link rel="stylesheet" href="./css/powerups.css" />
+    <link rel="stylesheet" href="./css/settings.css" />
+    <link rel="stylesheet" href="./css/overlay.css" />
+  </head>
+  <body>
+    <canvas id="game" role="img" aria-label="Fossil Frenzy game view. A dinosaur runs through the desert; jump cacti and duck pterodactyls."></canvas>
+    <div id="vignette"></div>
+    <div id="flash" aria-hidden="true"></div>
+    <canvas id="confetti" aria-hidden="true"></canvas>
+    <!-- Off-screen status line for assistive tech: score milestones, pause, game over. -->
+    <p id="sr-status" class="sr-only" role="status" aria-live="polite"></p>
+
+    <!-- Top centre. The score stays visible when the rest of the UI is hidden with H, but not on the title screen. -->
+    <div id="score">
+      <span id="best">BEST 00000</span>
+      <span id="points">00000</span>
+    </div>
+
+    <div id="ui">
+      <div id="badges">
+        <span id="badge-auto" class="badge hidden">AUTOPLAY</span>
+        <span id="badge-mute" class="badge hidden">MUTED</span>
+        <span id="badge-mode" class="badge" title="Game mode">CLASSIC</span>
+      </div>
+
+      <!-- Corner buttons: settings gear (title / game over) and pause (while running). Built labels come from strings.js. -->
+      <button id="btn-settings" class="icon-btn" type="button" aria-haspopup="dialog" data-ui>
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6a.5.5 0 0 0 .1-.6l-1.9-3.3a.5.5 0 0 0-.6-.2l-2.4 1a7.4 7.4 0 0 0-1.7-1l-.4-2.5a.5.5 0 0 0-.5-.4h-3.8a.5.5 0 0 0-.5.4l-.4 2.5a7.4 7.4 0 0 0-1.7 1l-2.4-1a.5.5 0 0 0-.6.2L2.5 8.8a.5.5 0 0 0 .1.6l2 1.6a7.5 7.5 0 0 0 0 2l-2 1.6a.5.5 0 0 0-.1.6l1.9 3.3c.1.2.4.3.6.2l2.4-1c.5.4 1.1.7 1.7 1l.4 2.5c0 .2.3.4.5.4h3.8c.2 0 .5-.2.5-.4l.4-2.5c.6-.3 1.2-.6 1.7-1l2.4 1c.2.1.5 0 .6-.2l1.9-3.3a.5.5 0 0 0-.1-.6ZM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Z"/></svg>
+      </button>
+      <button id="btn-pause" class="icon-btn hidden" type="button" data-ui>
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 4h3.5v16H7zM13.5 4H17v16h-3.5z"/></svg>
+      </button>
+      <button id="btn-help" class="icon-btn hidden" type="button" data-ui>?</button>
+
+      <!-- Active power-ups (timers) and the Time Attack clock. -->
+      <ul id="powerups" aria-label="Active power-ups"></ul>
+      <div id="clock" class="hidden" role="timer" aria-label="Time left">1:00</div>
+      <div id="toast" role="status" aria-live="polite"></div>
+      <div id="coach" class="hidden" role="status" aria-live="polite"></div>
+      <div id="countdown" class="hidden" aria-hidden="true"></div>
+      <button id="btn-end" class="btn small ghost hidden" type="button" data-ui>END RUN</button>
+
+      <section id="title" class="panel" aria-label="Fossil Frenzy">
+        <h1>FOSSIL<small>FRENZY</small></h1>
+        <p class="tag pill">Maximum frenzy. Minimum coordination.</p>
+        <div id="modes" role="radiogroup" aria-label="Game mode" data-ui></div>
+        <p id="mode-blurb" class="pill" aria-live="polite"></p>
+        <div id="weather-chips" role="radiogroup" aria-label="Environment" data-ui></div>
+        <button id="btn-start" class="btn start" type="button" aria-describedby="cta-text" data-ui data-snd="confirm"><span class="start-label">LOADING</span><span class="start-bar" aria-hidden="true"></span></button>
+        <p class="cta pill" aria-live="polite">
+          <span id="cta-text"></span>
+        </p>
+      </section>
+
+      <section id="gameover" class="panel hidden" aria-labelledby="over-title">
+        <h2 id="over-title">GAME OVER</h2>
+        <p id="final" class="pill"><span class="final-label">SCORE</span><b id="final-score" aria-live="polite">0</b><span id="new-best" class="hidden">NEW BEST</span><span id="unranked" class="hidden"></span></p>
+        <p id="quip" class="pill"></p>
+        <p id="run-stats" class="pill"></p>
+        <form id="save" class="hidden" autocomplete="off">
+          <input id="save-name" maxlength="16" placeholder="Your name" aria-label="Your name for the leaderboard" autocapitalize="off" spellcheck="false" enterkeyhint="send" />
+          <button id="save-send" class="btn small" type="submit">SAVE</button>
+          <button id="save-skip" class="btn small ghost" type="button">SKIP</button>
+          <p id="save-msg" role="status"></p>
+        </form>
+        <p id="board-note" class="pill hidden" role="status"></p>
+        <ol id="board" class="hidden"></ol>
+        <p id="unlock" class="hidden" role="status"></p>
+        <div class="over-actions">
+          <button id="btn-restart" class="btn" type="button" data-snd="confirm">RUN IT BACK</button>
+          <button id="btn-menu" class="btn ghost" type="button" data-ui>MENU <kbd class="for-keys">Esc</kbd></button>
+        </div>
+      </section>
+
+      <div id="settings-backdrop" class="hidden" data-ui>
+        <section id="settings" role="dialog" aria-modal="true" aria-labelledby="settings-title" data-ui data-scroll tabindex="-1">
+          <h2 id="settings-title">SETTINGS</h2>
+          <fieldset>
+            <legend>Difficulty <small>(Easy and Hard runs are unranked)</small></legend>
+            <div id="set-difficulty" class="seg" role="group" aria-label="Difficulty (speed multiplier)"></div>
+          </fieldset>
+          <fieldset>
+            <legend>Environment <small>(W on the title screen)</small></legend>
+            <div id="set-weather" class="seg" role="group" aria-label="Environment"></div>
+          </fieldset>
+          <div class="row">
+            <label for="set-volume">Master volume <output id="vol-out" for="set-volume">100%</output></label>
+            <input id="set-volume" type="range" min="0" max="100" step="5" value="100" />
+          </div>
+          <label class="check"><input id="set-mute" type="checkbox" /><span id="lbl-mute"></span></label>
+          <fieldset>
+            <legend>Graphics quality</legend>
+            <div id="set-quality" class="seg" role="group" aria-label="Graphics quality"></div>
+          </fieldset>
+          <fieldset>
+            <legend id="lg-text"></legend>
+            <div id="set-text" class="seg" role="group" aria-labelledby="lg-text"></div>
+          </fieldset>
+          <fieldset>
+            <legend id="lg-motion"></legend>
+            <div id="set-motion" class="seg" role="group" aria-labelledby="lg-motion"></div>
+          </fieldset>
+          <fieldset>
+            <legend id="lg-theme"></legend>
+            <div id="set-theme" class="seg" role="group" aria-labelledby="lg-theme"></div>
+          </fieldset>
+          <label class="check"><input id="set-shake" type="checkbox" /><span>Camera shake</span></label>
+          <label class="check"><input id="set-assist" type="checkbox" /><span id="lbl-assist"></span></label>
+          <label class="check"><input id="set-powerups" type="checkbox" /><span><span id="lbl-powerups"></span><small id="sub-powerups"></small></span></label>
+          <label class="check"><input id="set-classicplus" type="checkbox" /><span><span id="lbl-classicplus"></span><small id="sub-classicplus"></small></span></label>
+          <fieldset>
+            <legend>Dino skin <span id="skin-note"></span></legend>
+            <div id="set-skins" class="skins" role="group" aria-label="Dino skin"></div>
+          </fieldset>
+          <button id="settings-close" class="btn small" type="button" data-snd="back">DONE <kbd class="for-keys">Esc</kbd></button>
+        </section>
+      </div>
+
+      <div id="hints">
+        <span class="hint-main"></span><span class="hint-more"></span><span class="hint-title"></span>
+      </div>
+    </div>
+
+    <div id="loading" role="status">Loading&hellip;</div>
+
+  </body>
+</html>

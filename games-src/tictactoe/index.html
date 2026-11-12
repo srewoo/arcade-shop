@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Tic-Tac-Toe with a CPU opponent, two-player mode and a vanishing-marks variant." />
+    <title>Tic-Tac-Toe</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23fbf4e8'/><path d='M14 14l16 16M30 14L14 30' stroke='%23e8553e' stroke-width='6' stroke-linecap='round'/><circle cx='42' cy='42' r='9' fill='none' stroke='%23178f86' stroke-width='6'/></svg>"
+    />
+  </head>
+  <body>
+    <main class="app" id="app">
+      <header class="top">
+        <h1 class="logo">
+          <svg class="glyph" data-p="X" viewBox="0 0 100 100" aria-hidden="true"><path d="M24 24L76 76M76 24L24 76"/></svg>
+          <span class="word">Tic<span>·</span>Tac<span>·</span>Toe</span>
+          <svg class="glyph" data-p="O" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="27"/></svg>
+        </h1>
+        <div class="top-actions">
+          <button id="sound" class="icon-btn" type="button" aria-pressed="true" aria-label="Sound on" title="Sound (M)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9v6h4l5 4V5L8 9z"/><path class="waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="slash" d="M17 9l5 6M22 9l-5 6"/></svg>
+          </button>
+          <button id="theme" class="icon-btn" type="button" aria-label="Theme: system" title="Theme: system">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path class="fill" d="M12 4a8 8 0 0 0 0 16z"/></svg>
+          </button>
+          <button id="open-settings" class="icon-btn" type="button" aria-label="Settings" aria-haspopup="dialog" title="Settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M10.3 3.2h3.4l.5 2.4 1.7.7 2.1-1.3 2.4 2.4-1.3 2.1.7 1.7 2.4.5v3.4l-2.4.5-.7 1.7 1.3 2.1-2.4 2.4-2.1-1.3-1.7.7-.5 2.4h-3.4l-.5-2.4-1.7-.7-2.1 1.3-2.4-2.4 1.3-2.1-.7-1.7-2.4-.5v-3.4l2.4-.5.7-1.7-1.3-2.1 2.4-2.4 2.1 1.3 1.7-.7z"/></svg>
+          </button>
+          <button id="pause" class="icon-btn" type="button" aria-label="Pause" aria-haspopup="dialog" title="Pause (P)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M8 5v14M16 5v14"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="scoreboard">
+        <section class="scores" aria-label="Scoreboard">
+          <div class="score x" id="card-x"><span class="label" id="label-x">You (X)</span><b id="score-x">0</b><span class="pips" id="pips-x" aria-hidden="true" hidden></span></div>
+          <div class="score draw"><span class="label">Draws</span><b id="score-draw">0</b></div>
+          <div class="score o" id="card-o"><span class="label" id="label-o">CPU (O)</span><b id="score-o">0</b><span class="pips" id="pips-o" aria-hidden="true" hidden></span></div>
+        </section>
+        <p id="streak" class="streak" hidden></p>
+      </div>
+
+      <div class="statusbox">
+        <p id="onboard" class="banner" hidden>
+          <span id="onboard-text">Get 3 in a row to win. Tap any square.</span>
+          <button id="onboard-close" class="icon-btn" type="button" aria-label="Dismiss hint">×</button>
+        </p>
+        <p id="status" class="status" role="status" aria-live="polite">Your move</p>
+        <p id="movecount" class="movecount" hidden></p>
+      </div>
+
+      <div class="board-wrap" id="board-wrap">
+        <div id="board" class="board" role="group" aria-label="Board"></div>
+        <svg id="strike" class="strike" aria-hidden="true"></svg>
+        <div id="confetti" class="confetti" aria-hidden="true"></div>
+        <div id="result" class="result" data-tone="win" hidden>
+          <p id="result-title" class="result-title"></p>
+          <p id="result-sub" class="result-sub"></p>
+          <div class="result-actions">
+            <button id="result-next" class="btn primary" type="button">Next round</button>
+            <button id="result-view" class="btn" type="button">View board</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="new-round" class="btn primary" type="button"><span id="new-round-label">New round</span> <kbd>N</kbd></button>
+        <button id="reset" class="btn ghost" type="button">Reset scores</button>
+      </div>
+
+      <details id="options-box" class="options-box">
+        <summary><span class="sum-title">Game options</span><span id="options-summary" class="sum-text"></span></summary>
+        <section class="options" aria-label="Game options">
+          <fieldset data-setting="opponent">
+            <legend>Opponent</legend>
+            <button type="button" data-value="cpu">CPU</button>
+            <button type="button" data-value="human">2 Players</button>
+          </fieldset>
+          <fieldset data-setting="level">
+            <legend>CPU level</legend>
+            <button type="button" data-value="easy">Easy</button>
+            <button type="button" data-value="medium">Medium</button>
+            <button type="button" data-value="strong">Hard</button>
+            <button type="button" data-value="hard">Expert</button>
+          </fieldset>
+          <fieldset data-setting="variant">
+            <legend>Variant</legend>
+            <button type="button" data-value="classic">Classic</button>
+            <button type="button" data-value="vanishing">Vanishing</button>
+          </fieldset>
+          <fieldset data-setting="first">
+            <legend>First move</legend>
+            <button type="button" data-value="alternate">Alternate</button>
+            <button type="button" data-value="X">X</button>
+            <button type="button" data-value="O">O</button>
+          </fieldset>
+        </section>
+        <p id="level-desc" class="desc"></p>
+        <div id="confirm-bar" class="confirm-bar" role="group" aria-label="Confirm setting change" hidden>
+          <span id="confirm-text">Start a new round with this setting?</span>
+          <button id="confirm-yes" class="btn small primary" type="button">Restart</button>
+          <button id="confirm-no" class="btn small" type="button">Cancel</button>
+        </div>
+      </details>
+
+      <p class="hint">
+        <span class="keys">Keys <kbd>1</kbd>–<kbd>9</kbd> place a mark (top-left to bottom-right) · arrows move around the board · <kbd>N</kbd> new round · <kbd>P</kbd> pause · <kbd>M</kbd> mute.</span>
+        <span id="vanish-hint" hidden>Vanishing: each player keeps only 3 marks. The oldest one (dashed) disappears when its owner places a 4th. A draw is called at move 60.</span>
+      </p>
+    </main>
+
+    <div id="pause-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+      <div class="sheet">
+        <h2 id="pause-title">Paused</h2>
+        <p id="pause-note" class="desc"></p>
+        <div class="stack">
+          <button id="pause-resume" class="btn primary" type="button">Resume</button>
+          <button id="pause-restart" class="btn" type="button">New round</button>
+          <button id="pause-settings" class="btn" type="button">Settings</button>
+        </div>
+        <div id="pause-confirm" class="confirm-bar" role="group" aria-label="Confirm new round" hidden>
+          <span>Abandon this round and start a new one?</span>
+          <button id="pause-confirm-yes" class="btn small primary" type="button">Yes, restart</button>
+          <button id="pause-confirm-no" class="btn small" type="button">Keep playing</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+      <div class="sheet">
+        <h2 id="settings-title">Settings</h2>
+        <div class="options">
+          <div class="row">
+            <label for="volume" class="lbl">Volume</label>
+            <input id="volume" type="range" min="0" max="100" step="5" value="70" />
+            <output id="volume-out" for="volume">70</output>
+          </div>
+          <fieldset data-setting="sound">
+            <legend>Sound</legend>
+            <button type="button" data-value="true">On</button>
+            <button type="button" data-value="false">Muted</button>
+          </fieldset>
+          <fieldset data-setting="reduceMotion">
+            <legend>Reduce motion</legend>
+            <button type="button" data-value="system">System</button>
+            <button type="button" data-value="on">On</button>
+            <button type="button" data-value="off">Off</button>
+          </fieldset>
+          <fieldset data-setting="colorAssist">
+            <legend>Colour-blind assist</legend>
+            <button type="button" data-value="false">Off</button>
+            <button type="button" data-value="true">On</button>
+          </fieldset>
+          <fieldset data-setting="textSize">
+            <legend>Text size</legend>
+            <button type="button" data-value="100">100%</button>
+            <button type="button" data-value="125">125%</button>
+            <button type="button" data-value="150">150%</button>
+          </fieldset>
+          <fieldset data-setting="theme">
+            <legend>Theme</legend>
+            <button type="button" data-value="system">System</button>
+            <button type="button" data-value="light">Light</button>
+            <button type="button" data-value="dark">Dark</button>
+          </fieldset>
+        </div>
+        <button id="settings-close" class="btn primary" type="button">Done</button>
+      </div>
+    </div>
+    <div id="toast" class="sr-only" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

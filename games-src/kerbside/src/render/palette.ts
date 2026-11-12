@@ -1,0 +1,33 @@
+// Canvas colours (art is drawn in code, so contrast is checked in tests/contrast.test.ts).
+export const PAL = {
+  asphalt: '#343a43',
+  asphaltSpeck: '#3d444e',
+  line: '#e9edf2',
+  kerb: '#c9ced6',
+  kerbAlt: '#aeb4be',
+  grass: '#3f6b3a',
+  grassDark: '#34592f',
+  bush: '#2f5a2b',
+  bushLight: '#3d7237',
+  warnLine: '#ffb199',
+  stop: '#9aa1ab',
+  confetti: ['#ffd23f', '#4be08a', '#ff5a3c', '#6cb4ff', '#ffffff'],
+  kerbEdge: '#7d8591',
+  wall: '#8d95a1',
+  bay: '#ffd23f',
+  bayOk: '#4be08a',
+  player: '#ff5a3c',
+  playerDark: '#b8321a',
+  glass: '#1d2a38',
+  cone: '#ff8a1f',
+  pillar: '#aab1bc',
+  caravan: '#f3f5f8',
+  tyre: '#14171b',
+  tints: ['#8aa4d6', '#d99a9a', '#9ad0a8', '#d7c27d', '#b79adb', '#8cc8d0', '#d9d9d9'],
+  headlight: '#fff6c4',
+  tail: '#ff2e3a',
+  reverse: '#ffffff',
+  spark: '#ffd23f',
+} as const;
+
+export const tint = (i: number): string => PAL.tints[i % PAL.tints.length] ?? PAL.tints[0];

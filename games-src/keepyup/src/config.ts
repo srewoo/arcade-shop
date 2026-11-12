@@ -1,0 +1,33 @@
+// All gameplay and feel tuning lives here. Logical units: px (world is WORLD_H tall) and seconds.
+export const CONFIG = {
+  world: { height: 600, minWidth: 360, maxWidth: 960, groundY: 520 },
+  ball: { radius: 30, restitutionWall: 0.88, spinDecay: 1.4, magnus: 0.35 },
+  step: { dt: 1 / 120, maxFrame: 0.1, maxSteps: 12 },
+  gravity: { base: 1150, ramp: 9, max: 1900 },
+  hit: {
+    slop: 1.5,
+    kick: 720,
+    kickLow: 0.8,
+    kickSpread: 0.2,
+    sideSpeed: 430,
+    carry: 0.15,
+    spinMax: 16,
+    sweet: 0.25,
+    maxVx: 620,
+  },
+  twoBalls: { unlockScore: 25, secondDelay: 1.1 },
+  wind: { calmMin: 2.0, calmMax: 4.0, gustMin: 1.6, gustMax: 3.2, forceMin: 170, forceMax: 420, rise: 0.5 },
+  aim: { speed: 620, start: { x: 0.5, y: 0.72 } },
+  tiers: [
+    { min: 10, label: 'Warm-up', rank: 1 },
+    { min: 20, label: 'Nice!', rank: 2 },
+    { min: 30, label: 'Smooth', rank: 3 },
+    { min: 40, label: 'On fire', rank: 4 },
+    { min: 50, label: 'Pro', rank: 5 },
+    { min: 60, label: 'Champion', rank: 6 },
+    { min: 80, label: 'Legend', rank: 7 },
+    { min: 100, label: 'Untouchable', rank: 8 },
+  ],
+  fx: { maxParticles: 120, reducedFactor: 0.4, rippleLife: 0.5, popupLife: 0.9, calloutLife: 1.2 },
+  audio: { defaultVolume: 70, masterGain: 0.5, cueGain: 0.22 },
+} as const;

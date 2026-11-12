@@ -1,0 +1,45 @@
+// All gameplay and feel tuning lives here. Units: grid cells (c) and seconds, unless noted.
+// Rules mirror the classic "zap the matching discs" game: 10 columns, a feeder row on top,
+// 5 disc colours plus a bomb, a timer and a "discs to go" target per level.
+export const CONFIG = {
+  grid: { cols: 10, rows: 12, spawnRow: 0, floorRow: 11 },
+  sim: { dt: 1 / 60, maxFrameSec: 0.25, maxStepsPerFrame: 6 },
+  level: {
+    startRowsBase: 4,
+    maxStartRows: 8,
+    coloursBase: 2,
+    maxColours: 5,
+    secondsBase: 80,
+    secondsPerLevel: 5,
+    targetBase: 40,
+    targetPerLevel: 10,
+    spawnIntervalBase: 0.5,
+    spawnIntervalPerLevel: 0.12,
+    minSpawnInterval: 0.1,
+    /** Each finished feeder row shortens the build interval by this factor. */
+    rowSpeedup: 0.9,
+    minRowInterval: 0.03,
+    /** Bombs start appearing from this level. */
+    bombFromLevel: 2,
+    bombChance: 1 / 30,
+    warnSeconds: 10,
+  },
+  feeder: { dropEverySec: 1 / 6 },
+  fall: { zapHold: 0.13, zap: { g: 60, v0: 2, vMax: 24 }, fresh: { g: 80, v0: 6, vMax: 30 }, slideSpeed: 7 },
+  score: { exponentCap: 20, clearBonus: 2000, levelBonusPerLevel: 5000 },
+  danger: { topRow: 3 },
+  flow: { readySec: 1.4, endDelaySec: 1.1, clearDelaySec: 1.2, attractZapSec: 0.85, attractRestartSec: 1.6 },
+  fx: {
+    maxParticles: 260,
+    reducedFactor: 0.4,
+    maxArcs: 200,
+    maxPopups: 10,
+    shakeSec: 0.4,
+    shakeCells: 0.16,
+    flashSec: 0.3,
+    squashSec: 0.26,
+    arcStaggerSec: 0.04,
+    arcLifeSec: 0.38,
+  },
+  audio: { defaultVolume: 70, masterGain: 0.5, cueGain: 0.2 },
+} as const;

@@ -1,0 +1,118 @@
+/* Stage, banner, callouts, tip bar, coach, meters and controls. */
+.stage {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0d0b24;
+  border: 1px solid var(--border);
+}
+#lane { position: absolute; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+.turn {
+  position: absolute; top: 8px; left: 8px; max-width: calc(100% - 16px);
+  padding: 5px 12px; border-radius: 999px;
+  background: rgba(13, 11, 36, 0.86); color: #fff4fa; border: 1px solid rgba(255, 233, 245, 0.35);
+  font-weight: 800; font-size: 0.9375rem; line-height: 1.25; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.turn b { color: #ffe14a; font-variant-numeric: tabular-nums; }
+.banner {
+  position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 8px;
+  font-size: clamp(2rem, 11vw, 4.6rem); font-weight: 900; letter-spacing: 0.02em; line-height: 1.05;
+  color: #fff; --edge: #ff5cae; --glow: #ff4fa3;
+  opacity: 0; pointer-events: none;
+}
+/* Dark plate behind every banner so the lane and rails never run through the letters. */
+.banner .plate {
+  display: inline-block; max-width: 100%; padding: 0.1em 0.45em 0.14em; border-radius: 0.28em;
+  background: rgba(14, 8, 34, 0.9); border: 3px solid var(--edge);
+  box-shadow: 0 0 22px var(--glow), 0 8px 28px rgba(0, 0, 0, 0.55);
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.55);
+}
+.banner[data-kind='spare'] { --edge: #4dd8ff; --glow: #4dd8ff; }
+.banner[data-kind='turkey'] { --edge: #ffe14a; --glow: #ff9d3c; color: #ffe14a; }
+.banner[data-kind='gutter'], .banner[data-kind='miss'] { --edge: #ffb347; --glow: #ff8a3d; font-size: clamp(1.7rem, 8.5vw, 3.3rem); }
+.banner.show { animation: pop 1.6s ease-out forwards; }
+.banner[data-kind='gutter'].show { animation: thud 1.6s ease-out forwards; }
+@keyframes pop {
+  0% { opacity: 0; transform: scale(0.4) rotate(-6deg); }
+  15% { opacity: 1; transform: scale(1.15) rotate(2deg); }
+  30% { transform: scale(1) rotate(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.1); }
+}
+@keyframes thud {
+  0% { opacity: 0; transform: translateY(-30%) scale(1.1); }
+  12% { opacity: 1; transform: translateY(0) scale(1); }
+  18% { transform: translateX(-2.5%); }
+  24% { transform: translateX(2%); }
+  30% { transform: translateX(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(6%); }
+}
+.callout {
+  position: absolute; left: 50%; top: 14%; transform: translateX(-50%);
+  padding: 6px 16px; border-radius: 999px; font-weight: 800; font-size: 1.1rem;
+  background: rgba(13, 11, 36, 0.88); color: #ffe14a; border: 2px solid #ffe14a;
+  opacity: 0; pointer-events: none;
+}
+.callout.show { animation: callout 1.3s ease-out forwards; }
+@keyframes callout {
+  0% { opacity: 0; transform: translateX(-50%) translateY(10px) scale(0.8); }
+  15% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.05); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Tip bar: lives in the side column, never over the lane. A fixed slot, so the tip does not move anything. */
+.tipbar { min-height: 44px; display: flex; align-items: center; }
+.tip { margin: 0; font-size: 0.875rem; line-height: 1.3; color: var(--muted); }
+.tip.fresh { color: var(--fg); font-weight: 700; }
+.coach {
+  width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 10px;
+  padding: 6px 10px; border-radius: 12px; background: var(--card); color: var(--fg); border: 2px solid var(--accent);
+}
+.coach-title { margin: 0; font-size: 0.9375rem; grid-column: 1; }
+.coach-steps { margin: 0; padding-left: 18px; font-size: 0.8125rem; grid-column: 1; color: var(--muted); }
+.coach .btn { grid-column: 2; grid-row: 1 / span 2; }
+
+.status { margin: 0; min-height: 2.6em; font-size: 0.875rem; line-height: 1.3; color: var(--muted); }
+.side { display: grid; gap: 8px; min-width: 0; grid-template-columns: minmax(0, 1fr); }
+
+.meters { display: grid; gap: 4px; }
+.meter-row { display: grid; grid-template-columns: 3.6rem minmax(0, 1fr) 5rem; align-items: center; gap: 8px; min-height: 24px; }
+.m-label { font-size: 0.875rem; font-weight: 700; color: var(--muted); }
+.meter-row.active .m-label { color: var(--accent); animation: pulse 1s ease-in-out infinite; }
+.m-read { font-size: 0.8125rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--fg); white-space: nowrap; }
+.meter {
+  position: relative; height: 16px; border-radius: 8px; border: 1px solid var(--ui-border);
+  background: var(--card); --pos: 50%; --zone: 25%; overflow: hidden;
+}
+.meter.aim, .meter.spin { background: linear-gradient(90deg, var(--accent-soft), var(--card) 50%, var(--accent-soft)); }
+.meter.power { background: linear-gradient(90deg, #2fb26b33, #f2c23a44 60%, #e0453a66); }
+.meter .zone {
+  position: absolute; top: 0; bottom: 0; left: calc(50% - var(--zone) / 2); width: var(--zone);
+  background: var(--zone-bg); border-inline: 1px dashed var(--ui-border); pointer-events: none;
+}
+.meter i { position: absolute; top: -2px; bottom: -2px; left: var(--pos); width: 6px; margin-left: -3px; border-radius: 3px; background: var(--muted); }
+.meter.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.meter.active i { background: var(--accent); }
+/* Locked: a blue round knob, a different shape as well as a different colour. */
+.meter.done i { background: var(--done); width: 12px; margin-left: -6px; border-radius: 50%; top: 1px; bottom: 1px; }
+html[data-cb='on'] .meter { height: 20px; border-width: 2px; }
+html[data-cb='on'] .meter .zone { background: repeating-linear-gradient(135deg, var(--zone-bg) 0 4px, transparent 4px 8px); }
+html[data-cb='on'] .meter.active { border-style: dashed; }
+@keyframes pulse { 50% { opacity: 0.55; } }
+
+.controls { display: grid; grid-template-columns: 1fr 2fr 1fr auto; gap: 8px; }
+.controls .btn { padding: 0 6px; white-space: nowrap; }
+.controls .ghost { padding: 0 12px; min-width: 48px; }
+@media (max-width: 560px) { .back-lbl { display: none; } }
+
+html[data-rm='on'] .banner.show, html[data-rm='on'] .banner[data-kind='gutter'].show { animation: fade 1.6s linear forwards; }
+html[data-rm='on'] .callout.show { animation: fade-c 1.3s linear forwards; transform: translateX(-50%); }
+html[data-rm='on'] .meter-row.active .m-label { animation: none; }
+html[data-rm='on'] .btn:not(:disabled):active { transform: none; }
+@keyframes fade { 0% { opacity: 0; } 15%, 80% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes fade-c { 0% { opacity: 0; } 15%, 80% { opacity: 1; } 100% { opacity: 0; } }

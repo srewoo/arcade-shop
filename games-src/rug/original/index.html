@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>Rug Racers</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='12' fill='%2362ad3c'/><rect x='4' y='26' width='56' height='12' fill='%237e8388'/><rect x='12' y='31' width='8' height='2' fill='white'/><rect x='28' y='31' width='8' height='2' fill='white'/><rect x='44' y='31' width='8' height='2' fill='white'/><rect x='18' y='18' width='16' height='10' rx='4' fill='%23e5322b'/></svg>" />
+    <script type="module" crossorigin src="./assets/index-Ebi07fPK.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-5LRJdQlH.css">
+  </head>
+  <body>
+    <div id="boot" style="position:fixed;inset:0;z-index:50;display:grid;place-items:center;overflow:hidden;background:#a9744a url(./parquet.jpg) center/512px;color:#fff;font:600 24px system-ui,sans-serif;text-shadow:0 2px 6px rgba(40,20,5,.85);transition:opacity .3s"><span id="boot-text">Loading&hellip;</span><canvas id="boot-bar" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block"></canvas></div>
+    <script>
+      (() => {
+        // half the width of the window, but never too small to read on a phone
+        const size = () => Math.min(innerWidth, Math.max(340, Math.min(innerWidth, innerHeight * 2) / 2));
+        const boot = document.getElementById('boot'), text = document.getElementById('boot-text');
+        // Starts the loading animation. Called again when the page is about to reload for another map.
+        function start() {
+          let canvas = document.getElementById('boot-bar');
+          if (!canvas) {
+            canvas = document.createElement('canvas');
+            canvas.id = 'boot-bar';
+            canvas.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block';
+            boot.appendChild(canvas);
+          }
+          const place = () => { const s = size(); canvas.style.width = canvas.style.height = s + 'px'; return Math.round(s * Math.min(devicePixelRatio || 1, 1.5)); };
+          if (!canvas.transferControlToOffscreen) {
+            canvas.remove();
+            text.style.display = '';
+            window.__bootLoader = { set(p) { text.textContent = 'Loading\u2026 ' + Math.round(p * 100) + '%'; }, stop() {} };
+            return;
+          }
+          const pixels = place();
+          const offscreen = canvas.transferControlToOffscreen();
+          const worker = new Worker('./loader.js');
+          worker.postMessage({ canvas: offscreen, size: pixels }, [offscreen]);
+          text.style.display = 'none';
+          const onResize = () => worker.postMessage({ size: place() });
+          addEventListener('resize', onResize);
+          window.__bootLoader = {
+            threaded: true,
+            set(p, text) { worker.postMessage({ p, text }); },
+            stop() {
+              removeEventListener('resize', onResize);
+              worker.onmessage = (e) => { window.__bootFrames = e.data; worker.terminate(); };
+              worker.postMessage({ stop: true });
+            },
+          };
+        }
+        window.__bootStart = start;
+        start();
+      })();
+    </script>
+  </body>
+</html>

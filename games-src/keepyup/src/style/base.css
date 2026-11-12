@@ -1,0 +1,88 @@
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { font-size: 100%; height: 100%; }
+html[data-text='125'] { font-size: 125%; }
+html[data-text='150'] { font-size: 150%; }
+body {
+  margin: 0;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--wall);
+  color: var(--ink);
+  font: 500 1rem/1.4 ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+kbd { font: 600 0.8em ui-monospace, monospace; padding: 0.05em 0.4em; border: 1px solid var(--line); border-radius: 0.3em; background: var(--panel); }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* The stage IS the app: the court fills the whole viewport and the HUD sits on top of it. */
+.app { position: fixed; inset: 0; }
+.stage { position: absolute; inset: 0; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; background: var(--wall); }
+#cv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.stage:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+
+.hud {
+  position: absolute; z-index: 2; pointer-events: none;
+  top: max(0.6rem, env(safe-area-inset-top)); left: max(0.8rem, env(safe-area-inset-left));
+  display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-start; color: var(--hud-ink);
+}
+.score { display: grid; line-height: 1; padding: 0.35rem 0.8rem 0.4rem; border-radius: 0.8rem; background: color-mix(in srgb, var(--hud-bg) 78%, transparent); border: 1px solid rgba(143, 211, 244, 0.28); }
+.score .label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hud-dim); margin-bottom: 0.15rem; }
+.score b { font-size: 2.6rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.chips { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.chip {
+  background: color-mix(in srgb, var(--hud-bg) 72%, transparent); border: 1px solid rgba(143, 211, 244, 0.28);
+  border-radius: 0.6rem; padding: 0.15rem 0.55rem; display: flex; flex-direction: column; min-width: 0;
+}
+.chip .label { font-size: 0.75rem; color: var(--hud-dim); text-transform: uppercase; letter-spacing: 0.04em; }
+.chip b { font-size: 1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chip small { font-size: 0.75rem; color: var(--hud-dim); font-weight: 600; }
+@media (max-height: 500px) {
+  .hud { flex-direction: row; align-items: flex-end; gap: 0.7rem; }
+  .score b { font-size: 2rem; }
+}
+
+.top-actions {
+  position: absolute; z-index: 3; display: flex; gap: 0.4rem;
+  top: max(0.6rem, env(safe-area-inset-top)); right: max(0.8rem, env(safe-area-inset-right));
+}
+.icon-btn, .btn, fieldset button {
+  min-height: 44px; min-width: 44px; border: 1px solid var(--line); border-radius: 0.7rem;
+  background: var(--panel); padding: 0.4rem 0.9rem; font-weight: 600;
+}
+.icon-btn { padding: 0; display: grid; place-items: center; }
+.top-actions .icon-btn {
+  background: color-mix(in srgb, var(--hud-bg) 72%, transparent); color: var(--hud-ink);
+  border-color: rgba(143, 211, 244, 0.4); backdrop-filter: blur(2px);
+}
+.icon-btn svg { width: 1.4rem; height: 1.4rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn .spk { fill: currentColor; }
+.icon-btn .cog path { fill: currentColor; stroke: none; }
+.icon-btn[aria-pressed='true'] .slash { display: none; }
+.icon-btn[aria-pressed='false'] .waves { display: none; }
+.btn.primary, fieldset button[aria-pressed='true'], .btn.mode[aria-pressed='true'] {
+  background: var(--accent); color: var(--accent-ink); border-color: var(--accent);
+}
+.btn.small { min-height: 44px; }
+@media (hover: hover) { .btn:hover, .icon-btn:hover { border-color: var(--ink); } .top-actions .icon-btn:hover { border-color: var(--hud-ink); } }
+
+.banner {
+  position: absolute; z-index: 2; left: 50%; top: calc(50% + 4.2rem); transform: translateX(-50%);
+  background: color-mix(in srgb, var(--hud-bg) 78%, transparent); color: var(--hud-ink); padding: 0.45rem 1rem;
+  border-radius: 999px; font-weight: 700; border: 1px solid rgba(255, 180, 84, 0.7);
+  pointer-events: none; white-space: nowrap; max-width: 92vw;
+}
+:root[data-motion='full'] .banner { animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.72; } }
+/* Non-blocking coach mark: lives over the floor rock at the bottom, never over the corridor. */
+.hintbox {
+  position: absolute; z-index: 2; left: 0.6rem; right: 0.6rem; bottom: max(0.5rem, env(safe-area-inset-bottom));
+  max-width: 34rem; margin-inline: auto; display: flex; align-items: center; gap: 0.6rem;
+  background: color-mix(in srgb, var(--hud-bg) 85%, transparent); color: var(--hud-ink);
+  border: 1px solid rgba(143, 211, 244, 0.4); border-radius: 0.8rem; padding: 0.25rem 0.3rem 0.25rem 0.8rem;
+  font-size: 0.9rem; pointer-events: none;
+}
+.hintbox .btn { pointer-events: auto; min-height: 44px; background: transparent; color: var(--hud-ink); border-color: rgba(143, 211, 244, 0.5); }
+.hintbox span { flex: 1; }
+@media (pointer: coarse) { .keyhint { display: none; } }

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="description" content="Crumb Run: Pip the mouse raids a night-time kitchen floor, dodging four cats and drenching them with water pistols." />
+    <meta name="color-scheme" content="dark" />
+    <title>Crumb Run</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23201016'/><circle cx='32' cy='36' r='16' fill='%239ea3ad'/><circle cx='20' cy='22' r='9' fill='%23f4a6bd'/><circle cx='44' cy='22' r='9' fill='%23f4a6bd'/><circle cx='26' cy='34' r='2.5' fill='%23111'/><circle cx='38' cy='34' r='2.5' fill='%23111'/><circle cx='32' cy='42' r='3' fill='%23f08aa6'/></svg>"
+    />
+  </head>
+  <body>
+    <main class="app">
+      <header id="hud" class="hud" data-demo aria-label="Status">
+        <div class="hud-block hud-score"><span class="k">SCORE</span><span class="v" id="hud-score">000000</span></div>
+        <div class="hud-block hud-level hud-live"><span class="k">LEVEL</span><span class="v" id="hud-level">1</span></div>
+        <div class="hud-block hud-hi"><span class="k">HI</span><span class="v" id="hud-hi">000000</span></div>
+        <div class="hud-block hud-lives hud-live" id="hud-lives" role="img" aria-label="3 lives left"></div>
+        <div class="hud-block hud-water hud-live" id="hud-meter" hidden><span class="k">WATER</span><span class="meter"><i id="hud-meter-fill"></i></span></div>
+        <p id="hud-state" class="hud-state" role="status"></p>
+      </header>
+      <div id="stage" class="stage" aria-label="Crumb Run game area">
+        <canvas id="game" role="application" tabindex="0" aria-label="Crumb Run game board. Steer Pip the mouse with arrow keys, WASD, swipe or the on-screen d-pad."></canvas>
+        <p id="coach" class="coach" hidden></p>
+        <div id="title-actions" class="title-actions">
+          <button id="btn-start" class="btn primary start" type="button">Start</button>
+          <button id="btn-how" class="btn" type="button">How to play</button>
+        </div>
+        <p id="hint-small" class="hint-small" hidden></p>
+      </div>
+      <div class="controls">
+        <div class="tools" role="group" aria-label="Game buttons">
+          <button id="btn-pause" class="corner-btn" type="button" aria-label="Pause">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1"/><rect x="13.5" y="5" width="4.5" height="14" rx="1"/></svg>
+          </button>
+          <button id="btn-settings" class="corner-btn" type="button" aria-label="Open settings" aria-haspopup="dialog">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h10M17 7h4M3 17h4M11 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="15" cy="7" r="2.6"/><circle cx="9" cy="17" r="2.6"/></svg>
+          </button>
+          <button id="btn-mute" class="corner-btn" type="button" aria-label="Mute sound" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="waves" d="M16 9c1.6 1.6 1.6 4.4 0 6M18.5 6.5c3 3 3 8 0 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path class="slash" d="M16 8l6 8M22 8l-6 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>
+          </button>
+        </div>
+        <div class="dpad" role="group" aria-label="Directional pad">
+          <button type="button" data-dir="U" aria-label="Up">&#9650;</button>
+          <button type="button" data-dir="L" aria-label="Left">&#9664;</button>
+          <button type="button" data-dir="R" aria-label="Right">&#9654;</button>
+          <button type="button" data-dir="D" aria-label="Down">&#9660;</button>
+        </div>
+      </div>
+      <p class="keys" aria-hidden="true">Arrows / WASD steer<br />P pause &middot; O settings &middot; M mute</p>
+      <div id="modal-root" class="modal-root" hidden></div>
+      <div id="live" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+      <noscript>Crumb Run needs JavaScript.</noscript>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

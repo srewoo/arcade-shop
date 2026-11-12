@@ -1,0 +1,82 @@
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { font-size: 100%; }
+html[data-text='125'] { font-size: 125%; }
+html[data-text='150'] { font-size: 150%; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--ink);
+  font: 500 1rem/1.4 ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.app {
+  max-width: 76rem;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: max(0.75rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right))
+    max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.75rem;
+}
+.view { min-height: 0; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.logo { margin: 0; font-size: 1.25rem; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.5rem; }
+.logo-lamp svg { width: 1.4rem; height: 1.8rem; display: block; }
+.top-actions { display: flex; gap: 0.4rem; }
+
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.icon-btn, .btn, .chip {
+  border: 2px solid var(--line);
+  background: var(--panel);
+  border-radius: 12px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.icon-btn { padding: 0; display: grid; place-items: center; font-size: 1.4rem; line-height: 1; }
+.icon-btn svg { width: 1.4rem; height: 1.4rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn .spk { fill: currentColor; stroke: none; }
+.icon-btn[aria-pressed='true'] .slash { display: none; }
+.icon-btn[aria-pressed='false'] .waves { display: none; }
+.icon-btn[aria-pressed='false'] { color: var(--muted); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn.big { min-height: 3.25rem; font-size: 1.15rem; width: 100%; }
+.btn.ghost { background: transparent; }
+.btn.danger { border-color: var(--danger); color: var(--danger); }
+.btn.danger-ghost { background: transparent; color: var(--danger); border-color: var(--line); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn:not(:disabled):hover, .icon-btn:hover { border-color: var(--muted); }
+.btn.primary:not(:disabled):hover { border-color: var(--accent); filter: brightness(1.1); }
+kbd { font: 600 0.75rem/1.4 ui-monospace, monospace; border: 1px solid currentColor; border-radius: 4px; padding: 0 0.3em; opacity: 0.85; }
+kbd:empty { display: none; }
+.row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.row > * { flex: 1 1 0; }
+.row.center { justify-content: center; margin-top: 1rem; }
+.row.center > * { flex: 0 1 auto; }
+.row.between { justify-content: space-between; align-items: center; }
+.row.between > * { flex: 0 1 auto; }
+.row.spaced { margin-top: 0.5rem; }
+.stack { display: grid; gap: 0.5rem; margin-top: 0.75rem; }
+.field { border: 0; padding: 0; margin: 0 0 0.5rem; display: grid; gap: 0.35rem; min-width: 0; }
+.field legend, .field label { font-weight: 700; padding: 0; }
+.chips { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.chip { flex: 1 1 auto; padding: 0.4rem 0.8rem; }
+.chip[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.chip[aria-pressed='true']::before { content: '\2713\00a0'; }
+input[type='range'] { width: 100%; min-height: 44px; accent-color: var(--accent); }
+.note { color: var(--muted); font-size: 0.9rem; margin: 0; }
+.good { color: var(--good); font-weight: 700; margin: 0; }
+
+@media (orientation: landscape) and (min-width: 40rem) {
+  .app { padding-block: max(0.5rem, env(safe-area-inset-top)) max(0.5rem, env(safe-area-inset-bottom)); gap: 0.5rem; }
+  .logo { font-size: 1.1rem; }
+}
+@media (max-height: 30rem) { .app { gap: 0.25rem; } }

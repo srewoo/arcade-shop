@@ -1,0 +1,30 @@
+/* Colour tokens. Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3). */
+:root {
+  --bg: #f1efe4;
+  --panel: #ffffff;
+  --ink: #1d2a1e;
+  --muted: #526049;
+  --line: #c4ccb4;
+  --accent: #1f4d2b;
+  --accent-ink: #f6f4ea;
+  --clay: #b34a0a;
+  --good: #1d6b34;
+  --bad: #a52a1b;
+  --focus: #0b5fa5;
+  --shadow: 0 1px 0 rgba(29, 42, 30, 0.06), 0 8px 24px rgba(29, 42, 30, 0.1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #111a13; --panel: #1b271e; --ink: #eef2e6; --muted: #a9b69f; --line: #3d4e41;
+    --accent: #f2a948; --accent-ink: #111a13; --clay: #ff9a4a; --good: #6fd08a; --bad: #ff8a78;
+    --focus: #6dbdff; --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #111a13; --panel: #1b271e; --ink: #eef2e6; --muted: #a9b69f; --line: #3d4e41;
+  --accent: #f2a948; --accent-ink: #111a13; --clay: #ff9a4a; --good: #6fd08a; --bad: #ff8a78;
+  --focus: #6dbdff; --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}

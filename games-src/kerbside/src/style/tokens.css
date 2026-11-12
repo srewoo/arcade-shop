@@ -1,0 +1,33 @@
+/* Colour tokens. Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3). */
+:root {
+  --bg: #eef1f5;
+  --panel: #ffffff;
+  --ink: #1d232b;
+  --muted: #55606d;
+  --line: #7c8794;
+  --accent: #1d232b;
+  --accent-ink: #ffffff;
+  --focus: #0b6bcb;
+  --warn: #b3261e;
+  --ok: #17724a;
+  --star: #b7791f;
+  --road: #343a43;
+  --t-bg: #1f252c; --t-bg2: #353d47; --t-ink: #eef2f6; --t-muted: #b4bec9; --t-line: #8a95a3; --t-focus: #6cb4ff;
+  --t-green: #8fd37c; --t-green-ink: #10200b;
+  --shadow: 0 1px 0 rgba(29, 35, 43, 0.06), 0 8px 24px rgba(29, 35, 43, 0.1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #14181d; --panel: #1e242b; --ink: #eef2f6; --muted: #a3adba; --line: #66717e;
+    --accent: #eef2f6; --accent-ink: #14181d; --focus: #6cb4ff; --warn: #ff8a80; --ok: #5fdc9b;
+    --star: #ffd25a; --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #14181d; --panel: #1e242b; --ink: #eef2f6; --muted: #a3adba; --line: #66717e;
+  --accent: #eef2f6; --accent-ink: #14181d; --focus: #6cb4ff; --warn: #ff8a80; --ok: #5fdc9b;
+  --star: #ffd25a; --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}

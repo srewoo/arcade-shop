@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Measure Up: a water-jug measuring puzzle with 35 levels, a solver-checked par, undo, hints and stars." />
+    <title>Measure Up</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231e2430'/><path d='M20 14h24l-3 36a4 4 0 0 1-4 4H27a4 4 0 0 1-4-4z' fill='none' stroke='%23eef0f4' stroke-width='4'/><path d='M22 34h20l-1.5 16a4 4 0 0 1-4 4H27.500a4 4 0 0 1-4-4z' fill='%235aa9ee'/></svg>"
+    />
+  </head>
+  <body>
+    <main class="app" id="app">
+      <header class="topbar" id="topbar">
+        <button id="back" class="icon-btn text" type="button" hidden><span aria-hidden="true">‹</span> <span data-s="back"></span></button>
+        <span class="grow"></span>
+        <div class="top-actions">
+          <button id="sound" class="icon-btn" type="button" aria-pressed="true" data-s-aria="sound" title="M">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9v6h4l5 4V5L8 9z"/><path class="waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="slash" d="M17 9l5 6M22 9l-5 6"/></svg>
+          </button>
+          <button id="open-settings" class="icon-btn" type="button" aria-haspopup="dialog" data-s-aria="settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle class="teeth" cx="12" cy="12" r="8" stroke-width="3.6" stroke-dasharray="3.14 3.14" stroke-linecap="butt"/><circle cx="12" cy="12" r="6.4"/><circle cx="12" cy="12" r="2.4"/></svg>
+          </button>
+          <button id="pause" class="icon-btn" type="button" aria-haspopup="dialog" data-s-aria="pause" title="P" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M8 5v14M16 5v14"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <section id="screen-title" class="screen title" aria-labelledby="logo">
+        <svg id="title-art" class="title-art" viewBox="0 0 320 210" aria-hidden="true"></svg>
+        <h1 class="wordmark" id="logo"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M20 12h24l-3 38a4 4 0 0 1-4 4H27a4 4 0 0 1-4-4z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M22 32h20l-1.4 18a4 4 0 0 1-4 4H27.400a4 4 0 0 1-4-4z" fill="var(--w0)"/></svg><span data-s="appName"></span></h1>
+        <p class="tagline" data-s="tagline"></p>
+        <div class="stack">
+          <button id="go-campaign" class="btn primary" type="button" data-s="campaign"></button>
+          <button id="go-quick" class="btn" type="button" aria-haspopup="dialog" data-s="quick"></button>
+          <button id="go-help" class="btn" type="button" aria-haspopup="dialog" data-s="howTo"></button>
+        </div>
+        <p id="title-stars" class="muted"></p>
+      </section>
+
+      <section id="screen-levels" class="screen levels" aria-labelledby="levels-title" hidden>
+        <h2 id="levels-title" class="screen-title"><span data-s="levels"></span> <span id="levels-stars" class="muted"></span></h2>
+        <div id="level-grid" class="level-grid" role="group" aria-labelledby="levels-title"></div>
+      </section>
+
+      <section id="screen-play" class="screen play" aria-label="Puzzle" hidden>
+        <div class="stage"><svg id="scene" class="scene" viewBox="0 -20 320 240" role="img"></svg>
+        <p id="onboard" class="banner" hidden>
+            <span id="onboard-text"></span>
+            <button id="onboard-close" class="icon-btn" type="button" data-s-aria="dismiss">×</button>
+          </p>
+        </div>
+        <div class="panel">
+          <div class="hud">
+            <div class="stat"><span class="k" data-s="level"></span><b id="hud-level"></b></div>
+            <div class="stat"><span class="k" data-s="moves"></span><b id="hud-moves">0</b></div>
+            <div class="stat"><span class="k" data-s="par"></span><b id="hud-par">0</b></div>
+            <div class="stat stat-time"><span class="k" data-s="time"></span><b id="hud-time">0:00</b></div>
+          </div>
+          <p id="status" class="status" role="status" aria-live="polite"></p>
+          <div id="jugs" class="jugs" role="group" data-s-aria="jugsLabel"></div>
+          <div class="actions">
+            <button id="act-fill" class="btn" type="button"><span data-s="fill"></span> <kbd>F</kbd></button>
+            <button id="act-empty" class="btn" type="button"><span data-s="empty"></span> <kbd>E</kbd></button>
+            <button id="act-undo" class="btn" type="button"><span data-s="undo"></span> <kbd>U</kbd></button>
+            <button id="act-hint" class="btn" type="button"><span data-s="hint"></span> <kbd>H</kbd></button>
+            <button id="act-restart" class="btn ghost" type="button"><span data-s="restart"></span> <kbd>R</kbd></button>
+          </div>
+          <p class="keys-hint muted" data-s="keysHint"></p>
+        </div>
+      </section>
+    </main>
+
+    <div id="win-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="win-title" hidden>
+      <div class="sheet">
+        <h2 id="win-title" data-s="winTitle"></h2>
+        <p id="win-stars" class="big-stars" aria-live="polite"></p>
+        <p id="win-tier" class="tier"></p>
+        <p id="win-body" class="desc"></p>
+        <p id="win-extra" class="desc muted"></p>
+        <div class="stack">
+          <button id="win-next" class="btn primary" type="button"></button>
+          <button id="win-replay" class="btn" type="button" data-s="replay"></button>
+          <button id="win-levels" class="btn" type="button" data-s="toLevels"></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pause-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+      <div class="sheet">
+        <h2 id="pause-title" data-s="pausedTitle"></h2>
+        <p class="desc" data-s="pausedNote"></p>
+        <div class="stack">
+          <button id="pause-resume" class="btn primary" type="button" data-s="resume"></button>
+          <button id="pause-restart" class="btn" type="button" data-s="restart"></button>
+          <button id="pause-settings" class="btn" type="button" aria-haspopup="dialog" data-s="settings"></button>
+          <button id="pause-quit" class="btn" type="button" data-s="quit"></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="confirm-overlay" class="overlay" role="alertdialog" aria-modal="true" aria-labelledby="confirm-text" hidden>
+      <div class="sheet">
+        <p id="confirm-text" class="desc strong"></p>
+        <div class="stack">
+          <button id="confirm-no" class="btn primary" type="button" data-s="confirmNo"></button>
+          <button id="confirm-yes" class="btn" type="button"></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="quick-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="quick-title" hidden>
+      <div class="sheet">
+        <h2 id="quick-title" data-s="quickTitle"></h2>
+        <p class="desc" data-s="quickNote"></p>
+        <div class="stack">
+          <button class="btn" type="button" data-tier="easy" data-s="easy"></button>
+          <button class="btn" type="button" data-tier="medium" data-s="medium"></button>
+          <button class="btn" type="button" data-tier="hard" data-s="hard"></button>
+          <button id="quick-cancel" class="btn ghost" type="button" data-s="cancel"></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="help-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="help-title" hidden>
+      <div class="sheet">
+        <h2 id="help-title" data-s="helpTitle"></h2>
+        <div id="help-body" class="help-body"></div>
+        <button id="help-close" class="btn primary" type="button" data-s="done"></button>
+      </div>
+    </div>
+
+    <div id="settings-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+      <div class="sheet">
+        <h2 id="settings-title" data-s="settings"></h2>
+        <div class="options">
+          <div class="row">
+            <label for="volume" class="lbl" data-s="volume"></label>
+            <input id="volume" type="range" min="0" max="100" step="5" value="70" />
+            <output id="volume-out" for="volume">70</output>
+          </div>
+          <fieldset data-setting="sound">
+            <legend data-s="sound"></legend>
+            <button type="button" data-value="true" data-s="soundOn"></button>
+            <button type="button" data-value="false" data-s="soundOff"></button>
+          </fieldset>
+          <fieldset data-setting="reduceMotion">
+            <legend data-s="reduceMotion"></legend>
+            <button type="button" data-value="system" data-s="system"></button>
+            <button type="button" data-value="on" data-s="on"></button>
+            <button type="button" data-value="off" data-s="off"></button>
+          </fieldset>
+          <fieldset data-setting="colorAssist">
+            <legend data-s="colorAssist"></legend>
+            <button type="button" data-value="false" data-s="off"></button>
+            <button type="button" data-value="true" data-s="on"></button>
+          </fieldset>
+          <fieldset data-setting="showTimer">
+            <legend data-s="showTimer"></legend>
+            <button type="button" data-value="false" data-s="off"></button>
+            <button type="button" data-value="true" data-s="on"></button>
+          </fieldset>
+          <fieldset data-setting="textSize">
+            <legend data-s="textSize"></legend>
+            <button type="button" data-value="100">100%</button>
+            <button type="button" data-value="125">125%</button>
+            <button type="button" data-value="150">150%</button>
+          </fieldset>
+          <fieldset data-setting="theme">
+            <legend data-s="theme"></legend>
+            <button type="button" data-value="system" data-s="system"></button>
+            <button type="button" data-value="light" data-s="light"></button>
+            <button type="button" data-value="dark" data-s="dark"></button>
+          </fieldset>
+        </div>
+        <p class="desc muted" data-s="settingsHint"></p>
+        <button id="settings-close" class="btn primary" type="button" data-s="done"></button>
+      </div>
+    </div>
+    <div id="toast" class="sr-only" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

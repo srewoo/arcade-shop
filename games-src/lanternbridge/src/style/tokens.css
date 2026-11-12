@@ -1,0 +1,47 @@
+/* Colour tokens. Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3). */
+:root {
+  --bg: #f4efe6;
+  --panel: #ffffff;
+  --ink: #231f1a;
+  --muted: #5d5348;
+  --line: #d3c7b2;
+  --accent: #1e2f55;
+  --accent-ink: #ffffff;
+  --danger: #b3261e;
+  --focus: #1a5fa8;
+  --star: #8a5a00;
+  --fill: #c25a0a;
+  --good: #1d6b3a;
+  --shadow: 0 1px 0 rgba(35, 31, 26, 0.06), 0 8px 24px rgba(35, 31, 26, 0.1);
+  /* The scene is always a night scene, in both themes. */
+  --sky-top: #0b1330;
+  --sky-bottom: #1d2f5e;
+  --bank: #23402f;
+  --bank-edge: #3a6a47;
+  --river: #123058;
+  --river-wave: #1f4a82;
+  --deck: #5c4226;
+  --deck-gap: #3a2812;
+  --scene-ink: #eef1f8;
+  --scene-pick: #ffd166;
+  --scene-focus: #ffffff;
+  --mark: #1c1a22;
+  --fig-line: #1c1a22;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0f1526; --panel: #19213a; --ink: #eef1f8; --muted: #a9b3c9; --line: #36425f;
+    --accent: #ffd166; --accent-ink: #1b1500; --danger: #ff8a80; --focus: #7fd3f7;
+    --star: #ffd166; --fill: #ffb347; --good: #7fe0a0;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #0f1526; --panel: #19213a; --ink: #eef1f8; --muted: #a9b3c9; --line: #36425f;
+  --accent: #ffd166; --accent-ink: #1b1500; --danger: #ff8a80; --focus: #7fd3f7;
+  --star: #ffd166; --fill: #ffb347; --good: #7fe0a0;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}

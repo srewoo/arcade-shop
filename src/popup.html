@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>arcadeShop</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314121a'/%3E%3Crect x='10' y='22' width='44' height='24' rx='12' fill='%23f2b134'/%3E%3Cpath d='M20 28v12M14 34h12' stroke='%2314121a' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='40' cy='31' r='3.5' fill='%23e5322b'/%3E%3Ccircle cx='47' cy='37' r='3.5' fill='%2314121a'/%3E%3C/svg%3E" />
+    <script type="module" src="./main.ts"></script>
+  </head>
+  <body data-mode="popup">
+    <header class="top">
+      <div class="brand">
+        <img class="mark" src="icons/icon-48.png" alt="" width="32" height="32" />
+        <div>
+          <h1>arcadeShop</h1>
+          <p class="sub" id="count">24 games</p>
+        </div>
+      </div>
+      <button id="open-arcade" class="open" type="button" title="Open the full launcher in a tab">Full view <span aria-hidden="true">&#8599;</span></button>
+    </header>
+    <label class="search">
+      <span class="sr-only">Search games</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+      <input id="search" type="search" placeholder="Search games, Enter to play" autocomplete="off" spellcheck="false" />
+    </label>
+    <main>
+      <nav id="shelves" class="shelves" aria-label="Game shelves"></nav>
+      <section id="recent" class="recent" aria-labelledby="recent-title" hidden>
+        <h2 id="recent-title">Continue playing</h2>
+        <div id="recent-list" class="recent-list"></div>
+      </section>
+      <section aria-label="Games">
+        <div id="grid" class="grid"></div>
+        <p id="empty" class="empty" hidden></p>
+      </section>
+    </main>
+  </body>
+</html>

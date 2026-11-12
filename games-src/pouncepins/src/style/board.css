@@ -1,0 +1,43 @@
+/* Scoreboard: a thin strip in the header row. */
+.board { container-type: inline-size; display: grid; gap: 0.25rem; flex: 1 1 100%; order: 3; min-width: 0; }
+.pl { background: var(--panel); border: 1px solid var(--line); border-radius: 0.7rem; padding: 0.25rem 0.35rem; }
+.pl[data-active='true'] { border: 2px solid var(--accent); padding: calc(0.25rem - 1px) calc(0.35rem - 1px); }
+.pl-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.85rem; font-weight: 800; margin-bottom: 0.15rem; gap: 0.5rem; }
+.pl-head .fz { font-size: 0.75rem; font-weight: 700; color: var(--muted); }
+.pl-head .fz:empty { display: none; }
+.pl-head .sc { font-variant-numeric: tabular-nums; font-size: 1rem; }
+.frames { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; }
+@container (max-width: 330px) { .frames { grid-template-columns: repeat(5, 1fr); gap: 3px; } }
+.f { border: 1px solid var(--line); border-radius: 0.3rem; display: grid; grid-template-columns: repeat(2, 1fr); text-align: center; font-size: 0.75rem; line-height: 1.2; min-width: 0; }
+.f .n { grid-column: 1 / -1; font-size: 0.75rem; color: var(--muted); border-bottom: 1px solid var(--line); }
+.f .m { min-height: 1.05rem; font-weight: 800; }
+.f .m + .m { border-left: 1px solid var(--line); }
+.f .m[data-prov='true'] { font-style: italic; color: var(--accent); outline: 1.5px dashed var(--accent); outline-offset: -1px; border-radius: 0.2rem; }
+.f .t { grid-column: 1 / -1; font-weight: 800; font-variant-numeric: tabular-nums; border-top: 1px solid var(--line); min-height: 1.05rem; }
+.f[data-now='true'] { background: var(--cell-now); border: 2px solid var(--ink); }
+/* The muted frame number fell to 4.42:1 on the dark current-frame fill; ink clears 4.5 in both themes. */
+.f[data-now='true'] .n { color: var(--ink); }
+.f[data-tenth='true'] { grid-template-columns: repeat(3, 1fr); }
+.f[data-flash] { background: var(--accent); color: var(--accent-ink); }
+.f[data-flash] .n, .f[data-flash] .t { color: var(--accent-ink); }
+:root[data-motion='full'] .f[data-flash='pop'] { animation: cell-pop 0.7s ease-out; }
+@keyframes cell-pop { 0% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.fly { position: fixed; left: 0; top: 0; z-index: 30; pointer-events: none; font-weight: 900; font-size: 1.6rem; color: #fff8ec; -webkit-text-stroke: 2px #2b2420; paint-order: stroke fill; text-shadow: 0 2px 0 #2b2420; will-change: transform; }
+
+/* Compact strip: one score line per player sharing the row with the frames. */
+@media (max-width: 700px), (orientation: landscape) and (max-height: 560px) {
+  .pl { display: flex; align-items: center; gap: 0.4rem; }
+  .pl-head { flex: none; flex-direction: column; align-items: flex-start; gap: 0; margin: 0; font-size: 0.75rem; min-width: 2.6rem; line-height: 1.1; }
+  .pl-head .nm { max-width: 4.2rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .frames { flex: 1; min-width: 0; }
+}
+
+/* Short landscape: frame number shares a line with the marks so the strip is two rows tall. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .f, .f[data-tenth='true'] { grid-template-columns: auto repeat(2, 1fr); }
+  .f[data-tenth='true'] { grid-template-columns: auto repeat(3, 1fr); }
+  .f .n { grid-column: 1; grid-row: 1; border-bottom: 0; border-right: 1px solid var(--line); padding: 0 0.25rem; display: grid; place-items: center; }
+  .f .m { grid-row: 1; min-height: 1rem; }
+  .f .m:nth-of-type(2) { grid-column: 2; } 
+  .pl { padding-block: 0.15rem; }
+}

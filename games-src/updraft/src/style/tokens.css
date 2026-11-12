@@ -1,0 +1,45 @@
+/* Colour tokens. Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3).
+   The cave scene and HUD chips are dark in every theme; only the dialog sheets follow the theme. */
+:root {
+  --bg: #eaf0f5;
+  --panel: #ffffff;
+  --ink: #14202b;
+  --muted: #465868;
+  --line: #6f8294;
+  --accent: #14202b;
+  --accent-ink: #ffffff;
+  --focus: #0b5cad;
+  --cave: #0a1521;
+  --cave-far: #12263a;
+  --cave-mid: #1a3350;
+  --rock: #1b2d41;
+  --rock-hi: #34546f;
+  --rim: #8fd3f4;
+  --glow: #4cc3ff;
+  --craft: #ffb454;
+  --craft-ink: #fff4e0;
+  --coin: #ffd24a;
+  --coin-ink: #5a3d00;
+  --smoke: #9bb4c8;
+  --ghost: #7cc4ff;
+  --flame: #ff8a3d;
+  --hud-bg: #0d1823;
+  --hud-ink: #f2f8fc;
+  --hud-dim: #a9bccb;
+  --shadow: 0 1px 0 rgba(20, 32, 43, 0.06), 0 8px 24px rgba(20, 32, 43, 0.12);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0b121a; --panel: #151f2a; --ink: #eaf1f7; --muted: #a3b4c3; --line: #6b7f92;
+    --accent: #eaf1f7; --accent-ink: #0b121a; --focus: #6cb6ff;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #0b121a; --panel: #151f2a; --ink: #eaf1f7; --muted: #a3b4c3; --line: #6b7f92;
+  --accent: #eaf1f7; --accent-ink: #0b121a; --focus: #6cb6ff;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}

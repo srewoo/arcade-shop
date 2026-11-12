@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Redline Rush: a top-down endless traffic racer. Dodge, skim past cars, grab fuel and boost." />
+    <title>Redline Rush</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2310151c'/><rect x='22' y='10' width='20' height='44' rx='8' fill='%23ff4d3d'/><rect x='30' y='12' width='4' height='40' fill='%23fff'/></svg>"
+    />
+  </head>
+  <body>
+    <main class="app" id="app" data-phase="title" data-mode="endless">
+      <div class="stage" id="stage">
+        <canvas id="road" width="400" height="640" role="img" data-str-label="canvasLabel"></canvas>
+        <section class="hud" aria-label="Run status">
+          <div class="stat score"><span class="k" data-str="hScore"></span><b id="h-score">0</b></div>
+          <div class="stat"><span class="k" data-str="hSpeed"></span><b id="h-speed">0</b></div>
+          <div class="stat"><span class="k" data-str="hLives"></span><b id="h-lives">3</b></div>
+          <div class="stat only-trial"><span class="k" data-str="hTime"></span><b id="h-time">0</b></div>
+          <div class="stat only-trial"><span class="k" data-str="hCheck"></span><b id="h-check">0/5</b></div>
+          <div class="stat no-trial fuel" id="h-fuel-box">
+            <span class="k"><span data-str="hFuel"></span> <span id="h-fuel-low" class="low-flag" hidden data-str="low"></span></span>
+            <b id="h-fuel">100</b>
+            <span class="meter" aria-hidden="true"><i id="h-fuel-fill"></i></span>
+          </div>
+          <div class="stat extra"><span class="k" data-str="hCombo"></span><b id="h-combo">-</b></div>
+          <div class="stat extra"><span class="k" id="h-dist-k" data-str="hDist"></span><b id="h-dist">0</b></div>
+        </section>
+        <div class="top-actions">
+          <button id="sound" class="icon-btn opt" type="button" aria-pressed="true" data-str-label="soundLabel" title="M">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9v6h4l5 4V5L8 9z"/><path class="waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="slash" d="M17 9l5 6M22 9l-5 6"/></svg>
+          </button>
+          <button id="open-settings" class="icon-btn opt" type="button" aria-haspopup="dialog" data-str-label="settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.23 9.65 L22.02 10.09 L22.02 13.91 L19.23 14.35 L18.77 15.45 L20.44 17.73 L17.73 20.44 L15.45 18.77 L14.35 19.23 L13.91 22.02 L10.09 22.02 L9.65 19.23 L8.55 18.77 L6.27 20.44 L3.56 17.73 L5.23 15.45 L4.77 14.35 L1.98 13.91 L1.98 10.09 L4.77 9.65 L5.23 8.55 L3.56 6.27 L6.27 3.56 L8.55 5.23 L9.65 4.77 L10.09 1.98 L13.91 1.98 L14.35 4.77 L15.45 5.23 L17.73 3.56 L20.44 6.27 L18.77 8.55Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button id="pause" class="icon-btn" type="button" aria-haspopup="dialog" data-str-label="pause" title="P">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+          </button>
+        </div>
+        <div id="onboard" class="banner" hidden>
+          <svg class="skim-ico" viewBox="0 0 40 28" aria-hidden="true"><rect x="2" y="3" width="11" height="22" rx="3"/><rect x="27" y="3" width="11" height="22" rx="3"/><path d="M15 14h10M17.5 11l-3 3 3 3M22.5 11l3 3-3 3"/></svg>
+          <span id="onboard-text"></span>
+          <button id="onboard-close" class="icon-btn" type="button" data-str-label="dismissHint">×</button>
+        </div>
+        <div class="touch" id="touch">
+          <div class="pad left">
+            <button type="button" class="tbtn" data-key="left" data-str-label="tLeft"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button type="button" class="tbtn" data-key="right" data-str-label="tRight"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+          <div class="pad right">
+            <button type="button" class="tbtn" data-key="brake" data-str-label="tBrake"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button>
+            <button type="button" class="tbtn gas" data-key="gas" data-str-label="tGas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l7-7 7 7"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <p id="sr-status" class="sr-only" role="status" aria-live="polite"></p>
+    </main>
+
+    <div id="title-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="title-h" hidden>
+      <div class="sheet wide-sheet">
+        <div class="flag" aria-hidden="true"></div>
+        <h2 id="title-h" class="big" data-str="gameName"></h2>
+        <p class="desc" data-str="tagline"></p>
+        <div class="modes" id="modes" role="group" aria-label="Game mode"></div>
+        <ul class="howto" id="howto"></ul>
+        <button id="title-settings" class="btn" type="button" aria-haspopup="dialog" data-str="settings"></button>
+      </div>
+    </div>
+
+    <div id="pause-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+      <div class="sheet">
+        <h2 id="pause-title" data-str="paused"></h2>
+        <div class="stack">
+          <button id="pause-resume" class="btn primary" type="button" data-str="resume"></button>
+          <button id="pause-restart" class="btn" type="button" data-str="restart"></button>
+          <button id="pause-settings" class="btn" type="button" aria-haspopup="dialog" data-str="settings"></button>
+          <button id="pause-quit" class="btn" type="button" data-str="quit"></button>
+        </div>
+        <div id="pause-confirm" class="confirm-bar" role="group" hidden>
+          <span id="pause-confirm-text"></span>
+          <button id="pause-confirm-yes" class="btn small primary" type="button" data-str="yes"></button>
+          <button id="pause-confirm-no" class="btn small" type="button" data-str="keepPlaying"></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="result-title" hidden>
+      <div class="sheet result-sheet">
+        <p id="result-tier" class="tier" data-tier="rookie"></p>
+        <h2 id="result-title"></h2>
+        <p id="result-score" class="big-score" aria-hidden="true">0</p>
+        <p id="result-sub" class="desc"></p>
+        <dl id="result-stats" class="result-stats"></dl>
+        <p id="result-tip" class="tip"></p>
+        <div class="stack">
+          <button id="result-again" class="btn primary" type="button" data-str="again"></button>
+          <button id="result-title-btn" class="btn" type="button" data-str="toTitle"></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+      <div class="sheet">
+        <h2 id="settings-title" data-str="settings"></h2>
+        <div class="options">
+          <div class="row">
+            <label for="volume" class="lbl" data-str="volume"></label>
+            <input id="volume" type="range" min="0" max="100" step="5" value="70" />
+            <output id="volume-out" for="volume">70</output>
+          </div>
+          <fieldset data-setting="sound">
+            <legend data-str="sound"></legend>
+            <button type="button" data-value="true" data-str="on"></button>
+            <button type="button" data-value="false" data-str="muted"></button>
+          </fieldset>
+          <fieldset data-setting="reduceMotion">
+            <legend data-str="reduceMotion"></legend>
+            <button type="button" data-value="system" data-str="system"></button>
+            <button type="button" data-value="on" data-str="on"></button>
+            <button type="button" data-value="off" data-str="off"></button>
+          </fieldset>
+          <fieldset data-setting="colorAssist">
+            <legend data-str="colorAssist"></legend>
+            <button type="button" data-value="false" data-str="off"></button>
+            <button type="button" data-value="true" data-str="on"></button>
+          </fieldset>
+          <fieldset data-setting="textSize">
+            <legend data-str="textSize"></legend>
+            <button type="button" data-value="100">100%</button>
+            <button type="button" data-value="125">125%</button>
+            <button type="button" data-value="150">150%</button>
+          </fieldset>
+          <fieldset data-setting="theme">
+            <legend data-str="theme"></legend>
+            <button type="button" data-value="system" data-str="system"></button>
+            <button type="button" data-value="light" data-str="light"></button>
+            <button type="button" data-value="dark" data-str="dark"></button>
+          </fieldset>
+        </div>
+        <button id="settings-close" class="btn primary" type="button" data-str="done"></button>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

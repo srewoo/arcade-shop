@@ -1,0 +1,73 @@
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 100%; }
+:root[data-text='125'] { font-size: 125%; }
+:root[data-text='150'] { font-size: 150%; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: #0b1016; color: var(--ink);
+  font: 1rem/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden; -webkit-tap-highlight-color: transparent;
+}
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.stage :focus-visible { outline: 3px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 6px #0b5fd6; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app { position: relative; height: 100dvh; overflow: hidden; --side: 25px; }
+.stage { position: absolute; inset: 0; overflow: hidden; background: #0b1016; }
+#road { position: absolute; left: 0; top: 0; display: block; touch-action: none; }
+[data-phase='title'] .hud, [data-phase='title'] .top-actions, [data-phase='title'] .banner { display: none; }
+
+.top-actions {
+  position: absolute; z-index: 3; display: flex; gap: 8px;
+  top: calc(8px + env(safe-area-inset-top)); right: calc(8px + env(safe-area-inset-right));
+}
+.icon-btn {
+  min-width: 44px; min-height: 44px; display: inline-grid; place-items: center; padding: 0;
+  border: 1.5px solid rgba(255, 255, 255, 0.55); border-radius: 12px; background: rgba(8, 12, 18, 0.78); color: #fff;
+  font: inherit; font-size: 1.3rem; cursor: pointer; backdrop-filter: blur(3px);
+}
+.icon-btn svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn .spk { fill: currentColor; }
+.icon-btn .slash { display: none; }
+#sound[aria-pressed='false'] .waves { display: none; }
+#sound[aria-pressed='false'] .slash { display: inline; }
+
+.banner {
+  position: absolute; z-index: 2; left: 50%; transform: translateX(-50%); width: min(340px, calc(100% - 16px));
+  bottom: calc(16px + env(safe-area-inset-bottom)); pointer-events: none;
+  display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 10px; font-size: 0.8125rem; line-height: 1.3;
+  background: rgba(8, 12, 18, 0.86); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 12px;
+  transition: opacity 0.6s;
+}
+.banner.fade { opacity: 0; }
+.banner span { flex: 1; }
+.banner button { pointer-events: auto; min-width: 44px; }
+.skim-ico { width: 40px; height: 28px; flex: none; fill: none; stroke: #26d7ff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.skim-ico rect { fill: rgba(255, 255, 255, 0.2); stroke: #fff; }
+[data-touch='on'] .banner { bottom: calc(88px + env(safe-area-inset-bottom)); }
+
+.touch { position: absolute; left: 0; right: 0; bottom: calc(8px + env(safe-area-inset-bottom)); z-index: 2; display: none; justify-content: space-between; padding: 0 8px; pointer-events: none; }
+:root [data-touch='on'][data-phase='play'] .touch { display: flex; }
+.pad { display: flex; gap: 12px; pointer-events: auto; }
+.tbtn {
+  width: 68px; height: 68px; border-radius: 18px; padding: 0; display: grid; place-items: center;
+  background: rgba(16, 21, 28, 0.72); border: 2px solid #f2f5f9; color: #f2f5f9; touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.tbtn svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.tbtn[data-down='1'] { background: #f2f5f9; color: #10151c; }
+.tbtn.gas { border-color: #ffb800; }
+
+/* Wide screens: HUD column and hint live in the scenery beside the road, never on it. */
+@media (min-aspect-ratio: 13/10) {
+  .banner { left: auto; right: calc(8px + env(safe-area-inset-right)); bottom: auto; top: calc(64px + env(safe-area-inset-top)); transform: none; width: min(280px, calc(var(--side) - 16px)); }
+  [data-touch='on'] .banner { bottom: auto; }
+}
+[data-motion='reduce'] *, [data-motion='reduce'] *::before { transition: none !important; animation: none !important; }
+@media (max-height: 460px) {
+  .tbtn { width: 56px; height: 56px; }
+}
+/* Narrow portrait: only Pause stays on the bar; Sound and Settings live in the pause menu. */
+@media (max-aspect-ratio: 13/10) and (max-width: 560px) {
+  .top-actions .opt { display: none; }
+}

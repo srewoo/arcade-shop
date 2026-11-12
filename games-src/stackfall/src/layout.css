@@ -1,0 +1,87 @@
+/* Page layout. Portrait: bar, HUD, stage, pad, hint stacked. Landscape: a side column
+   (title, chips, HUD) | left pad | stage | right pad, so the well uses the full height. */
+.app {
+  height: 100dvh;
+  margin: 0 auto;
+  padding-block: max(0.5rem, env(safe-area-inset-top)) max(0.5rem, env(safe-area-inset-bottom));
+  padding-inline: max(0.75rem, env(safe-area-inset-left)) max(0.75rem, env(safe-area-inset-right));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  gap: 0.5rem;
+}
+.bar { grid-row: 1; }
+.hud { grid-row: 2; }
+.stage { grid-row: 3; }
+.pad { grid-row: 4; }
+.hint { grid-row: 5; }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
+.bar-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.pad { display: grid; grid-template-columns: repeat(auto-fit, minmax(2.9rem, 1fr)); gap: 0.35rem; }
+.pad-l, .pad-r { display: contents; }
+.modes { grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); }
+
+@media (max-width: 520px) {
+  .app { gap: 0.4rem; }
+  h1 { font-size: 1.2rem; }
+  .chip { padding-inline: 0.8rem; }
+  .chip kbd { display: none; }
+  .hud { gap: 0.25rem; }
+  .hud > div { padding: 0.2rem 0.35rem; }
+}
+@media (max-width: 520px) { .hint { display: none; } }
+@media (max-width: 400px) {
+  [data-screen]:not([data-screen='title']) .bar h1 { display: none; } /* chips get the whole row while playing */
+  .help p:nth-of-type(3) { display: none; }
+}
+@media (max-width: 359px) { .pad { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 520px) and (max-aspect-ratio: 1/1) {
+  [data-screen='title'] .pad, [data-screen='title'] .hud { display: none; } /* room for the mode cards */
+}
+@media (max-width: 480px) {
+  .mode small { display: none; }
+  .blurb { display: block; }
+  .modes { grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); }
+}
+[data-text='125'] .hud, [data-text='150'] .hud { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-height: 300px) {
+  .app { height: auto; min-height: 100dvh; }
+  .stage { min-height: 16rem; }
+}
+
+@media (min-aspect-ratio: 1/1) and (min-width: 480px) {
+  .app {
+    --side: clamp(9.5rem, 20vw, 13rem);
+    grid-template-columns: var(--side) auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-areas: 'bar pl stage pr' 'hud pl stage pr' 'hint pl stage pr';
+    column-gap: 0.5rem;
+  }
+  .bar { grid-area: bar; flex-direction: column; align-items: stretch; flex-wrap: nowrap; }
+  .bar-actions { flex-direction: column; flex-wrap: nowrap; }
+  .chip { text-align: left; }
+  .hud { grid-area: hud; grid-template-columns: minmax(0, 1fr) !important; gap: 0.3rem; }
+  .hud > div { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
+  .hud b { font-size: 1rem; }
+  .hint { grid-area: hint; align-self: start; font-size: 0.85rem; }
+  .stage { grid-area: stage; }
+  .pad { display: contents; }
+  .pad-l, .pad-r { display: flex; flex-direction: column; justify-content: center; gap: 0.5rem; }
+  .pad-l { grid-area: pl; }
+  .pad-r { grid-area: pr; }
+  .pad button { width: 3.5rem; min-height: 3.5rem; }
+  .pad[hidden] { display: none !important; }
+  .modes { grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); }
+}
+@media (min-aspect-ratio: 1/1) and (min-width: 480px) and (max-height: 500px) {
+  .app { --side: 9.5rem; padding-block: max(0.35rem, env(safe-area-inset-top)) max(0.35rem, env(safe-area-inset-bottom)); gap: 0.35rem; column-gap: 0.4rem; height: auto; min-height: 100dvh; }
+  .bar h1, .hint { display: none; }
+  .stage { min-height: calc(100dvh - 0.7rem); }
+  .hud > div { padding: 0.1rem 0.45rem; }
+  .card { padding: 0.6rem; gap: 0.4rem; }
+  .card h2 { font-size: 1.1rem; }
+  .mode small, .help p:nth-of-type(3) { display: none; }
+  .blurb { display: block; font-size: 0.85rem; }
+  .modes { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.3rem; }
+  .mode { padding: 0.3rem 0.4rem; }
+}

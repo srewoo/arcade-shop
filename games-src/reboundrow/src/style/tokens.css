@@ -1,0 +1,36 @@
+/* Chrome colour tokens. Contrast verified in tests/contrast.test.ts (text >= 4.5, graphics >= 3). */
+:root {
+  --bg: #f1f4fb;
+  --panel: #ffffff;
+  --ink: #141b2d;
+  --muted: #4a5573;
+  --line: #7a85aa;
+  --accent: #2543c4;
+  --accent-ink: #ffffff;
+  --danger: #a3262e;
+  --danger-ink: #ffffff;
+  --focus: #2543c4;
+  --shadow: 0 8px 28px rgba(20, 27, 45, 0.16);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0b1020; --panel: #171e36; --ink: #eef1fb; --muted: #aab4d6; --line: #7381b3;
+    --accent: #9db3ff; --accent-ink: #0b1020; --danger: #ff9aa2; --danger-ink: #0b1020;
+    --focus: #9db3ff; --shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #0b1020; --panel: #171e36; --ink: #eef1fb; --muted: #aab4d6; --line: #7381b3;
+  --accent: #9db3ff; --accent-ink: #0b1020; --danger: #ff9aa2; --danger-ink: #0b1020;
+  --focus: #9db3ff; --shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+/* Title and game screens are always dark (art direction); dialogs still follow the theme. */
+.dark-scope {
+  --bg: #0b1020; --panel: #171e36; --ink: #eef1fb; --muted: #aab4d6; --line: #7381b3;
+  --accent: #b8a4ff; --accent-ink: #0b1020; --danger: #ff9aa2; --danger-ink: #0b1020;
+  --focus: #c9baff; --shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  color: var(--ink);
+}

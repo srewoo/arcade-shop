@@ -1,0 +1,35 @@
+/* Colour tokens. Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3).
+   The playfield and HUD chips are dark in every theme; only the dialog sheets follow the theme. */
+:root {
+  --bg: #eef0f8;
+  --panel: #ffffff;
+  --ink: #17193a;
+  --muted: #4a5070;
+  --line: #6f77a0;
+  --accent: #e8743b;
+  --accent-ink: #1b0d06;
+  --focus: #0b5cad;
+  --night: #0f1330;
+  --hud-bg: #10143a;
+  --hud-ink: #f4f6ff;
+  --hud-dim: #b4bddf;
+  --hud-line: #8c9ad6;
+  --gold: #ffc83a;
+  --danger: #ff6b6b;
+  --shadow: 0 1px 0 rgba(23, 25, 58, 0.06), 0 8px 24px rgba(23, 25, 58, 0.14);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0c0f26; --panel: #171b3c; --ink: #eef0ff; --muted: #aab3d6; --line: #7782b4;
+    --focus: #8cc4ff;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #0c0f26; --panel: #171b3c; --ink: #eef0ff; --muted: #aab3d6; --line: #7782b4;
+  --focus: #8cc4ff;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}

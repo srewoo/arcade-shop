@@ -1,0 +1,246 @@
+/* Gaps, lap stats, split/drift popups and portrait/touch HUD tweaks. */
+/* ---- gaps to the cars ahead / behind ---- */
+.gaps {
+  position: absolute;
+  left: calc(var(--u) * 40);
+  top: calc(var(--u) * 196);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 8);
+}
+.gaps .gap {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 12);
+  padding: calc(var(--u) * 6) calc(var(--u) * 20) calc(var(--u) * 8) calc(var(--u) * 14);
+  border-radius: calc(var(--u) * 20);
+  border-left: calc(var(--u) * 10) solid var(--c, #fff);
+  background: #1e2126e6;
+  color: #fff;
+  font-weight: 900;
+  font-size: max(calc(var(--u) * 32), var(--hud-min));
+  white-space: nowrap;
+}
+.gaps .gap i {
+  font-style: normal;
+  font-size: max(calc(var(--u) * 24), var(--hud-min));
+  opacity: 0.85;
+}
+.gaps .gap b {
+  min-width: calc(var(--u) * 120);
+  font-variant-numeric: tabular-nums;
+}
+.gaps .gap-ahead b {
+  color: #ff9d8a;
+}
+.gaps .gap-behind b {
+  color: #9be8b0;
+}
+.gaps .gap span {
+  font-size: max(calc(var(--u) * 26), var(--hud-min));
+  opacity: 0.85;
+}
+.gaps .gap.off {
+  visibility: hidden; /* keeps the layout slot, shows no stale name */
+}
+
+/* ---- lap stats: delta vs best, best/last lap, drift score ---- */
+.stats {
+  position: absolute;
+  right: calc(var(--u) * 40);
+  top: calc(var(--u) * 168);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: calc(var(--u) * 6);
+}
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--u) * 14);
+  padding: calc(var(--u) * 4) calc(var(--u) * 18) calc(var(--u) * 6);
+  border-radius: calc(var(--u) * 16);
+  background: #1e2126bf;
+  color: #fff;
+  font-weight: 900;
+}
+.stat .k {
+  font-size: max(calc(var(--u) * 22), var(--hud-min));
+  letter-spacing: calc(var(--u) * 2);
+  opacity: 0.8;
+}
+.stat .v {
+  font-size: max(calc(var(--u) * 36), var(--hud-min));
+  min-width: calc(var(--u) * 140);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.stat .v.good {
+  color: #7dff9f;
+}
+.stat .v.bad {
+  color: #ff8a73;
+}
+.stat-drift .v {
+  color: #ffd650;
+}
+.hud.no-run .stats,
+.hud.no-run .gaps {
+  display: none;
+}
+.hud.tt .pos,
+.hud.tt .gaps {
+  display: none;
+}
+.hud.tt .stats {
+  right: auto;
+  left: calc(var(--u) * 40);
+  top: calc(var(--u) * 36);
+  align-items: flex-start;
+}
+.hud.tt .stat-delta .v {
+  font-size: max(calc(var(--u) * 52), var(--hud-min));
+}
+
+/* ---- split / message popup (below the lap badge) and drift popups ---- */
+.split-pop,
+.dp-event {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 calc(var(--u) * 4) 0 rgba(0, 0, 0, 0.4);
+}
+.split-pop {
+  top: calc(var(--u) * 180);
+  padding: calc(var(--u) * 8) calc(var(--u) * 30) calc(var(--u) * 12);
+  border-radius: calc(var(--u) * 26);
+  border: calc(var(--u) * 5) solid #fff;
+  background: #23262bd9;
+  font-size: max(calc(var(--u) * 46), var(--hud-min));
+}
+.split-pop.good {
+  background: #17804a;
+}
+.split-pop.bad {
+  background: #c2392b;
+}
+.split-pop.show {
+  animation: popFade 1.9s ease-out forwards;
+}
+.drift-pop {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 56%;
+  pointer-events: none;
+}
+.dp-live {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0) skewX(-8deg);
+  white-space: nowrap;
+  font-weight: 900;
+  font-size: max(calc(var(--u) * 62), var(--hud-min));
+  letter-spacing: calc(var(--u) * 2);
+  color: #ffe9a8;
+  -webkit-text-stroke: calc(var(--u) * 6) #23262b;
+  paint-order: stroke fill;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.dp-live.on {
+  opacity: 1;
+}
+.dp-event {
+  top: calc(var(--u) * 92);
+  font-size: max(calc(var(--u) * 54), var(--hud-min));
+  -webkit-text-stroke: calc(var(--u) * 6) #23262b;
+  paint-order: stroke fill;
+}
+.dp-event.good {
+  color: #ffe36a;
+}
+.dp-event.bad {
+  color: #ff6a55;
+}
+.dp-event.t1 {
+  color: #4aa8ff;
+}
+.dp-event.t2 {
+  color: #ff8a1a;
+}
+.dp-event.show {
+  animation: popRise 1.4s ease-out forwards;
+}
+@keyframes popFade {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, calc(var(--u) * 12)) scale(0.85);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1.06);
+  }
+  18% {
+    transform: translate(-50%, 0) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes popRise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, calc(var(--u) * 20)) scale(0.7);
+  }
+  12% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1.1);
+  }
+  70% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, calc(var(--u) * -50)) scale(1);
+  }
+}
+
+/* ---- portrait layout ---- */
+.vertical .gaps {
+  left: calc(var(--u) * 44);
+  top: calc(var(--u) * 420);
+}
+.vertical .stats {
+  right: auto;
+  left: calc(var(--u) * 44);
+  top: calc(var(--u) * 590);
+  align-items: flex-start;
+}
+.vertical .hud.tt .stats {
+  top: calc(var(--u) * 150);
+}
+.vertical .split-pop {
+  top: calc(var(--u) * 700);
+}
+.vertical .drift-pop {
+  top: 50%;
+}
+.vertical .boost {
+  width: calc(var(--u) * 820);
+}
+.vertical .hint {
+  left: 50%;
+  transform: translate(-50%);
+  max-width: none;
+}
+

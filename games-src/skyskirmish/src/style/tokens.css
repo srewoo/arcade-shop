@@ -1,0 +1,34 @@
+/* Colour tokens for the UI chrome. Dark is the default (it matches the night sky); the Light theme is opt-in.
+   Contrast checked in tests/contrast.test.ts (text >= 4.5, graphics >= 3). */
+:root {
+  --bg: #0a1626;
+  --panel: #12263d;
+  --ink: #eef5fb;
+  --muted: #a9bdd0;
+  --line: #6f90b0;
+  --accent: #8ccfff;
+  --accent-ink: #06203a;
+  --danger: #ff9a90;
+  --danger-ink: #2a0805;
+  --focus: #ffd25a;
+  --hud-bg: #0b1c33;
+  --hud-ink: #ffffff;
+  --hud-muted: #a9c4df;
+  --hot: #ffd25a;
+  --gold: #ffd25a;
+  --gold-ink: #2b1d00;
+  --scrim: rgba(3, 9, 22, 0.62);
+  color-scheme: dark;
+}
+:root[data-theme='dark'] {
+  --bg: #0a1626; --panel: #12263d; --ink: #eef5fb; --muted: #a9bdd0; --line: #6f90b0;
+  --accent: #8ccfff; --accent-ink: #06203a; --danger: #ff9a90; --danger-ink: #2a0805; --focus: #ffd25a;
+  --hud-bg: #0b1c33; --hud-ink: #ffffff; --hud-muted: #a9c4df; --hot: #ffd25a; --scrim: rgba(3, 9, 22, 0.62);
+  color-scheme: dark;
+}
+:root[data-theme='light'] {
+  --bg: #e6f1fa; --panel: #ffffff; --ink: #10263a; --muted: #3f566b; --line: #6a86a0;
+  --accent: #0a579b; --accent-ink: #ffffff; --danger: #a3231b; --danger-ink: #ffffff; --focus: #0a579b;
+  --hud-bg: #0b2a55; --hud-ink: #ffffff; --hud-muted: #b9d3ee; --hot: #ffd25a; --gold: #ffd25a; --gold-ink: #2b1d00; --scrim: rgba(7, 22, 40, 0.55);
+  color-scheme: light;
+}

@@ -1,0 +1,95 @@
+/* Accessibility: Reduce motion (html[data-reduce-motion="1"], set from the setting / OS preference),
+   colour-blind assist (.cb on the stage) and a fallback keyboard focus ring. Loaded last. */
+
+/* ---- Reduce motion: no looping or decorative motion; one-shot popups become plain fades ---- */
+html[data-reduce-motion="1"] .logo b,
+html[data-reduce-motion="1"] .key-btn,
+html[data-reduce-motion="1"] .boost.active .boost-fill,
+html[data-reduce-motion="1"] .boost.full .boost-tube,
+html[data-reduce-motion="1"] .pos.bump,
+html[data-reduce-motion="1"] .key-btn:active {
+  animation: none !important;
+}
+html[data-reduce-motion="1"] .countdown.show {
+  animation: rmFade 0.8s linear forwards !important;
+}
+html[data-reduce-motion="1"] .banner.show {
+  animation: rmFade 2.4s linear forwards !important;
+}
+html[data-reduce-motion="1"] .split-pop.show,
+html[data-reduce-motion="1"] .dp-event.show {
+  animation: rmFade 1.6s linear forwards !important;
+}
+@keyframes rmFade {
+  0% {
+    opacity: 0.001;
+  }
+  12% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.001;
+  }
+}
+html[data-reduce-motion="1"] .wrongway,
+html[data-reduce-motion="1"] .wrongway.show {
+  transform: translate(-50%, -50%);
+  transition: opacity 0.15s;
+}
+html[data-reduce-motion="1"] .results,
+html[data-reduce-motion="1"] .results.show {
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s;
+}
+html[data-reduce-motion="1"] .t-knob,
+html[data-reduce-motion="1"] .t-btn.down {
+  transition: none;
+}
+
+/* ---- colour-blind assist: blue / amber palette plus a symbol or word wherever colour meant something ---- */
+.cb .gaps .gap-ahead b {
+  color: #ffc857;
+}
+.cb .gaps .gap-behind b {
+  color: #8ecbff;
+}
+.cb .stat .v.good {
+  color: #8ecbff;
+}
+.cb .stat .v.bad {
+  color: #ffc857;
+}
+.cb .stat .v.good:before {
+  content: "\25B2\00a0";
+}
+.cb .stat .v.bad:before {
+  content: "\25BC\00a0";
+}
+.cb .split-pop.good {
+  background: #0b5fa5;
+}
+.cb .split-pop.bad {
+  background: #8a4b00;
+}
+.cb .dp-event.good,
+.cb .dp-event.t2 {
+  color: #ffc857;
+}
+.cb .dp-event.bad {
+  color: #ffffff;
+}
+.cb .dp-event.t1 {
+  color: #8ecbff;
+}
+.cb .boost.low .boost-fill {
+  background: repeating-linear-gradient(-45deg, #ffffff 0 calc(var(--u) * 12), #c8271f calc(var(--u) * 12) calc(var(--u) * 24));
+}
+
+/* ---- keyboard focus: visible on every control (specific rules above win where they exist) ---- */
+:where(.ui) :where(button, select, input, [tabindex]):focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}

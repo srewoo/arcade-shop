@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>arcadeShop store assets</title>
+<style>
+  :root { --bg:#15131b; --panel:#1f1c27; --line:#ffffff17; --text:#f4efe6; --muted:#b3aca0; --gold:#f2b134; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #000; font-family: system-ui, sans-serif; color: var(--text); }
+  .asset { position: relative; overflow: hidden; background: var(--bg); margin: 0 0 40px; }
+  .shot { width: 1280px; height: 800px; }
+  .glow::before { content: ""; position: absolute; inset: 0; background: radial-gradient(900px 520px at 80% 0%, #f2b13418, transparent 70%), radial-gradient(700px 500px at 0% 100%, #8a6cf012, transparent 70%); }
+  .cap { position: absolute; left: 72px; top: 58px; right: 72px; z-index: 2; }
+  .cap h1 { margin: 0; font-size: 54px; line-height: 1.05; font-weight: 850; letter-spacing: -0.03em; }
+  .cap h1 em { font-style: normal; color: var(--gold); }
+  .cap p { margin: 14px 0 0; font-size: 25px; line-height: 1.35; color: var(--muted); font-weight: 500; max-width: 1000px; }
+  .frame { position: absolute; background: var(--panel); border: 1px solid #ffffff24; border-radius: 16px; overflow: hidden; box-shadow: 0 30px 90px #000b; }
+  .bar { height: 34px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: #1b1922; border-bottom: 1px solid var(--line); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: #ffffff24; }
+  .tab { margin-left: 12px; display: flex; align-items: center; gap: 7px; padding: 4px 12px; border-radius: 7px; background: var(--panel); font-size: 13px; font-weight: 600; color: var(--muted); }
+  .tab img { width: 15px; height: 15px; }
+  .frame > img.v { display: block; width: 100%; height: calc(100% - 34px); object-fit: cover; object-position: top center; }
+  .label { position: absolute; z-index: 3; padding: 9px 16px; border-radius: 999px; background: #15131be6; border: 1px solid #ffffff26; font-size: 19px; font-weight: 750; display: flex; gap: 10px; align-items: center; }
+  .label i { font-style: normal; font-size: 14px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--a); }
+
+  /* wall */
+  .wall { position: absolute; display: grid; gap: 14px; transform: rotate(-4deg); }
+  .t { aspect-ratio: 16/10; border-radius: 12px; overflow: hidden; border-bottom: 4px solid var(--a); background: var(--panel); }
+  .t img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* tiles */
+  .small { width: 440px; height: 280px; }
+  .marquee { width: 1400px; height: 560px; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand b { font-weight: 900; letter-spacing: -0.04em; }
+  kbd { font: 700 15px/1 ui-monospace, monospace; padding: 6px 9px; border: 1px solid #ffffff33; border-bottom-width: 3px; border-radius: 7px; background: var(--panel); color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- 1: launcher -->
+<section id="shot-1" class="asset shot glow">
+  <div class="cap"><h1><em>24 games.</em> One toolbar button.</h1>
+    <p>Every game is bundled inside the extension, so the whole arcade works offline.</p></div>
+  <div class="frame" style="left:110px; top:232px; width:1060px; height:640px">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tab"><img src="img/icon-128.png" alt="">arcadeShop</span></div>
+    <img class="v" src="img/menu-full.png" alt=""></div>
+</section>
+
+<!-- 2: popup + shelves -->
+<section id="shot-2" class="asset shot glow">
+  <div class="cap" style="right:560px"><h1 style="font-size:48px">Search, pick a shelf,<br><em>press Enter.</em></h1>
+    <p>Action, Driving, Sports, Puzzle and Favourites, with your recently played games up top.</p></div>
+  <div class="frame" style="left:72px; top:300px; width:760px; height:560px">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tab"><img src="img/icon-128.png" alt="">arcadeShop</span></div>
+    <img class="v" src="img/shelf-sports.png" alt=""></div>
+  <div class="frame" style="left:800px; top:82px; width:410px; height:637px; border-color:#f2b13466">
+    <img src="img/popup.png" alt="" style="width:100%; display:block"></div>
+</section>
+
+<!-- 3: 3D games -->
+<section id="shot-3" class="asset shot glow">
+  <div class="cap"><h1>3D runners and <em>toy-car racing.</em></h1>
+    <p>Ragdoll physics, weather and power-ups. Ghost laps across the living-room rug.</p></div>
+  <div class="frame" style="left:56px; top:250px; width:600px; height:409px; transform:rotate(-2deg)">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tab"><img src="img/icon-128.png" alt="">Fossil Frenzy</span></div>
+    <img class="v" src="img/dino.jpg" alt="" style="object-position:center"></div>
+  <div class="frame" style="left:620px; top:330px; width:610px; height:415px; transform:rotate(2deg)">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tab"><img src="img/icon-128.png" alt="">Living Room GP</span></div>
+    <img class="v" src="img/rug.jpg" alt="" style="object-position:center"></div>
+  <div class="label" style="--a:#e07a2f; left:88px; top:680px"><i>Action</i>Fossil Frenzy</div>
+  <div class="label" style="--a:#e5322b; left:930px; top:244px"><i>Driving</i>Living Room GP</div>
+</section>
+
+<!-- 4: arcade classics -->
+<section id="shot-4" class="asset shot glow">
+  <div class="cap"><h1>Bubble shooters to <em>traffic racers.</em></h1>
+    <p>Pop Cannon, Redline Rush and 20 more: bowling, mini golf, pool, sudoku, logic puzzles.</p></div>
+  <div class="frame" style="left:72px; top:250px; width:556px; height:500px">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tab"><img src="img/icon-128.png" alt="">Pop Cannon</span></div>
+    <img class="v" src="img/popcannon.jpg" alt="" style="object-position:center"></div>
+  <div class="frame" style="left:652px; top:250px; width:556px; height:500px">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="tab"><img src="img/icon-128.png" alt="">Redline Rush</span></div>
+    <img class="v" src="img/redlinerush.jpg" alt="" style="object-position:center"></div>
+  <div class="label" style="--a:#e2508a; left:96px; top:690px"><i>Action</i>Pop Cannon</div>
+  <div class="label" style="--a:#d6453d; left:676px; top:690px"><i>Driving</i>Redline Rush</div>
+</section>
+
+<!-- 5: privacy -->
+<section id="shot-5" class="asset shot">
+  <div class="wall" style="left:-80px; top:-90px; width:1440px; grid-template-columns:repeat(6,1fr)">{{WALL}}</div>
+  <div style="position:absolute; inset:0; background:radial-gradient(760px 480px at 50% 52%, #15131bf5 0%, #15131bdd 60%, #15131b99 100%)"></div>
+  <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px">
+    <div style="font-size:92px; font-weight:900; letter-spacing:-0.04em; line-height:1.02; color:var(--gold)">No server.</div>
+    <div style="font-size:92px; font-weight:900; letter-spacing:-0.04em; line-height:1.02">No network.</div>
+    <div style="font-size:92px; font-weight:900; letter-spacing:-0.04em; line-height:1.02">No permissions.</div>
+    <p style="margin:26px 0 0; font-size:27px; color:var(--muted); font-weight:500">Scores, settings and favourites stay in this browser.</p>
+  </div>
+</section>
+
+<!-- small promo tile 440x280 -->
+<section id="tile-small" class="asset small">
+  <div class="wall" style="left:205px; top:-40px; width:330px; grid-template-columns:repeat(2,1fr); gap:10px">{{MINI}}</div>
+  <div style="position:absolute; inset:0; background:linear-gradient(90deg, var(--bg) 46%, #15131bcc 62%, #15131b00 100%)"></div>
+  <div style="position:absolute; left:28px; top:0; bottom:0; display:flex; flex-direction:column; justify-content:center; gap:14px">
+    <img src="img/icon-128.png" alt="" style="width:64px; height:64px">
+    <div style="font-size:40px; font-weight:900; letter-spacing:-0.045em; line-height:1">arcadeShop</div>
+    <div style="font-size:21px; font-weight:750; color:var(--gold); line-height:1.15">24 offline games<br>in one click</div>
+  </div>
+</section>
+
+<!-- marquee 1400x560 -->
+<section id="tile-marquee" class="asset marquee glow">
+  <div class="wall" style="left:690px; top:-120px; width:820px; grid-template-columns:repeat(3,1fr)">{{MINI}}</div>
+  <div style="position:absolute; inset:0; background:linear-gradient(90deg, var(--bg) 44%, #15131bcc 58%, #15131b00 85%)"></div>
+  <div style="position:absolute; left:84px; top:0; bottom:0; display:flex; flex-direction:column; justify-content:center; gap:22px">
+    <div class="brand"><img src="img/icon-128.png" alt="" style="width:72px; height:72px"><b style="font-size:44px">arcadeShop</b></div>
+    <div style="font-size:76px; font-weight:900; letter-spacing:-0.04em; line-height:1"><span style="color:var(--gold)">24 games.</span><br>One toolbar button.</div>
+    <div style="font-size:26px; color:var(--muted); font-weight:500">Fully offline. No server. No permissions.</div>
+  </div>
+</section>
+
+<!-- store icon 128 (96 art + 16 padding) -->
+<section id="store-icon" class="asset" style="width:128px; height:128px; background:transparent">
+  <img src="img/icon-128.png" alt="" style="position:absolute; left:16px; top:16px; width:96px; height:96px">
+</section>
+
+</body>
+</html>
